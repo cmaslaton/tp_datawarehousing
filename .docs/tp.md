@@ -63,16 +63,16 @@ Memoria y una de Enriquecimiento (datos derivados). `Realizado en el script step
 ✅ 7) Diseñar y crear el DQM para poder persistir los procesos ejecutados sobre el DWA, los descriptivos de cada
 entidad procesada y los indicadores de calidad. Documentar el diseño en la Metadata. `Realizado en el script step_06_create_dqm.py, donde se definen las tablas para el monitoreo de calidad y se registran en la metadata.`
 ✅ 8) Realizar la carga inicial del DWA con los datos que se seleccionen de las tablas recibidas y procesadas.
-`Realizado en el script step_07_initial_dwh_load.py. Este script orquesta la carga de todas las dimensiones y la tabla de hechos. Además, ejecuta controles de calidad de ingesta (nulos, valores negativos) y de integración (consistencia de conteos, mapeo de FKs), registrando todos los resultados en el DQM.`
+`Realizado en el script step_07_initial_dwh_load.py. Este script orquesta la carga completa y los controles de calidad.`
     a) Definir los controles de calidad de ingesta para cada tabla, los datos que se persistirán en el DQM y
     los indicadores y límites para aceptar o rechazar los datasets. Realizar y ejecutar los scripts
-correspondientes. Tener en cuenta: outliers, datos faltantes, valores que no respetan los formatos,
-etc.
-b) Definir los controles de calidad de integración para el conjunto de tablas, los datos que se persistirán
-en el DQM y los indicadores y límites para aceptar o rechazar los datasets. Realizar y ejecutar los scripts
-correspondientes. Tener en cuenta: la integridad referencial e indicadores de comparación.
-c) Ingestar los datos de Ingesta1 en el DWA definido. Las datos se deben insertar desde las tablas
-temporales creadas. Actualizar todas las capas. Siempre y cuando se superen los umbrales de calidad.
+    correspondientes. Tener en cuenta: outliers, datos faltantes, valores que no respetan los formatos,
+    etc. `Realizado en la función perform_ingestion_quality_checks, que valida nulos en PKs y valores negativos. Si falla, aborta la carga. Los resultados se persisten en DQM_indicadores_calidad.`
+    b) Definir los controles de calidad de integración para el conjunto de tablas, los datos que se persistirán
+    en el DQM y los indicadores y límites para aceptar o rechazar los datasets. Realizar y ejecutar los scripts
+    correspondientes. Tener en cuenta: la integridad referencial e indicadores de comparación. `Realizado en la función perform_integration_quality_checks, que verifica SKs nulas en la tabla de hechos y compara conteos de filas. Los resultados se persisten en el DQM.`
+    c) Ingestar los datos de Ingesta1 en el DWA definido. Las datos se deben insertar desde las tablas
+    temporales creadas. Actualizar todas las capas. Siempre y cuando se superen los umbrales de calidad. `Realizado en el cuerpo principal de step_07_initial_dwh_load.py, que invoca las funciones de carga solo si los controles de ingesta (8a) son exitosos.`
 9) Actualización:
 a) Persistir en área temporal las tablas entregadas como Ingesta2.
 b) Repetir los pasos definidos para Ingesta1 que sean adecuados para Ingesta2.
