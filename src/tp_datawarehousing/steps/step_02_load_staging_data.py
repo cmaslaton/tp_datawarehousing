@@ -41,7 +41,7 @@ def normalize_column_name(col_name: str) -> str:
 
     # 2. Reemplazar espacios y caracteres no alfanuméricos por guion bajo
     # 'CPI Change' -> 'CPI_Change', 'world-data' -> 'world_data', 'Capital/Major City' -> 'Capital_Major_City'
-    name = re.sub(r"[-\s\./]+", "_", col_name)
+    name = re.sub(r"[-\s\./:]+", "_", col_name)
 
     # 3. Insertar guion bajo antes de mayúsculas en camelCase (productName -> product_Name)
     # y antes de 'id' en casos como 'shipperid' -> 'shipper_id'.

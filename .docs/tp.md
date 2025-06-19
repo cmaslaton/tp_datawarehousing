@@ -49,10 +49,10 @@ Se pide:
 
 # Adquisición
 
-1) Analizar las tablas (.CSV) incluidas en Ingesta1.
+✅ 1) Analizar las tablas (.CSV) incluidas en Ingesta1. `Realizado implícitamente en el script step_02, donde se normalizaron columnas para la carga.`
 ✅ 2) Comparar la estructura de las tablas y el modelo de entidad relación. Adecuar si fuera necesario. Definir y
 crear las FOREIGN-KEYS necesarias para verificar la integridad referencial. `Realizado en el script step_03_add_foreign_keys.py`
-3) Considerar también la tabla de países (World-Data-2023) y vincularla con las tablas que correspondan.
+✅ 3) Considerar también la tabla de países (World-Data-2023) y vincularla con las tablas que correspondan. `Realizado en el script step_04, estandarizando nombres de países para permitir la vinculación.`
 ✅ 4) Crear un área temporal y persistir el modelo relacional obtenido con los datos de los .CSV. `Realizado en los scripts step_01 (creación de estructura) y step_02 (carga de datos).`
 ✅ 5) Crear el soporte para la Metadata y utilizarlo para describir las entidades. `Realizado en el script step_01_setup_staging_area.py`
 

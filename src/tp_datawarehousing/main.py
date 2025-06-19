@@ -2,6 +2,7 @@ from tp_datawarehousing.steps import (
     step_01_setup_staging_area,
     step_02_load_staging_data,
     step_03_add_foreign_keys,
+    step_04_link_world_data,
 )
 import logging
 
@@ -34,6 +35,11 @@ def main():
     )
     step_03_add_foreign_keys.add_foreign_keys_and_verify()
     logging.info("--- Paso 3: Finalizado ---")
+
+    # --- Paso 4: Vincular y Estandarizar Datos de Países ---
+    logging.info("--- Ejecutando Paso 4: Vinculando Datos de Países ---")
+    step_04_link_world_data.main()
+    logging.info("--- Paso 4: Finalizado ---")
 
     logging.info("Proceso de Data Warehousing finalizado con éxito.")
 
