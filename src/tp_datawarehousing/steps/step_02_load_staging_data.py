@@ -75,6 +75,13 @@ def load_csv_to_table(file_path: Path, table_name: str, conn: sqlite3.Connection
     """
     try:
         logging.info(f"Procesando archivo: {file_path.name} -> Tabla: {table_name}")
+
+        # Limpiar la tabla de staging antes de la carga para evitar duplicados
+        cursor = conn.cursor()
+        cursor.execute(f"DELETE FROM {table_name};")
+        conn.commit()
+        logging.info(f"Tabla {table_name} vaciada antes de la nueva carga.")
+
         # Intenta leer con UTF-8, si falla, prueba con latin-1
         try:
             df = pd.read_csv(file_path)

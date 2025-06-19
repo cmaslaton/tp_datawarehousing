@@ -1,10 +1,11 @@
 from tp_datawarehousing.steps import (
     step_01_setup_staging_area,
     step_02_load_staging_data,
-    step_03_add_foreign_keys,
+    step_03_create_ingestion_layer,
     step_04_link_world_data,
     step_05_create_dwh_model,
     step_06_create_dqm,
+    step_07_initial_dwh_load,
 )
 import logging
 
@@ -31,11 +32,11 @@ def main():
     step_02_load_staging_data.load_all_staging_data()
     logging.info("--- Paso 2: Finalizado ---")
 
-    # --- Paso 3: Añadir Foreign Keys y Verificar Integridad ---
+    # --- Paso 3: Crear Capa de Ingesta con Integridad ---
     logging.info(
-        "--- Ejecutando Paso 3: Añadiendo Foreign Keys y Verificando Integridad ---"
+        "--- Ejecutando Paso 3: Creando Capa de Ingesta (ING_) con Integridad ---"
     )
-    step_03_add_foreign_keys.add_foreign_keys_and_verify()
+    step_03_create_ingestion_layer.main()
     logging.info("--- Paso 3: Finalizado ---")
 
     # --- Paso 4: Vincular y Estandarizar Datos de Países ---
@@ -52,6 +53,12 @@ def main():
     logging.info("--- Ejecutando Paso 6: Creando el Data Quality Mart (DQM) ---")
     step_06_create_dqm.main()
     logging.info("--- Paso 6: Finalizado ---")
+
+    # --- Paso 7: Carga Inicial del DWH ---
+    # Nota: El script del paso 7 corresponde al punto 8 del TP.
+    logging.info("--- Ejecutando Paso 7: Carga Inicial del DWH (Punto 8 del TP) ---")
+    step_07_initial_dwh_load.main()
+    logging.info("--- Paso 7: Finalizado ---")
 
     logging.info("Proceso de Data Warehousing finalizado con éxito.")
 

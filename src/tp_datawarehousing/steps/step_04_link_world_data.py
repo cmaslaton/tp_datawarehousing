@@ -55,10 +55,10 @@ def standardize_country_names():
         logging.info(f"Conexión exitosa a la base de datos {DB_PATH}.")
 
         northwind_tables = {
-            "TMP_customers": "country",
-            "TMP_employees": "country",
-            "TMP_suppliers": "country",
-            "TMP_orders": "ship_country",
+            "ING_customers": "country",
+            "ING_employees": "country",
+            "ING_suppliers": "country",
+            "ING_orders": "ship_country",
         }
 
         for old_name, new_name in COUNTRY_NAME_MAPPING.items():
@@ -90,16 +90,16 @@ def analyze_country_data_consistency():
 
         # Obtener todos los nombres de países únicos de la tabla de datos mundiales
         world_countries_df = pd.read_sql_query(
-            "SELECT DISTINCT country FROM TMP_world_data_2023", conn
+            "SELECT DISTINCT country FROM ING_world_data_2023", conn
         )
         world_countries_set = set(world_countries_df["country"].str.strip())
 
         # Tablas y columnas de Northwind que contienen información de países
         northwind_tables = {
-            "TMP_customers": "country",
-            "TMP_employees": "country",
-            "TMP_suppliers": "country",
-            "TMP_orders": "ship_country",
+            "ING_customers": "country",
+            "ING_employees": "country",
+            "ING_suppliers": "country",
+            "ING_orders": "ship_country",
         }
 
         logging.info("Comparando nombres de países en las tablas de Northwind...")
