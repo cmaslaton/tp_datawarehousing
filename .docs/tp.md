@@ -58,10 +58,10 @@ crear las FOREIGN-KEYS necesarias para verificar la integridad referencial. `Rea
 
 # Ingeniería
 
-6) Definir y crear el Modelo Dimensional del DWA y documentarlo en la Metadata. Debe incluir una capa de
-Memoria y una de Enriquecimiento (datos derivados).
-7) Diseñar y crear el DQM para poder persistir los procesos ejecutados sobre el DWA, los descriptivos de cada
-entidad procesada y los indicadores de calidad. Documentar el diseño en la Metadata.
+✅ 6) Definir y crear el Modelo Dimensional del DWA y documentarlo en la Metadata. Debe incluir una capa de
+Memoria y una de Enriquecimiento (datos derivados). `Realizado en el script step_05_create_dwh_model.py, donde se define el esquema en estrella y se registran las tablas en la metadata.`
+✅ 7) Diseñar y crear el DQM para poder persistir los procesos ejecutados sobre el DWA, los descriptivos de cada
+entidad procesada y los indicadores de calidad. Documentar el diseño en la Metadata. `Realizado en el script step_06_create_dqm.py, donde se definen las tablas para el monitoreo de calidad y se registran en la metadata.`
 8) Realizar la carga inicial del DWA con los datos que se seleccionen de las tablas recibidas y procesadas.
 a) Definir los controles de calidad de ingesta para cada tabla, los datos que se persistirán en el DQM y
 los indicadores y límites para aceptar o rechazar los datasets. Realizar y ejecutar los scripts

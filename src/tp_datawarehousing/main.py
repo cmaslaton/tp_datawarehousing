@@ -3,6 +3,8 @@ from tp_datawarehousing.steps import (
     step_02_load_staging_data,
     step_03_add_foreign_keys,
     step_04_link_world_data,
+    step_05_create_dwh_model,
+    step_06_create_dqm,
 )
 import logging
 
@@ -40,6 +42,16 @@ def main():
     logging.info("--- Ejecutando Paso 4: Vinculando Datos de Países ---")
     step_04_link_world_data.main()
     logging.info("--- Paso 4: Finalizado ---")
+
+    # --- Paso 5: Crear el Modelo Dimensional del DWH ---
+    logging.info("--- Ejecutando Paso 5: Creando el Modelo Dimensional (DWH) ---")
+    step_05_create_dwh_model.main()
+    logging.info("--- Paso 5: Finalizado ---")
+
+    # --- Paso 6: Crear el Modelo del DQM ---
+    logging.info("--- Ejecutando Paso 6: Creando el Data Quality Mart (DQM) ---")
+    step_06_create_dqm.main()
+    logging.info("--- Paso 6: Finalizado ---")
 
     logging.info("Proceso de Data Warehousing finalizado con éxito.")
 
