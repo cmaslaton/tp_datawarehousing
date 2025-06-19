@@ -29,22 +29,174 @@ def log_process_start(conn, process_name, comments=""):
     return cursor.lastrowid, start_time
 
 
-def log_process_end(conn, execution_id, start_time, status, records_processed=0):
+def log_process_end(conn, process_id, start_time, status, comments=""):
     """Registra la finalización de un proceso en el DQM."""
     cursor = conn.cursor()
     end_time = datetime.now()
     duration = (end_time - start_time).total_seconds()
-    comment = f"Proceso finalizado en {duration:.2f} segundos."
     cursor.execute(
         """
         UPDATE DQM_ejecucion_procesos
-        SET fecha_fin = ?, estado = ?, registros_procesados = ?, comentarios = ?
+        SET fecha_fin = ?, estado = ?, duracion_seg = ?, comentarios = ?
         WHERE id_ejecucion = ?
         """,
-        (end_time, status, records_processed, comment, execution_id),
+        (end_time, status, duration, comments, process_id),
     )
     conn.commit()
-    logging.info(f"Proceso con ID {execution_id} finalizado con estado '{status}'.")
+    logging.info(
+        f"Proceso ID {process_id} finalizado. Estado: {status}. Duración: {duration:.2f}s."
+    )
+
+
+def log_dq_metric(conn, process_id, table_name, metric_name, metric_value):
+    """Registra una métrica descriptiva de una entidad en el DQM."""
+    cursor = conn.cursor()
+    cursor.execute(
+        """
+        INSERT INTO DQM_descriptivos_entidad (id_ejecucion, nombre_entidad, nombre_metrica, valor_metrica)
+        VALUES (?, ?, ?, ?)
+        """,
+        (process_id, table_name, metric_name, metric_value),
+    )
+    conn.commit()
+
+
+def log_dq_check(conn, process_id, check_name, table_name, status, details):
+    """Registra el resultado de un control de calidad en el DQM."""
+    cursor = conn.cursor()
+    cursor.execute(
+        """
+        INSERT INTO DQM_indicadores_calidad (id_ejecucion, nombre_indicador, entidad_asociada, resultado, detalles)
+        VALUES (?, ?, ?, ?, ?)
+        """,
+        (process_id, check_name, table_name, status, details),
+    )
+    conn.commit()
+
+
+# --- Lógica de Controles de Calidad ---
+def perform_ingestion_quality_checks(conn, process_id):
+    """
+    Ejecuta una serie de controles de calidad sobre las tablas de Ingesta (ING_).
+    """
+    logging.info("--- Iniciando Controles de Calidad de Ingesta (Punto 8a) ---")
+    cursor = conn.cursor()
+
+    tables_to_check = {
+        "ING_orders": "order_id",
+        "ING_order_details": "order_id",
+        "ING_products": "product_id",
+        "ING_customers": "customer_id",
+        "ING_employees": "employee_id",
+    }
+
+    overall_status = "OK"
+
+    for table, pk_column in tables_to_check.items():
+        # Conteo de Filas
+        cursor.execute(f"SELECT COUNT(*) FROM {table}")
+        row_count = cursor.fetchone()[0]
+        log_dq_metric(conn, process_id, table, "conteo_filas", row_count)
+
+        # Chequeo de Nulos en PK
+        cursor.execute(f"SELECT COUNT(*) FROM {table} WHERE {pk_column} IS NULL")
+        null_pk_count = cursor.fetchone()[0]
+        status = "OK" if null_pk_count == 0 else "FALLIDO"
+        if status == "FALLIDO":
+            overall_status = "FALLIDO"
+        log_dq_check(
+            conn,
+            process_id,
+            "nulos_en_pk",
+            table,
+            status,
+            f"Se encontraron {null_pk_count} claves primarias nulas.",
+        )
+
+    # Chequeo de valores negativos en order_details
+    cursor.execute(
+        "SELECT COUNT(*) FROM ING_order_details WHERE unit_price < 0 OR quantity < 0"
+    )
+    negative_values_count = cursor.fetchone()[0]
+    status = "OK" if negative_values_count == 0 else "FALLIDO"
+    if status == "FALLIDO":
+        overall_status = "FALLIDO"
+    log_dq_check(
+        conn,
+        process_id,
+        "valores_negativos_order_details",
+        "ING_order_details",
+        status,
+        f"Se encontraron {negative_values_count} registros con precios o cantidades negativas.",
+    )
+
+    logging.info(
+        f"--- Controles de Calidad de Ingesta Finalizados. Estado General: {overall_status} ---"
+    )
+    return overall_status
+
+
+def perform_integration_quality_checks(conn, process_id):
+    """
+    Ejecuta controles de calidad post-carga para verificar la integridad del DWH.
+    """
+    logging.info("--- Iniciando Controles de Calidad de Integración (Punto 8b) ---")
+    cursor = conn.cursor()
+    overall_status = "OK"
+
+    # 1. Verificar claves foráneas nulas en la tabla de hechos
+    fact_table = "DWA_FACT_Ventas"
+    sk_columns = [
+        "sk_cliente",
+        "sk_producto",
+        "sk_empleado",
+        "sk_tiempo",
+        "sk_geografia_envio",
+        "sk_shipper",
+    ]
+
+    for sk_column in sk_columns:
+        cursor.execute(f"SELECT COUNT(*) FROM {fact_table} WHERE {sk_column} IS NULL")
+        null_sk_count = cursor.fetchone()[0]
+
+        status = "OK" if null_sk_count == 0 else "ADVERTENCIA"
+        if status != "OK":
+            overall_status = "ADVERTENCIA"
+
+        log_dq_check(
+            conn,
+            process_id,
+            "fk_nulas_en_hechos",
+            fact_table,
+            status,
+            f"La columna '{sk_column}' tiene {null_sk_count} valores nulos.",
+        )
+
+    # 2. Comparar conteo de filas entre Staging y DWH
+    cursor.execute("SELECT COUNT(*) FROM ING_order_details")
+    ing_count = cursor.fetchone()[0]
+    cursor.execute(f"SELECT COUNT(*) FROM {fact_table}")
+    dwh_count = cursor.fetchone()[0]
+
+    log_dq_metric(conn, process_id, "ING_order_details", "conteo_filas", ing_count)
+    log_dq_metric(conn, process_id, fact_table, "conteo_filas", dwh_count)
+
+    status = "OK" if ing_count == dwh_count else "ADVERTENCIA"
+    if status != "OK":
+        overall_status = "ADVERTENCIA"
+    log_dq_check(
+        conn,
+        process_id,
+        "comparacion_conteo_filas",
+        f"ING_order_details vs {fact_table}",
+        status,
+        f"ING: {ing_count} filas, DWH: {dwh_count} filas. La diferencia puede indicar duplicados por el JOIN con geografía.",
+    )
+
+    logging.info(
+        f"--- Controles de Calidad de Integración Finalizados. Estado General: {overall_status} ---"
+    )
+    return overall_status
 
 
 # --- Lógica de Carga de Dimensiones ---
@@ -313,28 +465,37 @@ def load_fact_ventas(conn):
 
 def main():
     """
-    Orquesta la carga inicial del Data Warehouse, incluyendo controles de calidad.
+    Orquesta todo el proceso de carga del DWH, incluyendo los controles de calidad.
     """
     logging.info("Iniciando el Paso 8: Carga Inicial del DWH.")
     conn = None
+    process_id, start_time = None, None
     try:
         conn = sqlite3.connect(DB_PATH)
 
-        # TODO: Implementar Controles de Calidad (Punto 8a y 8b)
-        # Por ahora, asumimos que los controles pasan.
+        # 1. Iniciar el log del proceso principal
+        process_id, start_time = log_process_start(
+            conn, "CargaInicialDWH", "Proceso completo del Step 7"
+        )
 
+        # 2. Ejecutar Controles de Calidad de Ingesta (Punto 8a)
+        ingestion_status = perform_ingestion_quality_checks(conn, process_id)
+
+        # Si los controles de ingesta fallan, detenemos el proceso.
+        # En un escenario real, esto podría enviar una alerta.
+        if ingestion_status == "FALLIDO":
+            raise Exception(
+                "Los controles de calidad de ingesta han fallado. Abortando la carga del DWH."
+            )
+
+        # 3. Cargar el DWH (Dimensiones y Hechos)
         logging.info("--- Iniciando Carga de Dimensiones ---")
-
-        # Cargar dimensiones
-        shippers_count = load_dim_shippers(conn)
-        tiempo_count = load_dim_tiempo(conn)
-        productos_count = load_dim_productos(conn)
-        empleados_count = load_dim_empleados(conn)
-        clientes_count = load_dim_clientes(conn)
-        geografia_count = load_dim_geografia(conn)
-
-        # TODO: Cargar el resto de las dimensiones (Geografía)
-
+        load_dim_shippers(conn)
+        load_dim_tiempo(conn)
+        load_dim_productos(conn)
+        load_dim_empleados(conn)
+        load_dim_clientes(conn)
+        load_dim_geografia(conn)
         logging.info("--- Carga de Dimensiones Finalizada ---")
 
         # Cargar Tabla de Hechos (Ventas)
@@ -342,14 +503,36 @@ def main():
         ventas_count = load_fact_ventas(conn)
         logging.info("--- Carga de la Tabla de Hechos Finalizada ---")
 
-    except sqlite3.Error as e:
+        # 4. Ejecutar Controles de Calidad de Integración (Punto 8b)
+        integration_status = perform_integration_quality_checks(conn, process_id)
+
+        final_status = "Exitoso"
+        # Si cualquier chequeo da ADVERTENCIA o FALLIDO, el estado final lo reflejará.
+        if "ADVERTENCIA" in (ingestion_status, integration_status):
+            final_status = "Exitoso con Advertencias"
+        if "FALLIDO" in (ingestion_status, integration_status):
+            final_status = "FALLIDO"
+
+        # 5. Finalizar el log del proceso con el estado final
+        log_process_end(
+            conn,
+            process_id,
+            start_time,
+            final_status,
+            "El DWH se ha cargado y verificado.",
+        )
+
+    except Exception as e:
         logging.error(f"Error en la base de datos durante la carga del DWH: {e}")
-        if conn:
-            conn.rollback()
+        if conn and process_id:
+            # Registrar el fallo en el DQM
+            log_process_end(conn, process_id, start_time, "FALLIDO", str(e))
     finally:
         if conn:
             conn.close()
             logging.info("Conexión a la base de datos cerrada.")
+
+    logging.info("--- Paso 7: Finalizado ---")
 
 
 if __name__ == "__main__":

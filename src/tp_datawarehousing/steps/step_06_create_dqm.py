@@ -24,6 +24,13 @@ def create_dqm_tables():
         cursor = conn.cursor()
         logging.info("Conexión exitosa.")
 
+        # --- Borrado de Tablas (para asegurar recreación con esquema correcto) ---
+        logging.info("Asegurando la recreación de las tablas del DQM...")
+        cursor.execute("DROP TABLE IF EXISTS DQM_indicadores_calidad;")
+        cursor.execute("DROP TABLE IF EXISTS DQM_descriptivos_entidad;")
+        cursor.execute("DROP TABLE IF EXISTS DQM_ejecucion_procesos;")
+        conn.commit()
+
         # --- Crear Tablas del DQM ---
         logging.info("Creando tablas del Data Quality Mart (DQM_)...")
 
@@ -36,8 +43,8 @@ def create_dqm_tables():
             fecha_inicio DATETIME NOT NULL,
             fecha_fin DATETIME,
             estado TEXT NOT NULL, -- Ej: 'Exitoso', 'Fallido', 'En Progreso'
-            registros_procesados INTEGER,
-            comentarios TEXT
+            comentarios TEXT,
+            duracion_seg REAL
         )"""
         )
 
@@ -48,9 +55,8 @@ def create_dqm_tables():
             id_descriptivo INTEGER PRIMARY KEY AUTOINCREMENT,
             id_ejecucion INTEGER NOT NULL,
             nombre_entidad TEXT NOT NULL,
-            nombre_columna TEXT, -- Puede ser N/A para métricas de tabla completa
-            metrica TEXT NOT NULL, -- Ej: 'conteo_filas', 'valores_nulos', 'media', 'max', 'min'
-            valor TEXT NOT NULL,
+            nombre_metrica TEXT,
+            valor_metrica TEXT,
             FOREIGN KEY (id_ejecucion) REFERENCES DQM_ejecucion_procesos(id_ejecucion)
         )"""
         )
@@ -60,12 +66,11 @@ def create_dqm_tables():
             """
         CREATE TABLE IF NOT EXISTS DQM_indicadores_calidad (
             id_indicador INTEGER PRIMARY KEY AUTOINCREMENT,
-            id_ejecucion INTEGER NOT NULL,
-            nombre_entidad TEXT NOT NULL,
-            nombre_regla_calidad TEXT NOT NULL, -- Ej: 'unicidad_pk', 'integridad_referencial'
-            resultado TEXT NOT NULL, -- Ej: 'Pasa', 'Falla'
-            registros_fallidos INTEGER DEFAULT 0,
-            descripcion_regla TEXT,
+            id_ejecucion INTEGER,
+            nombre_indicador TEXT,
+            entidad_asociada TEXT,
+            resultado TEXT,
+            detalles TEXT,
             FOREIGN KEY (id_ejecucion) REFERENCES DQM_ejecucion_procesos(id_ejecucion)
         )"""
         )
@@ -74,20 +79,34 @@ def create_dqm_tables():
 
         # --- Registrar en Metadata ---
         logging.info("Registrando nuevas tablas en Metadata (MET_)...")
-        dqm_tables = {
-            "DQM_ejecucion_procesos": "Registra la ejecución de los diferentes procesos ETL/ELT del DWA.",
-            "DQM_descriptivos_entidad": "Almacena estadísticas descriptivas de las entidades procesadas en cada ejecución.",
-            "DQM_indicadores_calidad": "Guarda los resultados de las reglas de calidad de datos aplicadas durante los procesos.",
-        }
-
+        dqm_tables = [
+            (
+                "DQM_ejecucion_procesos",
+                "Almacena el log de ejecución de cada proceso ETL.",
+                "id_ejecucion (PK), nombre_proceso, fecha_inicio, fecha_fin, estado, comentarios, duracion_seg",
+                USER,
+            ),
+            (
+                "DQM_descriptivos_entidad",
+                "Almacena métricas descriptivas de las entidades en cada ejecución.",
+                "id_descriptivo (PK), id_ejecucion (FK), nombre_entidad, nombre_metrica, valor_metrica",
+                USER,
+            ),
+            (
+                "DQM_indicadores_calidad",
+                "Registra los resultados de los controles de calidad ejecutados.",
+                "id_indicador (PK), id_ejecucion (FK), nombre_indicador, entidad_asociada, resultado, detalles",
+                USER,
+            ),
+        ]
         current_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        for table_name, description in dqm_tables.items():
+        for table_name, description, columns, user in dqm_tables:
             cursor.execute(
                 """
                 INSERT OR REPLACE INTO MET_entidades (nombre_entidad, descripcion, capa, fecha_creacion, usuario_creacion)
                 VALUES (?, ?, ?, ?, ?)
                 """,
-                (table_name, description, "DQM", current_date, USER),
+                (table_name, description, "DQM", current_date, user),
             )
 
         logging.info("Metadata actualizada para las tablas del DQM.")
