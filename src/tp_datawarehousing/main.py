@@ -8,6 +8,7 @@ from tp_datawarehousing.steps import (
     step_07_initial_dwh_load,
     step_08_load_ingesta2_to_staging,
     step_09_update_dwh_with_ingesta2,
+    step_10_create_data_product,
 )
 import logging
 
@@ -71,6 +72,11 @@ def main():
     logging.info("--- Ejecutando Paso 9: Actualizando DWH con Ingesta2 ---")
     step_09_update_dwh_with_ingesta2.main()
     logging.info("--- Paso 9: Finalizado ---")
+
+    # --- Paso 10: Crear Producto de Datos ---
+    logging.info("--- Ejecutando Paso 10: Creando Producto de Datos ---")
+    step_10_create_data_product.main()
+    logging.info("--- Paso 10: Finalizado ---")
 
     logging.info("Proceso de Data Warehousing finalizado con éxito.")
 

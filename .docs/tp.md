@@ -89,11 +89,11 @@ entidad procesada y los indicadores de calidad. Documentar el diseño en la Meta
 
 # Publicación
 
-10) Publicar un producto de datos resultante del DWA para un caso de negocio particular y un período dado si
-corresponde.
-a) Desarrollar y ejecutar los scripts necesarios.
-b) Dejar huella en el DQM.
-c) Dejar huella en la Metadata de ser necesario.
+✅ 10) Publicar un producto de datos resultante del DWA para un caso de negocio particular y un período dado si
+corresponde. `Realizado en el script step_10_create_data_product.py.`
+    a) Desarrollar y ejecutar los scripts necesarios. `Realizado. Se crea la tabla agregada DP_Ventas_Mensuales_Categoria_Pais.`
+    b) Dejar huella en el DQM. `Realizado. La ejecución del proceso se registra en DQM_ejecucion_procesos.`
+    c) Dejar huella en la Metadata de ser necesario. `Realizado. La nueva tabla se registra en MET_entidades.`
 11) Explotación
 a) Desarrollar y publicar un tablero para la visualización del producto de datos desarrollado. Dejar huella en
 el DQM y en Metadata de ser necesario.
