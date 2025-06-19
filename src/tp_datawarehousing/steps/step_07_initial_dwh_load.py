@@ -532,7 +532,7 @@ def main():
             conn.close()
             logging.info("Conexión a la base de datos cerrada.")
 
-    logging.info("--- Paso 7: Finalizado ---")
+    # logging.info("--- Paso 7: Finalizado ---")
 
 
 if __name__ == "__main__":

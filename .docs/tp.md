@@ -73,19 +73,19 @@ entidad procesada y los indicadores de calidad. Documentar el diseño en la Meta
     correspondientes. Tener en cuenta: la integridad referencial e indicadores de comparación. `Realizado en la función perform_integration_quality_checks, que verifica SKs nulas en la tabla de hechos y compara conteos de filas. Los resultados se persisten en el DQM.`
     c) Ingestar los datos de Ingesta1 en el DWA definido. Las datos se deben insertar desde las tablas
     temporales creadas. Actualizar todas las capas. Siempre y cuando se superen los umbrales de calidad. `Realizado en el cuerpo principal de step_07_initial_dwh_load.py, que invoca las funciones de carga solo si los controles de ingesta (8a) son exitosos.`
-9) Actualización:
-a) Persistir en área temporal las tablas entregadas como Ingesta2.
-b) Repetir los pasos definidos para Ingesta1 que sean adecuados para Ingesta2.
-c) Considerar altas, bajas y modificaciones. Tener en cuenta el orden de prevalencia para las actualizaciones.
-d) Si hubiera errores se debe decidir si se cancela toda la actualización, se procesa en parte o en su totalidad.
-Lo que suceda debe quedar registrado en el DQM.
-e) Se debe considerar además la capa de Memoria para persistir la historia de los campos que han sido
-modificados.
-f) Se debe considerar además actualizar la capa de Enriquecimiento para persistir los datos derivados que
-se vean afectados.
-g) Desarrollar y ejecutar los scripts correspondientes para actualizar el DWA con los nuevos datos.
-h) Actualizar el DQM si fuera necesario.
-i) Actualizar la Metadata si fuera necesario.
+✅ 9) Actualización: `Realizada en los scripts step_08 (carga de Ingesta2 en un staging temporal TMP2_) y step_09 (orquestador de la actualización).`
+    a) Persistir en área temporal las tablas entregadas como Ingesta2. `Realizado en step_08_load_ingesta2_to_staging.py.`
+    b) Repetir los pasos definidos para Ingesta1 que sean adecuados para Ingesta2. `Realizado en step_08 y step_09, incluyendo normalización, carga y registro en DQM.`
+    c) Considerar altas, bajas y modificaciones. Tener en cuenta el orden de prevalencia para las actualizaciones. `Realizado en step_09: Se implementa SCD Tipo 2 para Clientes (altas y modificaciones con historia) y se actualizan/insertan hechos en la tabla de ventas.`
+    d) Si hubiera errores se debe decidir si se cancela toda la actualización, se procesa en parte o en su totalidad.
+    Lo que suceda debe quedar registrado en el DQM. `Realizado: el script step_09 registra el estado final (Exitoso/Fallido) y las métricas en el DQM.`
+    e) Se debe considerar además la capa de Memoria para persistir la historia de los campos que han sido
+    modificados. `Realizado en step_09 con la implementación de SCD Tipo 2 para la dimensión de clientes.`
+    f) Se debe considerar además actualizar la capa de Enriquecimiento para persistir los datos derivados que
+    se vean afectados. `Realizado implícitamente al actualizar/insertar nuevos hechos con métricas derivadas como monto_total.`
+    g) Desarrollar y ejecutar los scripts correspondientes para actualizar el DWA con los nuevos datos. `Realizado.`
+    h) Actualizar el DQM si fuera necesario. `Realizado.`
+    i) Actualizar la Metadata si fuera necesario. `No fue necesario para la actualización.`
 
 # Publicación
 

@@ -141,8 +141,6 @@ def load_all_staging_data():
                     f"El archivo {csv_file} no se encontró en {INGESTA_PATH}. Se omite."
                 )
 
-        logging.info("Proceso de carga de datos de Staging finalizado.")
-
     except sqlite3.Error as e:
         logging.error(f"Error de base de datos durante la carga de staging: {e}")
     finally:
