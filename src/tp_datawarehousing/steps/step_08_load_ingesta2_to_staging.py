@@ -10,7 +10,7 @@ logging.basicConfig(
 )
 
 # --- Constantes ---
-DB_PATH = ".data/tp_dwa.db"
+DB_PATH = "db/tp_dwa.db"
 INGESTA_PATH = ".data/ingesta2"
 
 # Mapeo de archivos CSV de Ingesta2 a nombres de tablas temporales TMP2_

@@ -11,7 +11,7 @@ logging.basicConfig(
 )
 
 # --- Constantes ---
-DB_PATH = ".data/tp_dwa.db"
+DB_PATH = "db/tp_dwa.db"
 INGESTA_PATH = ".data/ingesta1"
 
 # Mapeo de archivos CSV a nombres de tablas en la BD

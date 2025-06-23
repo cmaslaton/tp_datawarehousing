@@ -7,7 +7,7 @@ logging.basicConfig(
 )
 
 # --- Constantes ---
-DB_PATH = ".data/tp_dwa.db"
+DB_PATH = "db/tp_dwa.db"
 
 
 def create_database_and_tables():
