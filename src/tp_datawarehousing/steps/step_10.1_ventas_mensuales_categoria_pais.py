@@ -35,16 +35,16 @@ def log_process_end(conn, process_id, start_time, status, comments=""):
     conn.commit()
 
 
-def create_sales_data_product(conn, process_id):
+def create_dp1_ventas_mensuales_categoria_pais(conn, process_id):
     """
-    Crea un producto de datos agregado para el análisis de ventas.
+    Crea el Producto de Datos 1: Análisis de ventas mensuales por categoría y país.
     """
     logging.info(
-        "--- Iniciando creación del producto de datos: Ventas Mensuales por Categoría y País ---"
+        "--- Iniciando creación del DP1: Ventas Mensuales por Categoría y País ---"
     )
     cursor = conn.cursor()
 
-    table_name = "DP_Ventas_Mensuales_Categoria_Pais"
+    table_name = "DP1_Ventas_Mensuales_Categoria_Pais"
 
     # 1. Crear la tabla del producto de datos
     cursor.execute(f"DROP TABLE IF EXISTS {table_name};")
@@ -83,7 +83,7 @@ def create_sales_data_product(conn, process_id):
     logging.info(f"{inserted_count} registros agregados insertados en {table_name}.")
 
     # 3. Registrar el nuevo producto de datos en la metadata
-    description = "Producto de datos que resume las ventas totales mensuales por categoría de producto y país de envío."
+    description = "DP1: Producto de datos que resume las ventas totales mensuales por categoría de producto y país de envío."
     current_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     cursor.execute(
         "INSERT OR REPLACE INTO MET_entidades (nombre_entidad, descripcion, capa, fecha_creacion, usuario_creacion) VALUES (?, ?, ?, ?, ?)",
@@ -98,9 +98,9 @@ def create_sales_data_product(conn, process_id):
 
 def main():
     """
-    Orquesta la creación de productos de datos.
+    Orquesta la creación del DP1: Ventas Mensuales por Categoría y País.
     """
-    logging.info("Iniciando el Paso 10: Creación de Productos de Datos.")
+    logging.info("Iniciando el Paso 10.1: Creación del DP1 - Ventas Mensuales por Categoría y País.")
     conn = None
     process_id = -1
     start_time = datetime.now()
@@ -108,17 +108,17 @@ def main():
     try:
         conn = sqlite3.connect(DB_PATH)
         process_id, start_time = log_process_start(
-            conn, "CreacionDataProduct", "Genera DPs para explotación."
+            conn, "CreacionDP1_VentasMensuales", "Genera DP1 para análisis de ventas por categoría y país."
         )
 
-        create_sales_data_product(conn, process_id)
+        create_dp1_ventas_mensuales_categoria_pais(conn, process_id)
 
         log_process_end(
-            conn, process_id, start_time, "Exitoso", "Productos de datos generados."
+            conn, process_id, start_time, "Exitoso", "DP1 - Ventas Mensuales por Categoría y País generado."
         )
 
     except sqlite3.Error as e:
-        logging.error(f"Error de base de datos en el Paso 10: {e}")
+        logging.error(f"Error de base de datos en el Paso 10.1: {e}")
         if conn and process_id != -1:
             log_process_end(conn, process_id, start_time, "Fallido", str(e))
     finally:
@@ -128,4 +128,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    main() 

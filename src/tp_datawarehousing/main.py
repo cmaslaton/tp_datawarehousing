@@ -8,8 +8,11 @@ from tp_datawarehousing.steps import (
     step_07_initial_dwh_load,
     step_08_load_ingesta2_to_staging,
     step_09_update_dwh_with_ingesta2,
-    step_10_create_data_product,
 )
+# Importar productos de datos individualmente
+from tp_datawarehousing.steps import step_10_1_ventas_mensuales_categoria_pais
+from tp_datawarehousing.steps import step_10_2_performance_empleados_trimestral
+from tp_datawarehousing.steps import step_10_3_analisis_logistica_shippers
 import logging
 
 
@@ -73,10 +76,20 @@ def main():
     step_09_update_dwh_with_ingesta2.main()
     logging.info("--- Paso 9: Finalizado ---")
 
-    # --- Paso 10: Crear Producto de Datos ---
-    logging.info("--- Ejecutando Paso 10: Creando Producto de Datos ---")
-    step_10_create_data_product.main()
-    logging.info("--- Paso 10: Finalizado ---")
+    # --- Paso 10.1: Crear DP1 - Ventas Mensuales por Categoría y País ---
+    logging.info("--- Ejecutando Paso 10.1: Creando DP1 - Ventas Mensuales por Categoría y País ---")
+    step_10_1_ventas_mensuales_categoria_pais.main()
+    logging.info("--- Paso 10.1: Finalizado ---")
+
+    # --- Paso 10.2: Crear DP2 - Performance de Empleados Trimestral ---
+    logging.info("--- Ejecutando Paso 10.2: Creando DP2 - Performance de Empleados Trimestral ---")
+    step_10_2_performance_empleados_trimestral.main()
+    logging.info("--- Paso 10.2: Finalizado ---")
+
+    # --- Paso 10.3: Crear DP3 - Análisis de Logística y Shippers ---
+    logging.info("--- Ejecutando Paso 10.3: Creando DP3 - Análisis de Logística y Shippers ---")
+    step_10_3_analisis_logistica_shippers.main()
+    logging.info("--- Paso 10.3: Finalizado ---")
 
     logging.info("Proceso de Data Warehousing finalizado con éxito.")
 
