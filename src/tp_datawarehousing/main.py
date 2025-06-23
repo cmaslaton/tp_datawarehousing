@@ -7,7 +7,7 @@ from tp_datawarehousing.steps import (
     step_06_create_dqm,
     step_07_initial_dwh_load,
     step_08_load_ingesta2_to_staging,
-    step_09_update_dwh_with_ingesta2,
+    step_09_update_dwh_with_ingesta2
 )
 # Importar productos de datos individualmente
 from tp_datawarehousing.steps import step_10_1_ventas_mensuales_categoria_pais
