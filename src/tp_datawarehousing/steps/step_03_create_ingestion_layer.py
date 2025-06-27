@@ -5,7 +5,7 @@ logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
 )
 
-DB_PATH = ".data/tp_dwa.db"
+DB_PATH = "db/tp_dwa.db"
 
 TABLE_CREATION_QUERIES = {
     "ING_regions": "CREATE TABLE IF NOT EXISTS ING_regions (region_id INTEGER PRIMARY KEY, region_description TEXT NOT NULL);",

@@ -8,7 +8,7 @@ logging.basicConfig(
 )
 
 # --- Constantes ---
-DB_PATH = ".data/tp_dwa.db"
+DB_PATH = "db/tp_dwa.db"
 
 # --- Mapeo de inconsistencias conocidas ---
 # Este mapeo se usará para estandarizar los nombres de los países.
