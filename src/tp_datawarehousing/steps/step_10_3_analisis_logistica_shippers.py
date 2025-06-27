@@ -96,7 +96,7 @@ def create_dp3_analisis_logistica_shippers(conn, process_id):
                 g.ciudad as ciudad_destino,
                 COUNT(DISTINCT fv.nk_orden_id) as envios_realizados,
                 SUM(fv.flete) as costo_flete_total,
-                AVG(fv.flete) as costo_flete_promedio,
+                SUM(fv.flete) / COUNT(DISTINCT fv.nk_orden_id) as costo_flete_promedio,
                 SUM(fv.cantidad) as volumen_productos_enviados,
                 SUM(fv.monto_total) as ventas_totales_asociadas,
                 CASE 

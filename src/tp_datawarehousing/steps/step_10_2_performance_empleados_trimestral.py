@@ -91,7 +91,7 @@ def create_dp2_performance_empleados_trimestral(conn, process_id):
                 e.pais,
                 COUNT(DISTINCT fv.nk_orden_id) as ordenes_procesadas,
                 SUM(fv.monto_total) as ventas_totales,
-                AVG(fv.monto_total) as venta_promedio_por_orden,
+                SUM(fv.monto_total) / COUNT(DISTINCT fv.nk_orden_id) as venta_promedio_por_orden,
                 COUNT(DISTINCT fv.sk_producto) as productos_diferentes_vendidos,
                 COUNT(DISTINCT fv.sk_cliente) as clientes_diferentes_atendidos
             FROM DWA_FACT_Ventas fv
