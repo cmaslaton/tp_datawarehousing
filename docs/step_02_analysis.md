@@ -22,7 +22,8 @@ Este script ejecuta la **primera carga masiva de datos** desde archivos CSV de I
 - **Manejo de encoding**: Intenta UTF-8, fallback a latin-1 para archivos problemáticos
 - **Validación de archivos**: Verifica existencia de archivos antes de procesarlos
 - **Limpieza de datos**: DELETE previo evita duplicados en re-ejecuciones
-- **Logging de errores**: Captura y registra errores sin abortar el proceso completo
+
+- |||| **Logging de errores**: Captura y registra errores sin abortar el proceso completo
 
 ### Controles de Transformación:
 - **Normalización de columnas**: Convierte nombres inconsistentes a snake_case estándar
