@@ -14,11 +14,22 @@ pip install -e .
 python -m tp_datawarehousing.main
 ```
 
+### Running Individual Steps
+```bash
+# Run a specific step for testing/debugging
+python -c "from tp_datawarehousing.steps import step_01_setup_staging_area; step_01_setup_staging_area.create_database_and_tables()"
+```
+
 ### Dependencies
 - Uses Python 3.11+
 - Main dependencies managed in `pyproject.toml`
-- Runtime dependencies: pandas
+- Runtime dependencies: pandas, numpy, python-dateutil, pytz, tzdata
 - Lock file: `uv.lock`
+
+### Database Operations
+- Database file location: `db/tp_dwa.db` (note: inconsistent with `.data/tp_dwa.db` mentioned elsewhere)
+- All steps use SQLite with standard SQL syntax
+- Transaction management included in each step
 
 ## Architecture Overview
 
@@ -54,10 +65,12 @@ The 10-step process implements a complete data warehousing flow:
 
 ### Key Implementation Details
 
-- **Database Path**: All database operations use the constant `DB_PATH = ".data/tp_dwa.db"`
+- **Database Path**: All database operations use the constant `DB_PATH = "db/tp_dwa.db"` (defined in each step module)
 - **Logging**: Comprehensive logging system implemented across all modules with INFO level by default
 - **Error Handling**: Each step includes try-catch blocks for database operations
 - **Transaction Management**: Steps use SQLite transactions for data consistency
+- **Orchestration**: The `main.py` orchestrator imports and executes all 10 steps sequentially
+- **Step Independence**: Each step can be run individually for testing/debugging purposes
 
 ### Data Flow Layers
 
@@ -74,3 +87,12 @@ The project implements a multi-layered data architecture:
 - All SQL operations use standard SQLite syntax
 - Each step can be run independently after its prerequisites are met
 - The orchestrator provides detailed logging for monitoring ETL progress
+- Step 10 is split into three separate data product modules (10.1, 10.2, 10.3)
+- All table creation uses "CREATE TABLE IF NOT EXISTS" for idempotency
+
+### Critical Code Patterns
+
+- **Database Connection**: Each step module uses `sqlite3.connect(DB_PATH)` with proper error handling
+- **Logging Setup**: All modules use `logging.basicConfig(level=logging.INFO)` with standardized format
+- **Function Naming**: Main entry points use `main()` function, setup functions use descriptive names
+- **Import Structure**: Steps are imported individually in `main.py` for clear dependency tracking

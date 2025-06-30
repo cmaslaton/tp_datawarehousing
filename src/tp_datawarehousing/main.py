@@ -7,13 +7,15 @@ from tp_datawarehousing.steps import (
     step_06_create_dqm,
     step_07_initial_dwh_load,
     step_08_load_ingesta2_to_staging,
-    step_09_update_dwh_with_ingesta2
+    step_09_update_dwh_with_ingesta2,
 )
+
 # Importar productos de datos individualmente
 from tp_datawarehousing.steps import step_10_1_ventas_mensuales_categoria_pais
 from tp_datawarehousing.steps import step_10_2_performance_empleados_trimestral
 from tp_datawarehousing.steps import step_10_3_analisis_logistica_shippers
 import logging
+import os
 
 
 def main():
@@ -25,6 +27,14 @@ def main():
     )
 
     logging.info("Iniciando el proceso de Data Warehousing.")
+
+    # --- Crear directorio de base de datos si no existe ---
+    db_dir = "db"
+    if not os.path.exists(db_dir):
+        os.makedirs(db_dir, exist_ok=True)
+        logging.info(f"Directorio '{db_dir}' creado exitosamente.")
+    else:
+        logging.info(f"Directorio '{db_dir}' ya existe.")
 
     # --- Paso 1: Configurar el área de Staging ---
     logging.info(
@@ -77,17 +87,23 @@ def main():
     logging.info("--- Paso 9: Finalizado ---")
 
     # --- Paso 10.1: Crear DP1 - Ventas Mensuales por Categoría y País ---
-    logging.info("--- Ejecutando Paso 10.1: Creando DP1 - Ventas Mensuales por Categoría y País ---")
+    logging.info(
+        "--- Ejecutando Paso 10.1: Creando DP1 - Ventas Mensuales por Categoría y País ---"
+    )
     step_10_1_ventas_mensuales_categoria_pais.main()
     logging.info("--- Paso 10.1: Finalizado ---")
 
     # --- Paso 10.2: Crear DP2 - Performance de Empleados Trimestral ---
-    logging.info("--- Ejecutando Paso 10.2: Creando DP2 - Performance de Empleados Trimestral ---")
+    logging.info(
+        "--- Ejecutando Paso 10.2: Creando DP2 - Performance de Empleados Trimestral ---"
+    )
     step_10_2_performance_empleados_trimestral.main()
     logging.info("--- Paso 10.2: Finalizado ---")
 
     # --- Paso 10.3: Crear DP3 - Análisis de Logística y Shippers ---
-    logging.info("--- Ejecutando Paso 10.3: Creando DP3 - Análisis de Logística y Shippers ---")
+    logging.info(
+        "--- Ejecutando Paso 10.3: Creando DP3 - Análisis de Logística y Shippers ---"
+    )
     step_10_3_analisis_logistica_shippers.main()
     logging.info("--- Paso 10.3: Finalizado ---")
 
