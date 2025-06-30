@@ -27,7 +27,7 @@ python -c "from tp_datawarehousing.steps import step_01_setup_staging_area; step
 - Lock file: `uv.lock`
 
 ### Database Operations
-- Database file location: `db/tp_dwa.db` (note: inconsistent with `.data/tp_dwa.db` mentioned elsewhere)
+- Database file location: `db/tp_dwa.db`
 - All steps use SQLite with standard SQL syntax
 - Transaction management included in each step
 
@@ -41,7 +41,7 @@ This is a **Data Warehousing (DWA) project** implementing an end-to-end ETL pipe
 
 2. **Modular Design**: Each step is implemented as a separate module in `src/tp_datawarehousing/steps/`, allowing for independent development and testing of individual ETL phases.
 
-3. **SQLite-based Data Storage**: All data operations use SQLite database (`.data/tp_dwa.db`) with different table prefixes for different layers:
+3. **SQLite-based Data Storage**: All data operations use SQLite database (`db/tp_dwa.db`) with different table prefixes for different layers:
    - `TMP_`: Staging area tables
    - `ING_`: Ingestion layer with integrity constraints
    - `DWH_`: Data warehouse dimensional model
@@ -90,9 +90,42 @@ The project implements a multi-layered data architecture:
 - Step 10 is split into three separate data product modules (10.1, 10.2, 10.3)
 - All table creation uses "CREATE TABLE IF NOT EXISTS" for idempotency
 
+### Quality Control Framework
+
+The project implements a comprehensive data quality framework across all ETL steps:
+
+#### Quality Utils Module (`quality_utils.py`)
+- **`get_process_execution_id()`**: Initializes tracking for each process
+- **`log_quality_metric()`**: Records quality metrics in DQM_indicadores_calidad
+- **`validate_table_count()`**: Validates record counts
+- **`validate_no_nulls()`**: Checks for NULL values in critical fields
+- **`validate_referential_integrity()`**: Validates foreign key relationships
+- **`validate_data_range()`**: Validates value ranges
+- **`log_record_count()`**: Records operation counts
+
+#### Quality Controls by Step
+- **Step 2 (Staging)**: File validation, encoding checks, duplicate detection, data type validation
+- **Step 3 (Ingestion)**: Referential integrity, count validation, FK cleanup tracking
+- **Step 7 (DWH Load)**: Pre/post load validation, dimension/fact integrity, completeness checks
+- **Step 9 (DWH Update)**: SCD2 validation, temporal consistency, pre/post update state validation
+
+#### DQM Tables Structure
+- **`DQM_ejecucion_procesos`**: Process execution tracking
+- **`DQM_indicadores_calidad`**: Quality metrics and validation results
+- **`DQM_descriptivos_entidad`**: Descriptive statistics by entity
+
+#### Usage Pattern
+```python
+execution_id = get_process_execution_id("PROCESS_NAME")
+# ... process logic ...
+log_quality_metric(execution_id, "METRIC_NAME", "TABLE_NAME", "RESULT", "DETAILS")
+update_process_execution(execution_id, "Exitoso", "Comments")
+```
+
 ### Critical Code Patterns
 
 - **Database Connection**: Each step module uses `sqlite3.connect(DB_PATH)` with proper error handling
 - **Logging Setup**: All modules use `logging.basicConfig(level=logging.INFO)` with standardized format
 - **Function Naming**: Main entry points use `main()` function, setup functions use descriptive names
 - **Import Structure**: Steps are imported individually in `main.py` for clear dependency tracking
+- **Quality Integration**: All critical steps include quality metrics using the unified framework

@@ -1,6 +1,15 @@
 import sqlite3
 import logging
 from datetime import datetime, timedelta
+from tp_datawarehousing.quality_utils import (
+    get_process_execution_id,
+    update_process_execution,
+    log_quality_metric,
+    validate_table_count,
+    validate_no_nulls,
+    validate_referential_integrity,
+    log_record_count,
+)
 
 # --- Configuración de Logging ---
 logging.basicConfig(
@@ -12,38 +21,7 @@ DB_PATH = "db/tp_dwa.db"
 USER = "data_engineer_updater"
 
 
-# --- Funciones Auxiliares para el DQM (reutilizables) ---
-def log_process_start(conn, process_name, comments=""):
-    """Registra el inicio de un proceso en el DQM."""
-    cursor = conn.cursor()
-    start_time = datetime.now()
-    cursor.execute(
-        """
-        INSERT INTO DQM_ejecucion_procesos (nombre_proceso, fecha_inicio, estado, comentarios)
-        VALUES (?, ?, ?, ?)
-        """,
-        (process_name, start_time, "En Progreso", comments),
-    )
-    conn.commit()
-    return cursor.lastrowid, start_time
-
-
-def log_process_end(conn, process_id, start_time, status, comments=""):
-    """Registra la finalización de un proceso en el DQM."""
-    cursor = conn.cursor()
-    end_time = datetime.now()
-    duration = (end_time - start_time).total_seconds()
-    cursor.execute(
-        """
-        UPDATE DQM_ejecucion_procesos
-        SET fecha_fin = ?, estado = ?, duracion_seg = ?, comentarios = ?
-        WHERE id_ejecucion = ?
-        """,
-        (end_time, status, duration, comments, process_id),
-    )
-    conn.commit()
-
-
+# --- Funciones de Compatibilidad (mantenidas para no romper código existente) ---
 def log_dq_metric(conn, process_id, table_name, metric_name, metric_value):
     """Registra una métrica descriptiva de una entidad en el DQM."""
     cursor = conn.cursor()
@@ -180,7 +158,13 @@ def update_scd2_clientes(conn, process_id):
 
     conn.commit()
 
-    # Registrar métricas en DQM
+    # Registrar métricas usando framework unificado
+    log_record_count(
+        process_id, "MODIFIED_SCD2", "DWA_DIM_Clientes", len(changed_customers)
+    )
+    log_record_count(process_id, "NEW_SCD2", "DWA_DIM_Clientes", len(new_customers))
+
+    # Registrar métricas en DQM (compatibilidad)
     log_dq_metric(
         conn,
         process_id,
@@ -195,6 +179,13 @@ def update_scd2_clientes(conn, process_id):
     logging.info(
         f"Actualización de DWA_DIM_Clientes (SCD2) completada. {len(changed_customers)} registros actualizados, {len(new_customers)} nuevos."
     )
+
+    # Retornar resultados para el framework de calidad
+    return {
+        "modificados": len(changed_customers),
+        "nuevos": len(new_customers),
+        "total_procesados": len(changed_customers) + len(new_customers),
+    }
 
 
 def update_fact_ventas(conn, process_id):
@@ -222,6 +213,11 @@ def update_fact_ventas(conn, process_id):
     """
     cursor.execute(update_query)
     updated_count = cursor.rowcount
+
+    # Registrar métricas usando framework unificado
+    log_record_count(process_id, "UPDATED_FACTS", "DWA_FACT_Ventas", updated_count)
+
+    # Registrar métricas en DQM (compatibilidad)
     log_dq_metric(
         conn, process_id, "DWA_FACT_Ventas", "registros_modificados", updated_count
     )
@@ -261,6 +257,11 @@ def update_fact_ventas(conn, process_id):
     """
     cursor.execute(insert_query)
     inserted_count = cursor.rowcount
+
+    # Registrar métricas usando framework unificado
+    log_record_count(process_id, "INSERTED_FACTS", "DWA_FACT_Ventas", inserted_count)
+
+    # Registrar métricas en DQM (compatibilidad)
     log_dq_metric(
         conn, process_id, "DWA_FACT_Ventas", "registros_nuevos", inserted_count
     )
@@ -269,44 +270,342 @@ def update_fact_ventas(conn, process_id):
     conn.commit()
     logging.info("--- Actualización de DWA_FACT_Ventas completada ---")
 
+    # Retornar resultados para el framework de calidad
+    return {
+        "actualizados": updated_count,
+        "nuevos": inserted_count,
+        "total_procesados": updated_count + inserted_count,
+    }
+
 
 def main():
     """
     Orquesta la actualización del DWH con los datos de Ingesta2.
+    Incluye controles de calidad completos para operaciones SCD2 e incrementales.
     """
     logging.info("Iniciando el Paso 9: Actualización del DWH con Ingesta2.")
-    conn = None
-    process_id = -1
-    start_time = datetime.now()
 
+    # Inicializar tracking de calidad con framework unificado
+    execution_id = get_process_execution_id("STEP_09_UPDATE_DWH_INGESTA2")
+
+    conn = None
     try:
         conn = sqlite3.connect(DB_PATH)
-        process_id, start_time = log_process_start(
-            conn, "Actualizacion DWH con Ingesta2"
+        log_quality_metric(
+            execution_id,
+            "DATABASE_CONNECTION",
+            "DB_FILE",
+            "PASS",
+            "Conexión exitosa a la base de datos",
         )
 
-        # --- Actualizar Dimensiones ---
-        update_scd2_clientes(conn, process_id)
+        # Validaciones pre-proceso: Verificar que Ingesta2 esté disponible
+        validate_ingesta2_availability(execution_id, conn)
+
+        # Validaciones pre-proceso: Estado del DWH antes de actualización
+        validate_dwh_state_before_update(execution_id, conn)
+
+        # --- Actualizar Dimensiones SCD2 ---
+        logging.info("--- Iniciando Actualización de Dimensiones SCD2 ---")
+        try:
+            scd2_results = update_scd2_clientes(conn, execution_id)
+            log_quality_metric(
+                execution_id,
+                "SCD2_UPDATE",
+                "DWA_DIM_Clientes",
+                "PASS",
+                f"Clientes modificados: {scd2_results['modificados']}, Nuevos: {scd2_results['nuevos']}",
+            )
+        except Exception as e:
+            log_quality_metric(
+                execution_id,
+                "SCD2_UPDATE",
+                "DWA_DIM_Clientes",
+                "FAIL",
+                f"Error en SCD2: {str(e)}",
+            )
+            raise
 
         # --- Actualizar Tabla de Hechos ---
-        update_fact_ventas(conn, process_id)
+        logging.info("--- Iniciando Actualización de Tabla de Hechos ---")
+        try:
+            fact_results = update_fact_ventas(conn, execution_id)
+            log_quality_metric(
+                execution_id,
+                "FACT_UPDATE",
+                "DWA_FACT_Ventas",
+                "PASS",
+                f"Hechos actualizados: {fact_results['actualizados']}, Nuevos: {fact_results['nuevos']}",
+            )
+        except Exception as e:
+            log_quality_metric(
+                execution_id,
+                "FACT_UPDATE",
+                "DWA_FACT_Ventas",
+                "FAIL",
+                f"Error en tabla de hechos: {str(e)}",
+            )
+            raise
 
-        log_process_end(
-            conn,
-            process_id,
-            start_time,
-            "Exitoso",
-            "Actualización con Ingesta2 completada.",
+        # 5. Validaciones post-actualización
+        validate_dwh_integrity_after_update(execution_id, conn)
+        validate_temporal_consistency(execution_id, conn)
+
+        # Finalizar la ejecución del proceso
+        update_process_execution(
+            execution_id, "Exitoso", "Actualización desde Ingesta2 completada."
         )
+        logging.info("Paso 9 completado exitosamente.")
 
     except sqlite3.Error as e:
         logging.error(f"Error de base de datos en el Paso 9: {e}")
-        if conn and process_id != -1:
-            log_process_end(conn, process_id, start_time, "Fallido", str(e))
+        log_quality_metric(
+            execution_id, "DATABASE_ERROR", "PROCESS", "FAIL", f"Error SQL: {str(e)}"
+        )
+        update_process_execution(
+            execution_id, "Fallido", f"Error de base de datos: {str(e)}"
+        )
+    except Exception as e:
+        logging.error(f"Error general en el Paso 9: {e}")
+        log_quality_metric(
+            execution_id, "PROCESS_ERROR", "PROCESS", "FAIL", f"Error: {str(e)}"
+        )
+        update_process_execution(execution_id, "Fallido", f"Error: {str(e)}")
     finally:
         if conn:
             conn.close()
             logging.info("Conexión a la base de datos cerrada.")
+
+
+def validate_ingesta2_availability(execution_id: int, conn: sqlite3.Connection):
+    """
+    Valida que los datos de Ingesta2 estén disponibles y sean válidos.
+    """
+    cursor = conn.cursor()
+
+    # Verificar que las tablas TMP2_ existan y tengan datos
+    ingesta2_tables = ["TMP2_customers", "TMP2_orders", "TMP2_order_details"]
+
+    for table in ingesta2_tables:
+        try:
+            cursor.execute(f"SELECT COUNT(*) FROM {table}")
+            count = cursor.fetchone()[0]
+
+            if count == 0:
+                log_quality_metric(
+                    execution_id,
+                    "INGESTA2_EMPTY",
+                    table,
+                    "WARNING",
+                    f"Tabla {table} está vacía",
+                )
+            else:
+                log_quality_metric(
+                    execution_id,
+                    "INGESTA2_AVAILABLE",
+                    table,
+                    str(count),
+                    f"Tabla {table} disponible con {count} registros",
+                )
+        except sqlite3.Error as e:
+            log_quality_metric(
+                execution_id,
+                "INGESTA2_ERROR",
+                table,
+                "FAIL",
+                f"Error accediendo a {table}: {str(e)}",
+            )
+
+    # Validar fechas de Ingesta2
+    try:
+        cursor.execute(
+            """
+            SELECT MIN(order_date), MAX(order_date), COUNT(*) 
+            FROM TMP2_orders 
+            WHERE order_date IS NOT NULL
+        """
+        )
+        result = cursor.fetchone()
+        if result and result[2] > 0:
+            min_date, max_date, count = result
+            log_quality_metric(
+                execution_id,
+                "INGESTA2_DATE_RANGE",
+                "TMP2_orders",
+                "INFO",
+                f"Rango de fechas: {min_date} a {max_date}, {count} órdenes",
+            )
+        else:
+            log_quality_metric(
+                execution_id,
+                "INGESTA2_DATES",
+                "TMP2_orders",
+                "WARNING",
+                "No hay fechas válidas en TMP2_orders",
+            )
+    except sqlite3.Error as e:
+        log_quality_metric(
+            execution_id,
+            "INGESTA2_DATE_ERROR",
+            "TMP2_orders",
+            "ERROR",
+            f"Error validando fechas: {str(e)}",
+        )
+
+
+def validate_dwh_state_before_update(execution_id: int, conn: sqlite3.Connection):
+    """Valida el estado del DWH antes de la actualización."""
+    # Contar registros antes de la actualización
+    tables_to_check = {
+        "DWA_DIM_Clientes": "sk_cliente",
+        "DWA_FACT_Ventas": "nk_orden_id",
+    }
+
+    for table, pkey in tables_to_check.items():
+        try:
+            # Usar la función de validación genérica para registrar la métrica
+            validate_table_count(execution_id, table, 0, conn)
+        except sqlite3.Error as e:
+            log_quality_metric(
+                execution_id,
+                "PRE_UPDATE_ERROR",
+                table,
+                "ERROR",
+                f"No se pudo verificar la tabla antes de la actualización: {str(e)}",
+            )
+
+
+def validate_dwh_integrity_after_update(execution_id: int, conn: sqlite3.Connection):
+    """
+    Valida la integridad del DWH después de la actualización.
+    """
+    cursor = conn.cursor()
+
+    # Validar integridad referencial de la tabla de hechos actualizada
+    validate_referential_integrity(
+        execution_id,
+        "DWA_FACT_Ventas",
+        "DWA_DIM_Clientes",
+        "sk_cliente",
+        "sk_cliente",
+        conn,
+    )
+
+    # Validar que no haya FK nulas en campos críticos
+    validate_no_nulls(execution_id, "DWA_FACT_Ventas", "sk_cliente", conn)
+    validate_no_nulls(execution_id, "DWA_FACT_Ventas", "sk_tiempo", conn)
+
+    # Contar registros después de la actualización
+    try:
+        cursor.execute("SELECT COUNT(*) FROM DWA_FACT_Ventas")
+        fact_count = cursor.fetchone()[0]
+        log_quality_metric(
+            execution_id,
+            "POST_UPDATE_FACT_COUNT",
+            "DWA_FACT_Ventas",
+            str(fact_count),
+            f"Total registros en tabla de hechos después de actualización: {fact_count}",
+        )
+
+        cursor.execute("SELECT COUNT(*) FROM DWA_DIM_Clientes")
+        dim_count = cursor.fetchone()[0]
+        log_quality_metric(
+            execution_id,
+            "POST_UPDATE_DIM_COUNT",
+            "DWA_DIM_Clientes",
+            str(dim_count),
+            f"Total registros en dimensión después de actualización: {dim_count}",
+        )
+
+    except sqlite3.Error as e:
+        log_quality_metric(
+            execution_id,
+            "POST_UPDATE_COUNT_ERROR",
+            "DWA",
+            "ERROR",
+            f"Error contando registros post-actualización: {str(e)}",
+        )
+
+
+def validate_temporal_consistency(execution_id: int, conn: sqlite3.Connection):
+    """
+    Valida la consistencia temporal en dimensiones SCD2.
+    """
+    cursor = conn.cursor()
+
+    # Verificar que no haya solapamientos de fechas en SCD2
+    try:
+        cursor.execute(
+            """
+            SELECT nk_cliente_id, COUNT(*) as overlaps
+            FROM DWA_DIM_Clientes 
+            WHERE es_vigente = 1
+            GROUP BY nk_cliente_id
+            HAVING COUNT(*) > 1
+        """
+        )
+        overlaps = cursor.fetchall()
+
+        if overlaps:
+            overlap_count = len(overlaps)
+            log_quality_metric(
+                execution_id,
+                "SCD2_TEMPORAL_OVERLAPS",
+                "DWA_DIM_Clientes",
+                "FAIL",
+                f"Se encontraron {overlap_count} clientes con múltiples registros vigentes",
+            )
+        else:
+            log_quality_metric(
+                execution_id,
+                "SCD2_TEMPORAL_OVERLAPS",
+                "DWA_DIM_Clientes",
+                "PASS",
+                "No hay solapamientos temporales en SCD2",
+            )
+    except sqlite3.Error as e:
+        log_quality_metric(
+            execution_id,
+            "SCD2_TEMPORAL_ERROR",
+            "DWA_DIM_Clientes",
+            "ERROR",
+            f"Error validando consistencia temporal: {str(e)}",
+        )
+
+    # Verificar fechas de inicio <= fechas de fin
+    try:
+        cursor.execute(
+            """
+            SELECT COUNT(*) FROM DWA_DIM_Clientes 
+            WHERE fecha_fin_validez IS NOT NULL AND fecha_inicio_validez > fecha_fin_validez
+        """
+        )
+        invalid_dates = cursor.fetchone()[0]
+
+        if invalid_dates > 0:
+            log_quality_metric(
+                execution_id,
+                "SCD2_DATE_LOGIC",
+                "DWA_DIM_Clientes",
+                "FAIL",
+                f"{invalid_dates} registros con fechas de inicio > fin",
+            )
+        else:
+            log_quality_metric(
+                execution_id,
+                "SCD2_DATE_LOGIC",
+                "DWA_DIM_Clientes",
+                "PASS",
+                "Lógica de fechas SCD2 es consistente",
+            )
+    except sqlite3.Error as e:
+        log_quality_metric(
+            execution_id,
+            "SCD2_DATE_LOGIC_ERROR",
+            "DWA_DIM_Clientes",
+            "ERROR",
+            f"Error validando lógica de fechas: {str(e)}",
+        )
 
 
 if __name__ == "__main__":

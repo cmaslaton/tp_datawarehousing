@@ -43,6 +43,13 @@ def main():
     step_01_setup_staging_area.create_database_and_tables()
     logging.info("--- Paso 1: Finalizado ---")
 
+    # --- Paso 6 (movido): Crear el Modelo del DQM ---
+    logging.info(
+        "--- Ejecutando Paso 6 (movido): Creando el Data Quality Mart (DQM) ---"
+    )
+    step_06_create_dqm.main()
+    logging.info("--- Paso 6: Finalizado ---")
+
     # --- Paso 2: Cargar datos en Staging ---
     logging.info("--- Ejecutando Paso 2: Carga de datos de Ingesta1 a Staging ---")
     step_02_load_staging_data.load_all_staging_data()
@@ -64,11 +71,6 @@ def main():
     logging.info("--- Ejecutando Paso 5: Creando el Modelo Dimensional (DWH) ---")
     step_05_create_dwh_model.main()
     logging.info("--- Paso 5: Finalizado ---")
-
-    # --- Paso 6: Crear el Modelo del DQM ---
-    logging.info("--- Ejecutando Paso 6: Creando el Data Quality Mart (DQM) ---")
-    step_06_create_dqm.main()
-    logging.info("--- Paso 6: Finalizado ---")
 
     # --- Paso 7: Carga Inicial del DWH ---
     # Nota: El script del paso 7 corresponde al punto 8 del TP.

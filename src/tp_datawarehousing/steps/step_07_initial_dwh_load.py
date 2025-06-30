@@ -1,6 +1,16 @@
 import sqlite3
 import logging
 from datetime import datetime
+from tp_datawarehousing.quality_utils import (
+    get_process_execution_id,
+    update_process_execution,
+    log_quality_metric,
+    validate_table_count,
+    validate_no_nulls,
+    validate_referential_integrity,
+    validate_data_range,
+    log_record_count,
+)
 
 # --- Configuración de Logging ---
 logging.basicConfig(
@@ -12,42 +22,7 @@ DB_PATH = "db/tp_dwa.db"
 USER = "data_engineer"
 
 
-# --- Funciones Auxiliares para el DQM ---
-def log_process_start(conn, process_name, comments=""):
-    """Registra el inicio de un proceso en el DQM."""
-    cursor = conn.cursor()
-    start_time = datetime.now()
-    cursor.execute(
-        """
-        INSERT INTO DQM_ejecucion_procesos (nombre_proceso, fecha_inicio, estado, comentarios)
-        VALUES (?, ?, ?, ?)
-        """,
-        (process_name, start_time, "En Progreso", comments),
-    )
-    conn.commit()
-    logging.info(f"Proceso '{process_name}' iniciado y registrado en el DQM.")
-    return cursor.lastrowid, start_time
-
-
-def log_process_end(conn, process_id, start_time, status, comments=""):
-    """Registra la finalización de un proceso en el DQM."""
-    cursor = conn.cursor()
-    end_time = datetime.now()
-    duration = (end_time - start_time).total_seconds()
-    cursor.execute(
-        """
-        UPDATE DQM_ejecucion_procesos
-        SET fecha_fin = ?, estado = ?, duracion_seg = ?, comentarios = ?
-        WHERE id_ejecucion = ?
-        """,
-        (end_time, status, duration, comments, process_id),
-    )
-    conn.commit()
-    logging.info(
-        f"Proceso ID {process_id} finalizado. Estado: {status}. Duración: {duration:.2f}s."
-    )
-
-
+# --- Funciones de Compatibilidad (mantenidas para no romper código existente) ---
 def log_dq_metric(conn, process_id, table_name, metric_name, metric_value):
     """Registra una métrica descriptiva de una entidad en el DQM."""
     cursor = conn.cursor()
@@ -62,16 +37,8 @@ def log_dq_metric(conn, process_id, table_name, metric_name, metric_value):
 
 
 def log_dq_check(conn, process_id, check_name, table_name, status, details):
-    """Registra el resultado de un control de calidad en el DQM."""
-    cursor = conn.cursor()
-    cursor.execute(
-        """
-        INSERT INTO DQM_indicadores_calidad (id_ejecucion, nombre_indicador, entidad_asociada, resultado, detalles)
-        VALUES (?, ?, ?, ?, ?)
-        """,
-        (process_id, check_name, table_name, status, details),
-    )
-    conn.commit()
+    """Registra el resultado de un control de calidad en el DQM utilizando el framework unificado."""
+    log_quality_metric(process_id, check_name, table_name, status, details)
 
 
 # --- Lógica de Controles de Calidad ---
@@ -466,71 +433,260 @@ def load_fact_ventas(conn):
 def main():
     """
     Orquesta todo el proceso de carga del DWH, incluyendo los controles de calidad.
+    Utiliza el framework unificado de calidad.
     """
-    logging.info("Iniciando el Paso 8: Carga Inicial del DWH.")
+    logging.info("Iniciando el Paso 7: Carga Inicial del DWH.")
+
+    # Inicializar tracking de calidad con framework unificado
+    execution_id = get_process_execution_id("STEP_07_INITIAL_DWH_LOAD")
+
     conn = None
-    process_id, start_time = None, None
     try:
         conn = sqlite3.connect(DB_PATH)
-
-        # 1. Iniciar el log del proceso principal
-        process_id, start_time = log_process_start(
-            conn, "CargaInicialDWH", "Proceso completo del Step 7"
+        log_quality_metric(
+            execution_id,
+            "DATABASE_CONNECTION",
+            "DB_FILE",
+            "PASS",
+            "Conexión exitosa a la base de datos",
         )
 
-        # 2. Ejecutar Controles de Calidad de Ingesta (Punto 8a)
-        ingestion_status = perform_ingestion_quality_checks(conn, process_id)
+        # 1. Ejecutar Controles de Calidad de Ingesta (Punto 8a)
+        logging.info("--- Iniciando Controles de Calidad de Ingesta ---")
+        ingestion_status = perform_ingestion_quality_checks(conn, execution_id)
+
+        log_quality_metric(
+            execution_id,
+            "INGESTION_QUALITY_STATUS",
+            "VALIDATION",
+            ingestion_status,
+            f"Resultado de validaciones de ingesta: {ingestion_status}",
+        )
 
         # Si los controles de ingesta fallan, detenemos el proceso.
-        # En un escenario real, esto podría enviar una alerta.
         if ingestion_status == "FALLIDO":
+            update_process_execution(
+                execution_id,
+                "Fallido",
+                "Los controles de calidad de ingesta han fallado",
+            )
             raise Exception(
                 "Los controles de calidad de ingesta han fallado. Abortando la carga del DWH."
             )
 
-        # 3. Cargar el DWH (Dimensiones y Hechos)
+        # 2. Cargar el DWH (Dimensiones y Hechos)
         logging.info("--- Iniciando Carga de Dimensiones ---")
-        load_dim_shippers(conn)
-        load_dim_tiempo(conn)
-        load_dim_productos(conn)
-        load_dim_empleados(conn)
-        load_dim_clientes(conn)
-        load_dim_geografia(conn)
-        logging.info("--- Carga de Dimensiones Finalizada ---")
+        dimensions_loaded = 0
+
+        try:
+            load_dim_shippers(conn)
+            dimensions_loaded += 1
+            load_dim_tiempo(conn)
+            dimensions_loaded += 1
+            load_dim_productos(conn)
+            dimensions_loaded += 1
+            load_dim_empleados(conn)
+            dimensions_loaded += 1
+            load_dim_clientes(conn)
+            dimensions_loaded += 1
+            load_dim_geografia(conn)
+            dimensions_loaded += 1
+
+            log_quality_metric(
+                execution_id,
+                "DIMENSIONS_LOAD",
+                "DWH_PROCESS",
+                "PASS",
+                f"Se cargaron {dimensions_loaded} dimensiones exitosamente",
+            )
+            logging.info("--- Carga de Dimensiones Finalizada ---")
+
+        except Exception as e:
+            log_quality_metric(
+                execution_id,
+                "DIMENSIONS_LOAD",
+                "DWH_PROCESS",
+                "FAIL",
+                f"Error cargando dimensiones: {str(e)}",
+            )
+            raise
 
         # Cargar Tabla de Hechos (Ventas)
         logging.info("--- Iniciando Carga de la Tabla de Hechos ---")
-        ventas_count = load_fact_ventas(conn)
-        logging.info("--- Carga de la Tabla de Hechos Finalizada ---")
+        try:
+            ventas_count = load_fact_ventas(conn)
+            log_record_count(execution_id, "LOADED", "DWA_FACT_Ventas", ventas_count)
+            log_quality_metric(
+                execution_id,
+                "FACT_TABLE_LOAD",
+                "DWA_FACT_Ventas",
+                "PASS",
+                f"Cargados {ventas_count} registros en tabla de hechos",
+            )
+            logging.info("--- Carga de la Tabla de Hechos Finalizada ---")
+        except Exception as e:
+            log_quality_metric(
+                execution_id,
+                "FACT_TABLE_LOAD",
+                "DWA_FACT_Ventas",
+                "FAIL",
+                f"Error cargando tabla de hechos: {str(e)}",
+            )
+            raise
 
-        # 4. Ejecutar Controles de Calidad de Integración (Punto 8b)
-        integration_status = perform_integration_quality_checks(conn, process_id)
+        # 3. Ejecutar Controles de Calidad de Integración (Punto 8b)
+        logging.info("--- Iniciando Controles de Calidad de Integración ---")
+        integration_status = perform_integration_quality_checks(conn, execution_id)
 
+        log_quality_metric(
+            execution_id,
+            "INTEGRATION_QUALITY_STATUS",
+            "VALIDATION",
+            integration_status,
+            f"Resultado de validaciones de integración: {integration_status}",
+        )
+
+        # 4. Determinar estado final y registrar métricas finales
         final_status = "Exitoso"
-        # Si cualquier chequeo da ADVERTENCIA o FALLIDO, el estado final lo reflejará.
         if "ADVERTENCIA" in (ingestion_status, integration_status):
             final_status = "Exitoso con Advertencias"
         if "FALLIDO" in (ingestion_status, integration_status):
             final_status = "FALLIDO"
 
-        # 5. Finalizar el log del proceso con el estado final
-        log_process_end(
-            conn,
-            process_id,
-            start_time,
-            final_status,
-            "El DWH se ha cargado y verificado.",
+        # Validaciones adicionales del DWH completo
+        validate_dwh_completeness(execution_id, conn)
+
+        # Finalizar proceso
+        comments = (
+            f"DWH cargado: {dimensions_loaded} dimensiones, {ventas_count} hechos"
         )
+        if final_status == "FALLIDO":
+            update_process_execution(execution_id, "Fallido", comments)
+        elif final_status == "Exitoso con Advertencias":
+            update_process_execution(
+                execution_id, "Exitoso", f"{comments} (con advertencias)"
+            )
+        else:
+            update_process_execution(execution_id, "Exitoso", comments)
+
+        logging.info(f"Proceso completado con estado: {final_status}")
 
     except Exception as e:
         logging.error(f"Error en la base de datos durante la carga del DWH: {e}")
-        if conn and process_id:
-            # Registrar el fallo en el DQM
-            log_process_end(conn, process_id, start_time, "FALLIDO", str(e))
+        log_quality_metric(
+            execution_id,
+            "PROCESS_ERROR",
+            "DWH_LOAD",
+            "FAIL",
+            f"Error crítico: {str(e)}",
+        )
+        update_process_execution(execution_id, "Fallido", f"Error crítico: {str(e)}")
     finally:
         if conn:
             conn.close()
             logging.info("Conexión a la base de datos cerrada.")
+
+
+def validate_dwh_completeness(execution_id: int, conn: sqlite3.Connection):
+    """
+    Valida que el DWH esté completo después de la carga inicial.
+    """
+    cursor = conn.cursor()
+    fact_count = 0  # Inicializar la variable
+
+    # Verificar que todas las dimensiones tengan datos
+    dimensions = [
+        "DWA_DIM_Shippers",
+        "DWA_DIM_Tiempo",
+        "DWA_DIM_Productos",
+        "DWA_DIM_Empleados",
+        "DWA_DIM_Clientes",
+        "DWA_DIM_Geografia",
+    ]
+
+    empty_dimensions = []
+    total_dim_records = 0
+
+    for dim in dimensions:
+        try:
+            cursor.execute(f"SELECT COUNT(*) FROM {dim}")
+            count = cursor.fetchone()[0]
+            total_dim_records += count
+
+            if count == 0:
+                empty_dimensions.append(dim)
+            else:
+                log_quality_metric(
+                    execution_id,
+                    "DIMENSION_COUNT",
+                    dim,
+                    str(count),
+                    f"Dimensión {dim} cargada con {count} registros",
+                )
+        except sqlite3.Error as e:
+            log_quality_metric(
+                execution_id,
+                "DIMENSION_ERROR",
+                dim,
+                "ERROR",
+                f"Error verificando dimensión: {str(e)}",
+            )
+
+    if empty_dimensions:
+        log_quality_metric(
+            execution_id,
+            "EMPTY_DIMENSIONS",
+            "DWH_VALIDATION",
+            "WARNING",
+            f"Dimensiones vacías: {', '.join(empty_dimensions)}",
+        )
+    else:
+        log_quality_metric(
+            execution_id,
+            "EMPTY_DIMENSIONS",
+            "DWH_VALIDATION",
+            "PASS",
+            "Todas las dimensiones contienen datos",
+        )
+
+    # Verificar tabla de hechos
+    try:
+        cursor.execute("SELECT COUNT(*) FROM DWA_FACT_Ventas")
+        fact_count = cursor.fetchone()[0]
+
+        if fact_count == 0:
+            log_quality_metric(
+                execution_id,
+                "FACT_TABLE_POPULATED",
+                "DWA_FACT_Ventas",
+                "FAIL",
+                "La tabla de hechos está vacía",
+            )
+        else:
+            log_quality_metric(
+                execution_id,
+                "FACT_TABLE_POPULATED",
+                "DWA_FACT_Ventas",
+                "PASS",
+                f"Tabla de hechos cargada con {fact_count} registros",
+            )
+    except sqlite3.Error as e:
+        log_quality_metric(
+            execution_id,
+            "FACT_TABLE_ERROR",
+            "DWA_FACT_Ventas",
+            "ERROR",
+            f"Error verificando tabla de hechos: {str(e)}",
+        )
+
+    # Resumen final
+    log_quality_metric(
+        execution_id,
+        "DWH_LOAD_SUMMARY",
+        "DWH_VALIDATION",
+        f"DIM:{total_dim_records}, FACT:{fact_count}",
+        f"DWH cargado: {total_dim_records} registros en dimensiones, {fact_count} en hechos",
+    )
 
     # logging.info("--- Paso 7: Finalizado ---")
 
