@@ -134,8 +134,13 @@ def load_csv_to_table(file_path: Path, table_name: str, conn: sqlite3.Connection
         }
         if renamed_cols_map:
             logging.info(f"Columnas renombradas: {renamed_cols_map}")
+            # Registrar conteo de columnas renombradas
             log_quality_metric(execution_id, "COLUMN_NORMALIZATION", file_path.name, "PERFORMED", 
                              f"Columnas renombradas: {len(renamed_cols_map)}")
+            # Registrar mapeo detallado para trazabilidad completa
+            import json
+            log_quality_metric(execution_id, "COLUMN_NORMALIZATION_DETAIL", file_path.name, "MAPPING", 
+                             json.dumps(renamed_cols_map, ensure_ascii=False))
 
         # Control de calidad: Validar tipos de datos críticos
         validate_data_types(df, table_name, file_path.name, execution_id)

@@ -2,7 +2,9 @@ import pandas as pd
 import sqlite3
 import logging
 import re
+import json
 from pathlib import Path
+from ..quality_utils import get_process_execution_id, log_quality_metric
 
 # --- Configuración de Logging ---
 logging.basicConfig(
@@ -80,7 +82,7 @@ def normalize_column_name(col_name: str) -> str:
     return name
 
 
-def create_and_load_staging_tables(conn: sqlite3.Connection):
+def create_and_load_staging_tables(conn: sqlite3.Connection, execution_id: int):
     """
     Crea las tablas TMP2_ y carga los datos de los CSV de Ingesta2.
     """
@@ -114,6 +116,12 @@ def create_and_load_staging_tables(conn: sqlite3.Connection):
             }
             if renamed_cols_map:
                 logging.info(f"Columnas renombradas: {renamed_cols_map}")
+                # Registrar conteo de columnas renombradas
+                log_quality_metric(execution_id, "COLUMN_NORMALIZATION", file_path.name, "PERFORMED", 
+                                 f"Columnas renombradas: {len(renamed_cols_map)}")
+                # Registrar mapeo detallado para trazabilidad completa
+                log_quality_metric(execution_id, "COLUMN_NORMALIZATION_DETAIL", file_path.name, "MAPPING", 
+                                 json.dumps(renamed_cols_map, ensure_ascii=False))
 
             df.to_sql(table_name, conn, if_exists="append", index=False)
             logging.info(
@@ -130,11 +138,15 @@ def main():
     Orquesta la creación de las tablas de staging para Ingesta2 y la carga de datos.
     """
     logging.info("Iniciando el Paso 8: Carga de Ingesta2 al área de Staging (TMP2).")
+    
+    # Obtener ID de ejecución para métricas de calidad
+    execution_id = get_process_execution_id("step_08_load_ingesta2_to_staging")
+    
     conn = None
     try:
         conn = sqlite3.connect(DB_PATH)
         logging.info(f"Conexión exitosa a la base de datos {DB_PATH}.")
-        create_and_load_staging_tables(conn)
+        create_and_load_staging_tables(conn, execution_id)
     except sqlite3.Error as e:
         logging.error(f"Error de base de datos en el Paso 8: {e}")
     finally:
