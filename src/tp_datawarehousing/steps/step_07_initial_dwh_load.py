@@ -196,43 +196,90 @@ def load_dim_tiempo(conn):
     cursor = conn.cursor()
     cursor.execute("DELETE FROM DWA_DIM_Tiempo;")
 
-    # Se utiliza STRFTIME para asegurar compatibilidad con SQLite
-    cursor.execute(
-        """
-        INSERT INTO DWA_DIM_Tiempo (sk_tiempo, fecha, anio, mes, dia, trimestre, nombre_mes, nombre_dia, es_fin_de_semana)
-        WITH RECURSIVE dates(date_val) AS (
-            SELECT MIN(DATE(order_date)) FROM ING_orders
-            UNION ALL
-            SELECT DATE(date_val, '+1 day')
-            FROM dates
-            WHERE date_val < (SELECT MAX(DATE(order_date)) FROM ING_orders)
+    # Obtener rango de fechas primero
+    try:
+        cursor.execute("SELECT MIN(DATE(order_date)), MAX(DATE(order_date)), COUNT(*) FROM ING_orders WHERE order_date IS NOT NULL;")
+        result = cursor.fetchone()
+        min_date, max_date, order_count = result
+        
+        if not min_date or not max_date:
+            logging.warning("No hay fechas válidas en ING_orders. Cargando dimensión tiempo mínima.")
+            # Cargar solo el año actual como fallback
+            from datetime import datetime
+            current_year = datetime.now().year
+            cursor.execute(f"""
+                INSERT INTO DWA_DIM_Tiempo (sk_tiempo, fecha, anio, mes, dia, trimestre, nombre_mes, nombre_dia, es_fin_de_semana)
+                VALUES ({current_year}0101, '{current_year}-01-01', {current_year}, 1, 1, 1, 'Enero', 'Lunes', 0);
+            """)
+            conn.commit()
+            logging.info("Carga de DWA_DIM_Tiempo completada con datos mínimos. 1 registro insertado.")
+            return 1
+        
+        logging.info(f"Rango de fechas detectado: {min_date} a {max_date} ({order_count} órdenes)")
+        
+        # Calcular días entre fechas para validar el rango
+        cursor.execute("SELECT julianday(?) - julianday(?);", (max_date, min_date))
+        days_diff = cursor.fetchone()[0]
+        
+        if days_diff > 10000:  # Más de ~27 años
+            logging.error(f"Rango de fechas demasiado amplio: {days_diff} días. Limitando a 10 años desde fecha mínima.")
+            cursor.execute("SELECT DATE(?, '+10 years');", (min_date,))
+            max_date = cursor.fetchone()[0]
+            days_diff = 10 * 365
+        
+        logging.info(f"Generando dimensión tiempo para {int(days_diff)} días...")
+        
+        # CTE optimizada con límite
+        cursor.execute(
+            """
+            INSERT INTO DWA_DIM_Tiempo (sk_tiempo, fecha, anio, mes, dia, trimestre, nombre_mes, nombre_dia, es_fin_de_semana)
+            WITH RECURSIVE dates(date_val, counter) AS (
+                SELECT DATE(?), 0
+                UNION ALL
+                SELECT DATE(date_val, '+1 day'), counter + 1
+                FROM dates
+                WHERE date_val < DATE(?) AND counter < 15000
+            )
+            SELECT
+                CAST(STRFTIME('%Y%m%d', date_val) AS INTEGER),
+                date_val,
+                CAST(STRFTIME('%Y', date_val) AS INTEGER),
+                CAST(STRFTIME('%m', date_val) AS INTEGER),
+                CAST(STRFTIME('%d', date_val) AS INTEGER),
+                CAST((STRFTIME('%m', date_val) - 1) / 3 + 1 AS INTEGER),
+                CASE STRFTIME('%m', date_val)
+                    WHEN '01' THEN 'Enero' WHEN '02' THEN 'Febrero' WHEN '03' THEN 'Marzo'
+                    WHEN '04' THEN 'Abril' WHEN '05' THEN 'Mayo' WHEN '06' THEN 'Junio'
+                    WHEN '07' THEN 'Julio' WHEN '08' THEN 'Agosto' WHEN '09' THEN 'Septiembre'
+                    WHEN '10' THEN 'Octubre' WHEN '11' THEN 'Noviembre' WHEN '12' THEN 'Diciembre'
+                END,
+                CASE STRFTIME('%w', date_val)
+                    WHEN '0' THEN 'Domingo' WHEN '1' THEN 'Lunes' WHEN '2' THEN 'Martes'
+                    WHEN '3' THEN 'Miércoles' WHEN '4' THEN 'Jueves' WHEN '5' THEN 'Viernes'
+                    WHEN '6' THEN 'Sábado'
+                END,
+                CASE WHEN STRFTIME('%w', date_val) IN ('0', '6') THEN 1 ELSE 0 END
+            FROM dates;
+            """, (min_date, max_date)
         )
-        SELECT
-            CAST(STRFTIME('%Y%m%d', date_val) AS INTEGER),
-            date_val,
-            CAST(STRFTIME('%Y', date_val) AS INTEGER),
-            CAST(STRFTIME('%m', date_val) AS INTEGER),
-            CAST(STRFTIME('%d', date_val) AS INTEGER),
-            CAST((STRFTIME('%m', date_val) - 1) / 3 + 1 AS INTEGER),
-            CASE STRFTIME('%m', date_val)
-                WHEN '01' THEN 'Enero' WHEN '02' THEN 'Febrero' WHEN '03' THEN 'Marzo'
-                WHEN '04' THEN 'Abril' WHEN '05' THEN 'Mayo' WHEN '06' THEN 'Junio'
-                WHEN '07' THEN 'Julio' WHEN '08' THEN 'Agosto' WHEN '09' THEN 'Septiembre'
-                WHEN '10' THEN 'Octubre' WHEN '11' THEN 'Noviembre' WHEN '12' THEN 'Diciembre'
-            END,
-            CASE STRFTIME('%w', date_val)
-                WHEN '0' THEN 'Domingo' WHEN '1' THEN 'Lunes' WHEN '2' THEN 'Martes'
-                WHEN '3' THEN 'Miércoles' WHEN '4' THEN 'Jueves' WHEN '5' THEN 'Viernes'
-                WHEN '6' THEN 'Sábado'
-            END,
-            CASE WHEN STRFTIME('%w', date_val) IN ('0', '6') THEN 1 ELSE 0 END
-        FROM dates;
-    """
-    )
-    count = cursor.rowcount
-    conn.commit()
-    logging.info(f"Carga de DWA_DIM_Tiempo completada. {count} registros insertados.")
-    return count
+        
+        count = cursor.rowcount
+        conn.commit()
+        logging.info(f"Carga de DWA_DIM_Tiempo completada. {count} registros insertados.")
+        
+        # Validar la carga
+        cursor.execute("SELECT COUNT(*) FROM DWA_DIM_Tiempo;")
+        final_count = cursor.fetchone()[0]
+        
+        if final_count != count:
+            logging.warning(f"Discrepancia en conteo: insertados={count}, tabla contiene={final_count}")
+        
+        return final_count
+        
+    except Exception as e:
+        logging.error(f"Error en load_dim_tiempo: {e}")
+        conn.rollback()
+        raise
 
 
 def load_dim_productos(conn):

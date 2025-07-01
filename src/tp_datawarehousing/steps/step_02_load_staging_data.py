@@ -3,13 +3,22 @@ import sqlite3
 import logging
 import os
 import re
+import time
 from pathlib import Path
 from tp_datawarehousing.quality_utils import (
     get_process_execution_id, 
     update_process_execution,
     log_quality_metric,
     validate_table_count,
-    log_record_count
+    log_record_count,
+    QualityResult,
+    QualitySeverity,
+    QualityThresholds,
+    validate_completeness_score,
+    validate_format_patterns,
+    validate_business_key_uniqueness,
+    validate_cross_field_logic,
+    validate_domain_constraints
 )
 
 # --- Configuración de Logging ---
@@ -75,7 +84,28 @@ def normalize_column_name(col_name: str) -> str:
     return name
 
 
-def load_csv_to_table(file_path: Path, table_name: str, conn: sqlite3.Connection, execution_id: int):
+def connect_with_retry(db_path: str, max_retries: int = 5, delay: float = 1.0) -> sqlite3.Connection:
+    """
+    Establece conexión a SQLite con reintentos para evitar database locked.
+    """
+    for attempt in range(max_retries):
+        try:
+            conn = sqlite3.connect(db_path, timeout=30.0)
+            conn.execute("PRAGMA busy_timeout = 30000;")  # 30 segundos
+            conn.execute("PRAGMA journal_mode = WAL;")    # Write-Ahead Logging
+            conn.execute("PRAGMA synchronous = NORMAL;")  # Balance rendimiento/seguridad
+            return conn
+        except sqlite3.OperationalError as e:
+            if "database is locked" in str(e) and attempt < max_retries - 1:
+                logging.warning(f"BD bloqueada, reintentando en {delay}s... (intento {attempt + 1}/{max_retries})")
+                time.sleep(delay)
+                delay *= 1.5  # Backoff exponencial
+            else:
+                raise
+    raise sqlite3.OperationalError("No se pudo conectar después de múltiples intentos")
+
+
+def load_csv_to_table(conn: sqlite3.Connection, file_path: Path, table_name: str, execution_id: int):
     """
     Carga los datos de un archivo CSV a una tabla específica en la base de datos,
     normalizando los nombres de las columnas antes de la inserción.
@@ -86,45 +116,57 @@ def load_csv_to_table(file_path: Path, table_name: str, conn: sqlite3.Connection
 
         # Limpiar la tabla de staging antes de la carga para evitar duplicados
         cursor = conn.cursor()
-        cursor.execute(f"DELETE FROM {table_name};")
-        conn.commit()
-        logging.info(f"Tabla {table_name} vaciada antes de la nueva carga.")
+        
+        # Usar transacción explícita con timeout
+        conn.execute("BEGIN IMMEDIATE;")
+        try:
+            cursor.execute(f"DELETE FROM {table_name};")
+            conn.commit()
+            logging.info(f"Tabla {table_name} vaciada antes de la nueva carga.")
+        except Exception as e:
+            conn.rollback()
+            raise e
 
         # Intenta leer con UTF-8, si falla, prueba con latin-1
         try:
             df = pd.read_csv(file_path)
             log_quality_metric(execution_id, "FILE_ENCODING", file_path.name, "UTF-8", 
-                             "Archivo leído correctamente con encoding UTF-8")
+                             "Archivo leído correctamente con encoding UTF-8", QualitySeverity.LOW.value)
         except UnicodeDecodeError:
             logging.warning(
                 f"Error de decodificación UTF-8 en {file_path.name}. Intentando con 'latin-1'."
             )
             df = pd.read_csv(file_path, encoding="latin-1")
             log_quality_metric(execution_id, "FILE_ENCODING", file_path.name, "LATIN-1", 
-                             "Archivo requirió encoding latin-1")
+                             "Archivo requirió encoding latin-1", QualitySeverity.MEDIUM.value)
 
         # Control de calidad: Validar que el DataFrame no esté vacío
         if df.empty:
-            log_quality_metric(execution_id, "EMPTY_FILE_CHECK", file_path.name, "FAIL", 
-                             "El archivo CSV está vacío")
+            log_quality_metric(execution_id, "EMPTY_FILE_CHECK", file_path.name, QualityResult.FAIL.value, 
+                             "El archivo CSV está vacío", QualitySeverity.HIGH.value)
             logging.error(f"El archivo {file_path.name} está vacío")
             return False
         else:
-            log_quality_metric(execution_id, "EMPTY_FILE_CHECK", file_path.name, "PASS", 
-                             f"Archivo contiene {len(df)} registros")
+            log_quality_metric(execution_id, "EMPTY_FILE_CHECK", file_path.name, QualityResult.PASS.value, 
+                             f"Archivo contiene {len(df)} registros", QualitySeverity.LOW.value)
 
         # Control de calidad: Validar estructura básica del archivo
         log_quality_metric(execution_id, "COLUMN_COUNT", file_path.name, str(len(df.columns)), 
-                         f"Número de columnas: {len(df.columns)}")
+                         f"Número de columnas: {len(df.columns)}", QualitySeverity.LOW.value)
         
-        # Control de calidad: Verificar duplicados por filas completas
+        # Control de calidad: Verificar duplicados por filas completas con thresholds estandarizados
         duplicates = df.duplicated().sum()
-        if duplicates > 0:
-            log_quality_metric(execution_id, "DUPLICATE_ROWS", file_path.name, "WARNING", 
-                             f"Se encontraron {duplicates} filas duplicadas")
+        duplicate_percentage = (duplicates / len(df)) * 100 if len(df) > 0 else 0
+        
+        if duplicates == 0:
+            log_quality_metric(execution_id, "DUPLICATE_ROWS", file_path.name, QualityResult.PASS.value, 
+                             "No se encontraron filas duplicadas", QualitySeverity.LOW.value)
+        elif duplicate_percentage < QualityThresholds.DUPLICATES_WARNING:
+            log_quality_metric(execution_id, "DUPLICATE_ROWS", file_path.name, QualityResult.WARNING.value, 
+                             f"Se encontraron {duplicates} filas duplicadas ({duplicate_percentage:.1f}%)", QualitySeverity.MEDIUM.value)
         else:
-            log_quality_metric(execution_id, "DUPLICATE_ROWS", file_path.name, "PASS", 
-                             "No se encontraron filas duplicadas")
+            log_quality_metric(execution_id, "DUPLICATE_ROWS", file_path.name, QualityResult.FAIL.value, 
+                             f"Se encontraron {duplicates} filas duplicadas ({duplicate_percentage:.1f}%)", QualitySeverity.HIGH.value)
 
         # Normalizar los nombres de las columnas del DataFrame
         original_columns = df.columns
@@ -136,18 +178,25 @@ def load_csv_to_table(file_path: Path, table_name: str, conn: sqlite3.Connection
             logging.info(f"Columnas renombradas: {renamed_cols_map}")
             # Registrar conteo de columnas renombradas
             log_quality_metric(execution_id, "COLUMN_NORMALIZATION", file_path.name, "PERFORMED", 
-                             f"Columnas renombradas: {len(renamed_cols_map)}")
+                             f"Columnas renombradas: {len(renamed_cols_map)}", QualitySeverity.LOW.value)
             # Registrar mapeo detallado para trazabilidad completa
             import json
             log_quality_metric(execution_id, "COLUMN_NORMALIZATION_DETAIL", file_path.name, "MAPPING", 
-                             json.dumps(renamed_cols_map, ensure_ascii=False))
+                             json.dumps(renamed_cols_map, ensure_ascii=False), QualitySeverity.LOW.value)
 
         # Control de calidad: Validar tipos de datos críticos
         validate_data_types(df, table_name, file_path.name, execution_id)
 
-        # Cargar datos en la tabla. 'append' añade los datos, 'replace' borraría la tabla primero.
+        # Cargar datos en la tabla con transacción explícita
         records_before = len(df)
-        df.to_sql(table_name, conn, if_exists="append", index=False)
+        
+        conn.execute("BEGIN IMMEDIATE;")
+        try:
+            df.to_sql(table_name, conn, if_exists="append", index=False)
+            conn.commit()
+        except Exception as e:
+            conn.rollback()
+            raise e
         
         # Registrar la carga exitosa
         log_record_count(execution_id, "LOADED", table_name, records_before)
@@ -175,45 +224,120 @@ def validate_data_types(df: pd.DataFrame, table_name: str, file_name: str, execu
         if 'unit_price' in df.columns:
             negative_prices = (df['unit_price'] < 0).sum()
             if negative_prices > 0:
-                log_quality_metric(execution_id, "NEGATIVE_PRICE", table_name, "FAIL", 
-                                 f"Se encontraron {negative_prices} precios negativos")
+                log_quality_metric(execution_id, "NEGATIVE_PRICE", table_name, QualityResult.FAIL.value, 
+                                 f"Se encontraron {negative_prices} precios negativos", QualitySeverity.HIGH.value)
             else:
-                log_quality_metric(execution_id, "NEGATIVE_PRICE", table_name, "PASS", 
-                                 "Todos los precios son válidos")
+                log_quality_metric(execution_id, "NEGATIVE_PRICE", table_name, QualityResult.PASS.value, 
+                                 "Todos los precios son válidos", QualitySeverity.LOW.value)
         
         if 'quantity' in df.columns:
             zero_quantities = (df['quantity'] <= 0).sum()
             if zero_quantities > 0:
-                log_quality_metric(execution_id, "ZERO_QUANTITY", table_name, "WARNING", 
-                                 f"Se encontraron {zero_quantities} cantidades <= 0")
+                log_quality_metric(execution_id, "ZERO_QUANTITY", table_name, QualityResult.WARNING.value, 
+                                 f"Se encontraron {zero_quantities} cantidades <= 0", QualitySeverity.MEDIUM.value)
+            else:
+                log_quality_metric(execution_id, "ZERO_QUANTITY", table_name, QualityResult.PASS.value, 
+                                 "Todas las cantidades son válidas", QualitySeverity.LOW.value)
     
     elif "products" in table_name:
         # Validar precios de productos
         if 'unit_price' in df.columns:
             null_prices = df['unit_price'].isnull().sum()
             if null_prices > 0:
-                log_quality_metric(execution_id, "NULL_PRICE", table_name, "WARNING", 
-                                 f"Se encontraron {null_prices} productos sin precio")
+                log_quality_metric(execution_id, "NULL_PRICE", table_name, QualityResult.WARNING.value, 
+                                 f"Se encontraron {null_prices} productos sin precio", QualitySeverity.MEDIUM.value)
+            else:
+                log_quality_metric(execution_id, "NULL_PRICE", table_name, QualityResult.PASS.value, 
+                                 "Todos los productos tienen precio", QualitySeverity.LOW.value)
     
     elif "orders" in table_name:
         # Validar fechas de órdenes
         if 'order_date' in df.columns:
             null_dates = df['order_date'].isnull().sum()
             if null_dates > 0:
-                log_quality_metric(execution_id, "NULL_ORDER_DATE", table_name, "FAIL", 
-                                 f"Se encontraron {null_dates} órdenes sin fecha")
+                log_quality_metric(execution_id, "NULL_ORDER_DATE", table_name, QualityResult.FAIL.value, 
+                                 f"Se encontraron {null_dates} órdenes sin fecha", QualitySeverity.CRITICAL.value)
             else:
-                log_quality_metric(execution_id, "NULL_ORDER_DATE", table_name, "PASS", 
-                                 "Todas las órdenes tienen fecha")
+                log_quality_metric(execution_id, "NULL_ORDER_DATE", table_name, QualityResult.PASS.value, 
+                                 "Todas las órdenes tienen fecha", QualitySeverity.LOW.value)
     
-    # Validación general: Conteo de valores nulos por columna
+    # Validación general: Conteo de valores nulos por columna con thresholds estandarizados
     for column in df.columns:
         null_count = df[column].isnull().sum()
         if null_count > 0:
             percentage = (null_count / len(df)) * 100
-            result = "WARNING" if percentage < 10 else "FAIL"
+            if percentage < QualityThresholds.NULL_VALUES_WARNING:
+                result = QualityResult.WARNING.value
+                severity = QualitySeverity.MEDIUM.value
+            elif percentage < QualityThresholds.NULL_VALUES_FAIL:
+                result = QualityResult.WARNING.value
+                severity = QualitySeverity.MEDIUM.value
+            else:
+                result = QualityResult.FAIL.value
+                severity = QualitySeverity.HIGH.value
+            
             log_quality_metric(execution_id, "NULL_VALUES", f"{table_name}.{column}", result, 
-                             f"Valores nulos: {null_count} ({percentage:.1f}%)")
+                             f"Valores nulos: {null_count} ({percentage:.1f}%)", severity)
+    
+    # NUEVAS VALIDACIONES AVANZADAS - MEJORES PRÁCTICAS PROFESIONALES
+    
+    # 1. Completeness Score para campos críticos por tabla
+    critical_fields_map = {
+        "customers": ["customer_id", "company_name"],
+        "orders": ["order_id", "customer_id", "order_date"],
+        "order_details": ["order_id", "product_id", "unit_price", "quantity"],
+        "products": ["product_id", "product_name"],
+        "employees": ["employee_id", "first_name", "last_name"]
+    }
+    
+    for table_key, fields in critical_fields_map.items():
+        if table_key in table_name.lower():
+            # Solo validar campos que existen en el DataFrame
+            existing_fields = [f for f in fields if f in df.columns]
+            if existing_fields:
+                validate_completeness_score(execution_id, table_name, existing_fields)
+            break
+    
+    # 2. Format Validation para campos específicos
+    if "customers" in table_name.lower():
+        if "customer_id" in df.columns:
+            validate_format_patterns(execution_id, table_name, "customer_id", "customer_id")
+        if "postal_code" in df.columns:
+            validate_format_patterns(execution_id, table_name, "postal_code", "postal_code")
+    
+    # 3. Business Key Uniqueness
+    business_keys_map = {
+        "customers": ["customer_id"],
+        "products": ["product_id"],
+        "orders": ["order_id"],
+        "employees": ["employee_id"],
+        "categories": ["category_id"],
+        "suppliers": ["supplier_id"]
+    }
+    
+    for table_key, keys in business_keys_map.items():
+        if table_key in table_name.lower():
+            existing_keys = [k for k in keys if k in df.columns]
+            if existing_keys:
+                validate_business_key_uniqueness(execution_id, table_name, existing_keys)
+            break
+    
+    # 4. Cross-field Logic Validation
+    if "orders" in table_name.lower() and "order_date" in df.columns and "shipped_date" in df.columns:
+        validations = [
+            {
+                "rule": "shipped_date >= order_date",
+                "description": "Fecha de envío debe ser posterior o igual a fecha de pedido"
+            }
+        ]
+        validate_cross_field_logic(execution_id, table_name, validations)
+    
+    # 5. Domain Constraints para campos categóricos
+    if "world_data" in table_name.lower():
+        # Validar códigos de continente estándar
+        if "continent" in df.columns:
+            valid_continents = ["Asia", "Europe", "North America", "South America", "Africa", "Oceania", "Antarctica"]
+            validate_domain_constraints(execution_id, table_name, "continent", valid_continents, case_sensitive=False)
 
 
 def load_all_staging_data():
@@ -238,7 +362,7 @@ def load_all_staging_data():
         return
 
     try:
-        conn = sqlite3.connect(DB_PATH)
+        conn = connect_with_retry(DB_PATH)
         logging.info(f"Conexión exitosa a la base de datos {DB_PATH}.")
         log_quality_metric(execution_id, "DATABASE_CONNECTION", "DB_FILE", "PASS", 
                          "Conexión exitosa a la base de datos")
@@ -275,7 +399,7 @@ def load_all_staging_data():
         for csv_file, table_name in TABLE_MAPPING.items():
             file_path = ingesta_dir / csv_file
             if file_path.exists():
-                success = load_csv_to_table(file_path, table_name, conn, execution_id)
+                success = load_csv_to_table(conn, file_path, table_name, execution_id)
                 if success:
                     success_count += 1
             else:

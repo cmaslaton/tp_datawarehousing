@@ -1,5 +1,6 @@
 import sqlite3
 import logging
+import time
 from tp_datawarehousing.quality_utils import (
     get_process_execution_id, 
     update_process_execution,
@@ -13,6 +14,27 @@ from tp_datawarehousing.quality_utils import (
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
 )
+
+
+def connect_with_retry(db_path: str, max_retries: int = 5, delay: float = 1.0) -> sqlite3.Connection:
+    """
+    Establece conexión a SQLite con reintentos para evitar database locked.
+    """
+    for attempt in range(max_retries):
+        try:
+            conn = sqlite3.connect(db_path, timeout=30.0)
+            conn.execute("PRAGMA busy_timeout = 30000;")  # 30 segundos
+            conn.execute("PRAGMA journal_mode = WAL;")    # Write-Ahead Logging
+            conn.execute("PRAGMA synchronous = NORMAL;")  # Balance rendimiento/seguridad
+            return conn
+        except sqlite3.OperationalError as e:
+            if "database is locked" in str(e) and attempt < max_retries - 1:
+                logging.warning(f"BD bloqueada, reintentando en {delay}s... (intento {attempt + 1}/{max_retries})")
+                time.sleep(delay)
+                delay *= 1.5  # Backoff exponencial
+            else:
+                raise
+    raise sqlite3.OperationalError("No se pudo conectar después de múltiples intentos")
 
 DB_PATH = "db/tp_dwa.db"
 
@@ -125,7 +147,7 @@ def create_and_load_ingestion_layer():
     
     conn = None
     try:
-        conn = sqlite3.connect(DB_PATH)
+        conn = connect_with_retry(DB_PATH)
         cursor = conn.cursor()
         cursor.execute("PRAGMA foreign_keys = ON;")
         
@@ -198,9 +220,13 @@ def create_and_load_ingestion_layer():
                                          f"Se limpiaron {orphan_fks} FKs huérfanas en reports_to")
                 else:
                     # Caso general para el resto de las tablas
-                    cursor.execute(f"INSERT INTO {table} SELECT * FROM {source_table};")
-
-                conn.commit()
+                    conn.execute("BEGIN IMMEDIATE;")
+                    try:
+                        cursor.execute(f"INSERT INTO {table} SELECT * FROM {source_table};")
+                        conn.commit()
+                    except Exception as e:
+                        conn.rollback()
+                        raise e
                 
                 # Validar la carga
                 cursor.execute(f"SELECT COUNT(*) FROM {table}")
