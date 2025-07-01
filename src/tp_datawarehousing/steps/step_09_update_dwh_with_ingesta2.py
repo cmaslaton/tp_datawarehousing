@@ -9,6 +9,8 @@ from tp_datawarehousing.quality_utils import (
     validate_no_nulls,
     validate_referential_integrity,
     log_record_count,
+    execute_transaction_with_retry,
+    get_db_connection,
 )
 
 # --- Configuración de Logging ---
@@ -32,19 +34,19 @@ def log_dq_metric(conn, process_id, table_name, metric_name, metric_value):
         """,
         (process_id, table_name, metric_name, str(metric_value)),
     )
-    conn.commit()
+    # NO hacer commit aquí - será manejado por la transacción padre
 
 
-# --- Lógica de Actualización (SCD Tipo 2 para Clientes) ---
-def update_scd2_clientes(conn, process_id):
+# --- Lógica de Actualización Optimizada (SCD Tipo 2 para Clientes) ---
+def update_scd2_clientes_transaction(conn, process_id):
     """
-    Actualiza la dimensión de clientes usando la lógica de Slowly Changing Dimension Tipo 2.
+    Actualiza la dimensión de clientes usando SCD Tipo 2 en una sola transacción.
+    Esta función NO hace commit - debe ser llamada desde execute_transaction_with_retry.
     """
     logging.info("--- Iniciando actualización de DWA_DIM_Clientes (SCD Tipo 2) ---")
     cursor = conn.cursor()
 
-    # 1. Identificar clientes con cambios (dirección, contacto, etc.)
-    # Comparamos los registros vigentes en el DWH con los datos de Ingesta2
+    # 1. Identificar clientes con cambios en una sola query optimizada
     query_changed_customers = """
         SELECT
             d.sk_cliente,
@@ -60,13 +62,13 @@ def update_scd2_clientes(conn, process_id):
         FROM TMP2_customers t
         JOIN DWA_DIM_Clientes d ON t.customer_id = d.nk_cliente_id
         WHERE d.es_vigente = 1 AND (
-            d.direccion != t.address OR
-            d.ciudad != t.city OR
-            d.region != t.region OR
-            d.codigo_postal != t.postal_code OR
-            d.pais != t.country OR
-            d.nombre_contacto != t.contact_name OR
-            d.titulo_contacto != t.contact_title
+            COALESCE(d.direccion, '') != COALESCE(t.address, '') OR
+            COALESCE(d.ciudad, '') != COALESCE(t.city, '') OR
+            COALESCE(d.region, '') != COALESCE(t.region, '') OR
+            COALESCE(d.codigo_postal, '') != COALESCE(t.postal_code, '') OR
+            COALESCE(d.pais, '') != COALESCE(t.country, '') OR
+            COALESCE(d.nombre_contacto, '') != COALESCE(t.contact_name, '') OR
+            COALESCE(d.titulo_contacto, '') != COALESCE(t.contact_title, '')
         );
     """
     cursor.execute(query_changed_customers)
@@ -75,54 +77,62 @@ def update_scd2_clientes(conn, process_id):
     today = datetime.now().date()
     yesterday = today - timedelta(days=1)
 
-    # 2. Expirar los registros viejos
-    for customer in changed_customers:
-        sk_cliente_to_expire = customer[0]
-        logging.info(
-            f"Expirando registro antiguo para cliente con sk_cliente = {sk_cliente_to_expire}"
-        )
+    # 2. Actualizar todos los registros viejos en una sola operación
+    if changed_customers:
+        expired_customer_ids = [str(customer[0]) for customer in changed_customers]
+        placeholders = ",".join(["?" for _ in expired_customer_ids])
+
         cursor.execute(
-            """
+            f"""
             UPDATE DWA_DIM_Clientes
             SET fecha_fin_validez = ?, es_vigente = 0
-            WHERE sk_cliente = ?
-            """,
-            (yesterday.isoformat(), sk_cliente_to_expire),
+            WHERE sk_cliente IN ({placeholders})
+        """,
+            [yesterday.isoformat()] + expired_customer_ids,
         )
 
-    # 3. Insertar los registros nuevos (actualizados)
-    for customer_data in changed_customers:
-        # sk_cliente (customer_data[0]) no se usa para la inserción
-        logging.info(
-            f"Insertando nuevo registro para cliente con nk_cliente_id = {customer_data[1]}"
-        )
-        cursor.execute(
+        logging.info(f"Expirados {len(changed_customers)} registros de clientes")
+
+        # 3. Insertar todos los registros nuevos (actualizados) en lotes
+        new_customer_data = []
+        for customer_data in changed_customers:
+            new_customer_data.append(
+                (
+                    customer_data[1],  # nk_cliente_id
+                    customer_data[2],  # company_name
+                    customer_data[3],  # contact_name
+                    customer_data[4],  # contact_title
+                    customer_data[5],  # address
+                    customer_data[6],  # city
+                    customer_data[7],  # region
+                    customer_data[8],  # postal_code
+                    customer_data[9],  # country
+                    today.isoformat(),
+                    None,
+                    1,
+                )
+            )
+
+        cursor.executemany(
             """
             INSERT INTO DWA_DIM_Clientes (
                 nk_cliente_id, nombre_compania, nombre_contacto, titulo_contacto,
                 direccion, ciudad, region, codigo_postal, pais,
                 fecha_inicio_validez, fecha_fin_validez, es_vigente
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            """,
-            (
-                customer_data[1],
-                customer_data[2],
-                customer_data[3],
-                customer_data[4],
-                customer_data[5],
-                customer_data[6],
-                customer_data[7],
-                customer_data[8],
-                customer_data[9],
-                today.isoformat(),
-                None,
-                1,
-            ),
+        """,
+            new_customer_data,
         )
 
-    # 4. Identificar y insertar clientes completamente nuevos
+        logging.info(
+            f"Insertados {len(changed_customers)} registros actualizados de clientes"
+        )
+
+    # 4. Identificar e insertar clientes completamente nuevos en lotes
     query_new_customers = """
-        SELECT * FROM TMP2_customers t
+        SELECT customer_id, company_name, contact_name, contact_title,
+               address, city, region, postal_code, country
+        FROM TMP2_customers t
         WHERE NOT EXISTS (
             SELECT 1 FROM DWA_DIM_Clientes d WHERE d.nk_cliente_id = t.customer_id
         );
@@ -130,41 +140,40 @@ def update_scd2_clientes(conn, process_id):
     cursor.execute(query_new_customers)
     new_customers = cursor.fetchall()
 
-    for new_customer in new_customers:
-        logging.info(f"Insertando cliente completamente nuevo: {new_customer[0]}")
-        cursor.execute(
+    if new_customers:
+        new_customer_data = []
+        for new_customer in new_customers:
+            new_customer_data.append(
+                (
+                    new_customer[0],  # customer_id
+                    new_customer[1],  # company_name
+                    new_customer[2],  # contact_name
+                    new_customer[3],  # contact_title
+                    new_customer[4],  # address
+                    new_customer[5],  # city
+                    new_customer[6],  # region
+                    new_customer[7],  # postal_code
+                    new_customer[8],  # country
+                    today.isoformat(),
+                    None,
+                    1,
+                )
+            )
+
+        cursor.executemany(
             """
             INSERT INTO DWA_DIM_Clientes (
                 nk_cliente_id, nombre_compania, nombre_contacto, titulo_contacto,
                 direccion, ciudad, region, codigo_postal, pais,
                 fecha_inicio_validez, fecha_fin_validez, es_vigente
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            """,
-            (
-                new_customer[0],
-                new_customer[1],
-                new_customer[2],
-                new_customer[3],
-                new_customer[4],
-                new_customer[5],
-                new_customer[6],
-                new_customer[7],
-                new_customer[8],
-                today.isoformat(),
-                None,
-                1,
-            ),
+        """,
+            new_customer_data,
         )
 
-    conn.commit()
+        logging.info(f"Insertados {len(new_customers)} clientes completamente nuevos")
 
-    # Registrar métricas usando framework unificado
-    log_record_count(
-        process_id, "MODIFIED_SCD2", "DWA_DIM_Clientes", len(changed_customers)
-    )
-    log_record_count(process_id, "NEW_SCD2", "DWA_DIM_Clientes", len(new_customers))
-
-    # Registrar métricas en DQM (compatibilidad)
+    # Registrar métricas en DQM (compatibilidad) - sin commit
     log_dq_metric(
         conn,
         process_id,
@@ -188,53 +197,71 @@ def update_scd2_clientes(conn, process_id):
     }
 
 
-def update_fact_ventas(conn, process_id):
+def update_fact_ventas_transaction(conn, process_id):
     """
-    Actualiza la tabla de hechos con los datos de Ingesta2.
-    Maneja modificaciones de hechos existentes e inserción de nuevos hechos.
+    Actualiza la tabla de hechos con los datos de Ingesta2 en una sola transacción optimizada.
+    Esta función NO hace commit - debe ser llamada desde execute_transaction_with_retry.
     """
     logging.info("--- Iniciando actualización de DWA_FACT_Ventas ---")
     cursor = conn.cursor()
 
-    # 1. Identificar y actualizar los hechos existentes (modificaciones)
-    # Se actualizan las métricas de las filas de hechos que coinciden en order_id y product_id.
+    # 1. Actualizar hechos existentes en una sola operación
+    # Nota: SQLite no soporta FROM en UPDATE directamente, usamos subqueries
     update_query = """
-        UPDATE DWA_FACT_Ventas
-        SET
-            precio_unitario = (SELECT unit_price FROM TMP2_order_details t WHERE t.order_id = nk_orden_id AND t.product_id = (SELECT nk_producto_id FROM DWA_DIM_Productos dp WHERE dp.sk_producto = DWA_FACT_Ventas.sk_producto)),
-            cantidad = (SELECT quantity FROM TMP2_order_details t WHERE t.order_id = nk_orden_id AND t.product_id = (SELECT nk_producto_id FROM DWA_DIM_Productos dp WHERE dp.sk_producto = DWA_FACT_Ventas.sk_producto)),
-            descuento = (SELECT discount FROM TMP2_order_details t WHERE t.order_id = nk_orden_id AND t.product_id = (SELECT nk_producto_id FROM DWA_DIM_Productos dp WHERE dp.sk_producto = DWA_FACT_Ventas.sk_producto)),
-            monto_total = (SELECT unit_price * quantity * (1 - discount) FROM TMP2_order_details t WHERE t.order_id = nk_orden_id AND t.product_id = (SELECT nk_producto_id FROM DWA_DIM_Productos dp WHERE dp.sk_producto = DWA_FACT_Ventas.sk_producto))
+        UPDATE DWA_FACT_Ventas 
+        SET 
+            cantidad = (
+                SELECT od.quantity 
+                FROM TMP2_order_details od 
+                JOIN DWA_DIM_Productos dp ON od.product_id = dp.nk_producto_id 
+                WHERE od.order_id = DWA_FACT_Ventas.nk_orden_id 
+                AND dp.sk_producto = DWA_FACT_Ventas.sk_producto
+            ),
+            precio_unitario = (
+                SELECT od.unit_price 
+                FROM TMP2_order_details od 
+                JOIN DWA_DIM_Productos dp ON od.product_id = dp.nk_producto_id 
+                WHERE od.order_id = DWA_FACT_Ventas.nk_orden_id 
+                AND dp.sk_producto = DWA_FACT_Ventas.sk_producto
+            ),
+            descuento = (
+                SELECT od.discount 
+                FROM TMP2_order_details od 
+                JOIN DWA_DIM_Productos dp ON od.product_id = dp.nk_producto_id 
+                WHERE od.order_id = DWA_FACT_Ventas.nk_orden_id 
+                AND dp.sk_producto = DWA_FACT_Ventas.sk_producto
+            ),
+            monto_total = (
+                SELECT od.unit_price * od.quantity * (1 - od.discount) 
+                FROM TMP2_order_details od 
+                JOIN DWA_DIM_Productos dp ON od.product_id = dp.nk_producto_id 
+                WHERE od.order_id = DWA_FACT_Ventas.nk_orden_id 
+                AND dp.sk_producto = DWA_FACT_Ventas.sk_producto
+            )
         WHERE EXISTS (
-            SELECT 1 FROM TMP2_order_details t
-            JOIN DWA_DIM_Productos dp ON t.product_id = dp.nk_producto_id
-            WHERE DWA_FACT_Ventas.nk_orden_id = t.order_id AND DWA_FACT_Ventas.sk_producto = dp.sk_producto
-        );
+            SELECT 1 FROM TMP2_order_details od 
+            JOIN DWA_DIM_Productos dp ON od.product_id = dp.nk_producto_id 
+            WHERE od.order_id = DWA_FACT_Ventas.nk_orden_id 
+            AND dp.sk_producto = DWA_FACT_Ventas.sk_producto
+        )
     """
+
     cursor.execute(update_query)
-    updated_count = cursor.rowcount
+    updated_facts = cursor.rowcount
 
-    # Registrar métricas usando framework unificado
-    log_record_count(process_id, "UPDATED_FACTS", "DWA_FACT_Ventas", updated_count)
+    logging.info(f"{updated_facts} hechos existentes fueron actualizados.")
 
-    # Registrar métricas en DQM (compatibilidad)
-    log_dq_metric(
-        conn, process_id, "DWA_FACT_Ventas", "registros_modificados", updated_count
-    )
-    logging.info(f"{updated_count} hechos existentes fueron actualizados.")
-
-    # 2. Insertar nuevos hechos (altas)
-    # Se insertan las filas de TMP2_order_details que no tienen una contraparte en DWA_FACT_Ventas.
+    # 2. Insertar nuevos hechos en lotes usando la estructura correcta
     insert_query = """
         INSERT INTO DWA_FACT_Ventas (
             sk_cliente, sk_producto, sk_empleado, sk_tiempo, sk_geografia_envio, sk_shipper,
             precio_unitario, cantidad, descuento, flete, monto_total, nk_orden_id
         )
-        SELECT
+        SELECT DISTINCT
             dc.sk_cliente,
             dp.sk_producto,
             de.sk_empleado,
-            CAST(STRFTIME('%Y%m%d', o.order_date) AS INTEGER),
+            dt.sk_tiempo,
             dg.sk_geografia,
             ds.sk_shipper,
             od.unit_price,
@@ -243,38 +270,41 @@ def update_fact_ventas(conn, process_id):
             o.freight,
             (od.unit_price * od.quantity * (1 - od.discount)),
             o.order_id
-        FROM TMP2_orders o
-        JOIN TMP2_order_details od ON o.order_id = od.order_id
+        FROM TMP2_order_details od
+        JOIN TMP2_orders o ON od.order_id = o.order_id
         LEFT JOIN DWA_DIM_Clientes dc ON o.customer_id = dc.nk_cliente_id AND dc.es_vigente = 1
         LEFT JOIN DWA_DIM_Productos dp ON od.product_id = dp.nk_producto_id
         LEFT JOIN DWA_DIM_Empleados de ON o.employee_id = de.nk_empleado_id
+        LEFT JOIN DWA_DIM_Tiempo dt ON DATE(o.order_date) = dt.fecha
         LEFT JOIN DWA_DIM_Geografia dg ON o.ship_address = dg.direccion AND o.ship_city = dg.ciudad AND o.ship_country = dg.pais
         LEFT JOIN DWA_DIM_Shippers ds ON o.ship_via = ds.nk_shipper_id
         WHERE NOT EXISTS (
-            SELECT 1 FROM DWA_FACT_Ventas fv
-            WHERE fv.nk_orden_id = o.order_id AND fv.sk_producto = dp.sk_producto
-        );
+            SELECT 1 FROM DWA_FACT_Ventas f 
+            WHERE f.nk_orden_id = o.order_id 
+            AND f.sk_producto = dp.sk_producto
+        )
+        AND dc.sk_cliente IS NOT NULL  -- Solo insertar si tenemos cliente válido
+        AND dp.sk_producto IS NOT NULL  -- Solo insertar si tenemos producto válido
+        AND dt.sk_tiempo IS NOT NULL   -- Solo insertar si tenemos fecha válida
     """
+
     cursor.execute(insert_query)
-    inserted_count = cursor.rowcount
+    inserted_facts = cursor.rowcount
 
-    # Registrar métricas usando framework unificado
-    log_record_count(process_id, "INSERTED_FACTS", "DWA_FACT_Ventas", inserted_count)
+    logging.info(f"{inserted_facts} nuevos hechos fueron insertados.")
 
-    # Registrar métricas en DQM (compatibilidad)
+    # Registrar métricas en DQM (compatibilidad) - sin commit
     log_dq_metric(
-        conn, process_id, "DWA_FACT_Ventas", "registros_nuevos", inserted_count
+        conn, process_id, "DWA_FACT_Ventas", "hechos_actualizados", updated_facts
     )
-    logging.info(f"{inserted_count} nuevos hechos fueron insertados.")
+    log_dq_metric(conn, process_id, "DWA_FACT_Ventas", "hechos_nuevos", inserted_facts)
 
-    conn.commit()
     logging.info("--- Actualización de DWA_FACT_Ventas completada ---")
 
-    # Retornar resultados para el framework de calidad
     return {
-        "actualizados": updated_count,
-        "nuevos": inserted_count,
-        "total_procesados": updated_count + inserted_count,
+        "actualizados": updated_facts,
+        "nuevos": inserted_facts,
+        "total_procesados": updated_facts + inserted_facts,
     }
 
 
@@ -288,9 +318,12 @@ def main():
     # Inicializar tracking de calidad con framework unificado
     execution_id = get_process_execution_id("STEP_09_UPDATE_DWH_INGESTA2")
 
-    conn = None
     try:
-        conn = sqlite3.connect(DB_PATH)
+        # Crear conexión temporal para validaciones pre-proceso
+        conn = get_db_connection()
+        if conn is None:
+            raise sqlite3.Error("No se pudo obtener conexión a la base de datos")
+
         log_quality_metric(
             execution_id,
             "DATABASE_CONNECTION",
@@ -305,10 +338,16 @@ def main():
         # Validaciones pre-proceso: Estado del DWH antes de actualización
         validate_dwh_state_before_update(execution_id, conn)
 
+        # Cerrar conexión temporal antes de las transacciones
+        conn.close()
+        conn = None
+
         # --- Actualizar Dimensiones SCD2 ---
         logging.info("--- Iniciando Actualización de Dimensiones SCD2 ---")
         try:
-            scd2_results = update_scd2_clientes(conn, execution_id)
+            scd2_results = execute_transaction_with_retry(
+                update_scd2_clientes_transaction, execution_id
+            )
             log_quality_metric(
                 execution_id,
                 "SCD2_UPDATE",
@@ -329,7 +368,9 @@ def main():
         # --- Actualizar Tabla de Hechos ---
         logging.info("--- Iniciando Actualización de Tabla de Hechos ---")
         try:
-            fact_results = update_fact_ventas(conn, execution_id)
+            fact_results = execute_transaction_with_retry(
+                update_fact_ventas_transaction, execution_id
+            )
             log_quality_metric(
                 execution_id,
                 "FACT_UPDATE",
@@ -348,8 +389,12 @@ def main():
             raise
 
         # 5. Validaciones post-actualización
-        validate_dwh_integrity_after_update(execution_id, conn)
-        validate_temporal_consistency(execution_id, conn)
+        # Crear nueva conexión temporal para validaciones finales
+        conn = get_db_connection()
+        if conn:
+            validate_dwh_integrity_after_update(execution_id, conn)
+            validate_temporal_consistency(execution_id, conn)
+            conn.close()
 
         # Finalizar la ejecución del proceso
         update_process_execution(
@@ -372,9 +417,13 @@ def main():
         )
         update_process_execution(execution_id, "Fallido", f"Error: {str(e)}")
     finally:
-        if conn:
-            conn.close()
-            logging.info("Conexión a la base de datos cerrada.")
+        # Solo cerrar si conn no es None y aún está abierta
+        if "conn" in locals() and conn:
+            try:
+                conn.close()
+                logging.info("Conexión de validación cerrada.")
+            except:
+                pass
 
 
 def validate_ingesta2_availability(execution_id: int, conn: sqlite3.Connection):

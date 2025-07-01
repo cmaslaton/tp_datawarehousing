@@ -10,20 +10,24 @@ import random
 from datetime import datetime
 from typing import Optional, Any
 
-# --- Constantes ---
-DB_PATH = "db/tp_dwa.db"  # Mantener ruta original por compatibilidad
-MAX_RETRIES = 3
-RETRY_DELAY = 0.1  # 100ms base delay
+# --- Configuración ---
+DB_PATH = "db/tp_dwa.db"
+MAX_RETRIES = 5  # Aumentar reintentos
+RETRY_DELAY = 0.1  # Reducir delay inicial
+
+# --- Configuración mejorada ---
+MAX_CONNECTION_TIMEOUT = 30.0  # Timeout más largo para operaciones complejas
+BATCH_SIZE = 100  # Para operaciones por lotes
 
 
 def execute_with_retry(operation_func, *args, **kwargs):
     """
-    Ejecuta una operación de base de datos con reintentos automáticos.
-    
+    Ejecuta una operación de base de datos con reintentos automáticos mejorados.
+
     Args:
         operation_func: Función a ejecutar
         *args, **kwargs: Argumentos para la función
-        
+
     Returns:
         Resultado de la función o None si falla
     """
@@ -32,34 +36,57 @@ def execute_with_retry(operation_func, *args, **kwargs):
             return operation_func(*args, **kwargs)
         except sqlite3.OperationalError as e:
             error_msg = str(e).lower()
-            if ("database is locked" in error_msg or "disk i/o error" in error_msg) and attempt < MAX_RETRIES - 1:
-                # Esperar con backoff exponencial y jitter
-                delay = RETRY_DELAY * (2 ** attempt) + random.uniform(0, 0.1)
-                logging.warning(f"Error de BD ({e}), reintentando en {delay:.2f}s (intento {attempt + 1}/{MAX_RETRIES})")
+            if (
+                "database is locked" in error_msg
+                or "disk i/o error" in error_msg
+                or "database is busy" in error_msg
+            ) and attempt < MAX_RETRIES - 1:
+                # Esperar con backoff exponencial y jitter más efectivo
+                base_delay = RETRY_DELAY * (2**attempt)
+                jitter = random.uniform(0, base_delay * 0.5)  # Jitter más significativo
+                delay = base_delay + jitter
+                logging.warning(
+                    f"Error de BD ({e}), reintentando en {delay:.2f}s (intento {attempt + 1}/{MAX_RETRIES})"
+                )
                 time.sleep(delay)
                 continue
             else:
                 # Si es el último intento o error no manejable, loggear y continuar
-                logging.error(f"Error persistente de BD después de {MAX_RETRIES} intentos: {e}")
+                logging.error(
+                    f"Error persistente de BD después de {MAX_RETRIES} intentos: {e}"
+                )
                 return None
         except Exception as e:
             logging.error(f"Error no relacionado con BD: {e}")
             return None
-    
+
     return None
 
 
-def get_db_connection():
+def get_db_connection(timeout=None):
     """
-    Obtiene una conexión a la base de datos con configuración básica.
-    
+    Obtiene una conexión a la base de datos con configuración optimizada para evitar bloqueos.
+
+    Args:
+        timeout: Timeout personalizado para la conexión
+
     Returns:
         Conexión SQLite configurada
     """
     try:
-        conn = sqlite3.connect(DB_PATH, timeout=10.0)
-        # Configuración mínima para evitar problemas I/O
-        conn.execute("PRAGMA busy_timeout=10000")  # 10 segundos de timeout
+        connection_timeout = timeout or MAX_CONNECTION_TIMEOUT
+        conn = sqlite3.connect(DB_PATH, timeout=connection_timeout)
+
+        # Configuración optimizada para operaciones complejas
+        conn.execute("PRAGMA busy_timeout=30000")  # 30 segundos de timeout
+        conn.execute("PRAGMA synchronous=NORMAL")  # Balance entre velocidad y seguridad
+        conn.execute(
+            "PRAGMA journal_mode=WAL"
+        )  # Write-Ahead Logging para mejor concurrencia
+        conn.execute("PRAGMA temp_store=MEMORY")  # Usar memoria para temp tables
+        conn.execute("PRAGMA cache_size=10000")  # Cache más grande
+        conn.execute("PRAGMA locking_mode=NORMAL")  # Asegurar unlocking apropiado
+
         return conn
     except Exception as e:
         logging.error(f"Error creando conexión a BD: {e}")
@@ -76,24 +103,32 @@ def get_process_execution_id(proceso_nombre: str) -> int:
     Returns:
         ID de ejecución para usar en las métricas de calidad
     """
+
     def _create_execution():
         conn = get_db_connection()
         try:
             cursor = conn.cursor()
-            
+
             # Insertar nueva ejecución
-            cursor.execute("""
+            cursor.execute(
+                """
                 INSERT INTO DQM_ejecucion_procesos 
                 (nombre_proceso, fecha_inicio, estado) 
                 VALUES (?, ?, ?)
-            """, (proceso_nombre, datetime.now().strftime("%Y-%m-%d %H:%M:%S"), "En Progreso"))
-            
+            """,
+                (
+                    proceso_nombre,
+                    datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                    "En Progreso",
+                ),
+            )
+
             execution_id = cursor.lastrowid
             conn.commit()
             return execution_id
         finally:
             conn.close()
-    
+
     try:
         return execute_with_retry(_create_execution)
     except sqlite3.Error as e:
@@ -112,6 +147,7 @@ def update_process_execution(
         estado: Estado final ('Exitoso', 'Fallido')
         comentarios: Comentarios adicionales
     """
+
     def _update_execution():
         conn = get_db_connection()
         try:
@@ -120,10 +156,13 @@ def update_process_execution(
             fecha_fin = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
             # Calcular duración si existe fecha_inicio
-            cursor.execute("""
+            cursor.execute(
+                """
                 SELECT fecha_inicio FROM DQM_ejecucion_procesos 
                 WHERE id_ejecucion = ?
-            """, (execution_id,))
+            """,
+                (execution_id,),
+            )
 
             result = cursor.fetchone()
             duracion_seg = None
@@ -133,11 +172,14 @@ def update_process_execution(
                 fecha_fin_dt = datetime.strptime(fecha_fin, "%Y-%m-%d %H:%M:%S")
                 duracion_seg = (fecha_fin_dt - fecha_inicio).total_seconds()
 
-            cursor.execute("""
+            cursor.execute(
+                """
                 UPDATE DQM_ejecucion_procesos 
                 SET fecha_fin = ?, estado = ?, comentarios = ?, duracion_seg = ?
                 WHERE id_ejecucion = ?
-            """, (fecha_fin, estado, comentarios, duracion_seg, execution_id))
+            """,
+                (fecha_fin, estado, comentarios, duracion_seg, execution_id),
+            )
 
             conn.commit()
         finally:
@@ -166,16 +208,20 @@ def log_quality_metric(
         resultado: Resultado de la validación ('PASS', 'FAIL', 'WARNING', valor numérico)
         detalles: Detalles adicionales sobre el resultado
     """
+
     def _log_metric():
         conn = get_db_connection()
         try:
             cursor = conn.cursor()
 
-            cursor.execute("""
+            cursor.execute(
+                """
                 INSERT INTO DQM_indicadores_calidad 
                 (id_ejecucion, nombre_indicador, entidad_asociada, resultado, detalles)
                 VALUES (?, ?, ?, ?, ?)
-            """, (execution_id, nombre_indicador, entidad_asociada, resultado, detalles))
+            """,
+                (execution_id, nombre_indicador, entidad_asociada, resultado, detalles),
+            )
 
             conn.commit()
         finally:
@@ -208,6 +254,7 @@ def validate_table_count(
     Returns:
         True si la validación pasa, False si falla
     """
+
     def _validate_count():
         if conn is None:
             connection = get_db_connection()
@@ -227,7 +274,7 @@ def validate_table_count(
 
     try:
         count = execute_with_retry(_validate_count)
-        
+
         result = "PASS" if count >= expected_min else "FAIL"
         detalles = f"Registros encontrados: {count}, mínimo esperado: {expected_min}"
 
@@ -271,6 +318,7 @@ def validate_no_nulls(
     Returns:
         True si no hay NULLs, False si hay NULLs
     """
+
     def _validate_nulls():
         if conn is None:
             connection = get_db_connection()
@@ -281,7 +329,9 @@ def validate_no_nulls(
 
         try:
             cursor = connection.cursor()
-            cursor.execute(f"SELECT COUNT(*) FROM {table_name} WHERE {column_name} IS NULL")
+            cursor.execute(
+                f"SELECT COUNT(*) FROM {table_name} WHERE {column_name} IS NULL"
+            )
             null_count = cursor.fetchone()[0]
             return null_count
         finally:
@@ -338,6 +388,7 @@ def validate_referential_integrity(
     Returns:
         True si la integridad es válida, False si hay violaciones
     """
+
     def _validate_integrity():
         if conn is None:
             connection = get_db_connection()
@@ -411,6 +462,7 @@ def validate_data_range(
     Returns:
         True si todos los valores están en rango, False si hay valores fuera de rango
     """
+
     def _validate_range():
         conditions = []
         if min_value is not None:
@@ -478,3 +530,74 @@ def log_record_count(execution_id: int, operation: str, table_name: str, count: 
         resultado=str(count),
         detalles=f"Operación: {operation}, Registros: {count}",
     )
+
+
+def execute_transaction_with_retry(transaction_func, *args, **kwargs):
+    """
+    Ejecuta una transacción completa con reintentos automáticos.
+    Maneja commits y rollbacks de manera segura.
+
+    Args:
+        transaction_func: Función que contiene la lógica de transacción
+        *args, **kwargs: Argumentos para la función
+
+    Returns:
+        Resultado de la transacción
+    """
+    for attempt in range(MAX_RETRIES):
+        conn = None
+        try:
+            conn = get_db_connection()
+            if conn is None:
+                raise sqlite3.Error("No se pudo obtener conexión a la base de datos")
+
+            # Comenzar transacción
+            conn.execute("BEGIN IMMEDIATE")
+
+            # Ejecutar la función de transacción
+            result = transaction_func(conn, *args, **kwargs)
+
+            # Commit solo si todo salió bien
+            conn.commit()
+            return result
+
+        except sqlite3.OperationalError as e:
+            error_msg = str(e).lower()
+            if conn:
+                try:
+                    conn.rollback()
+                except:
+                    pass
+                conn.close()
+
+            if (
+                "database is locked" in error_msg or "database is busy" in error_msg
+            ) and attempt < MAX_RETRIES - 1:
+                base_delay = RETRY_DELAY * (2**attempt)
+                jitter = random.uniform(0, base_delay * 0.5)
+                delay = base_delay + jitter
+                logging.warning(
+                    f"Transacción falló ({e}), reintentando en {delay:.2f}s (intento {attempt + 1}/{MAX_RETRIES})"
+                )
+                time.sleep(delay)
+                continue
+            else:
+                logging.error(
+                    f"Error persistente en transacción después de {MAX_RETRIES} intentos: {e}"
+                )
+                raise
+
+        except Exception as e:
+            if conn:
+                try:
+                    conn.rollback()
+                except:
+                    pass
+                conn.close()
+            logging.error(f"Error en transacción: {e}")
+            raise
+        finally:
+            if conn:
+                conn.close()
+
+    raise sqlite3.Error(f"Transacción falló después de {MAX_RETRIES} intentos")
