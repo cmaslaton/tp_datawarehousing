@@ -19,9 +19,9 @@ MAX_RETRIES = 8  # Aumentar reintentos para bloqueos
 RETRY_DELAY = 0.2  # Delay inicial más conservador
 
 # --- Configuración mejorada para SQLite concurrency ---
-MAX_CONNECTION_TIMEOUT = 60.0  # Timeout más largo para operaciones complejas
+MAX_CONNECTION_TIMEOUT = 30.0  # Timeout reducido para detectar problemas más rápido
 BATCH_SIZE = 50  # Reducir batch size para menos contención
-WAL_CHECKPOINT_INTERVAL = 1000  # Checkpoint WAL cada 1000 páginas
+WAL_CHECKPOINT_INTERVAL = 500  # Checkpoint WAL más frecuente
 CONNECTION_POOL_SIZE = 3  # Pool de conexiones limitado
 
 # --- Enums para niveles de severidad y calidad ---
@@ -162,15 +162,15 @@ def get_db_connection(timeout=None):
         conn = sqlite3.connect(DB_PATH, timeout=connection_timeout)
 
         # Configuración optimizada para máxima concurrencia y estabilidad
-        conn.execute("PRAGMA busy_timeout=60000")  # 60 segundos de timeout
+        conn.execute("PRAGMA busy_timeout=30000")  # 30 segundos de timeout (reducido)
         conn.execute("PRAGMA synchronous=NORMAL")  # Balance entre velocidad y seguridad
         conn.execute("PRAGMA journal_mode=WAL")  # Write-Ahead Logging para mejor concurrencia
-        conn.execute("PRAGMA wal_autocheckpoint=1000")  # Checkpoint automático
+        conn.execute("PRAGMA wal_autocheckpoint=500")  # Checkpoint más frecuente
         conn.execute("PRAGMA temp_store=MEMORY")  # Usar memoria para temp tables
-        conn.execute("PRAGMA cache_size=20000")  # Cache más grande (20MB aprox)
+        conn.execute("PRAGMA cache_size=10000")  # Cache reducido para menos memoria
         conn.execute("PRAGMA locking_mode=NORMAL")  # Asegurar unlocking apropiado
         conn.execute("PRAGMA page_size=4096")  # Tamaño de página optimizado
-        conn.execute("PRAGMA mmap_size=268435456")  # 256MB memory mapped
+        conn.execute("PRAGMA mmap_size=134217728")  # 128MB memory mapped (reducido)
         conn.execute("PRAGMA optimize")  # Optimización automática
 
         return conn
@@ -284,6 +284,7 @@ def log_quality_metric(
     resultado: str,
     detalles: Optional[str] = None,
     severidad: Optional[str] = None,
+    conn: Optional[sqlite3.Connection] = None,
 ):
     """
     Registra una métrica de calidad en la tabla DQM_indicadores_calidad.
@@ -295,13 +296,13 @@ def log_quality_metric(
         resultado: Resultado de la validación ('PASS', 'FAIL', 'WARNING', 'CRITICAL', valor numérico)
         detalles: Detalles adicionales sobre el resultado
         severidad: Nivel de severidad (CRITICAL, HIGH, MEDIUM, LOW)
+        conn: Conexión existente (opcional, se crea una nueva si no se proporciona)
     """
 
     def _log_metric():
-        conn = get_db_connection()
-        try:
+        if conn is not None:
+            # Usar conexión existente
             cursor = conn.cursor()
-
             cursor.execute(
                 """
                 INSERT INTO DQM_indicadores_calidad 
@@ -310,13 +311,31 @@ def log_quality_metric(
             """,
                 (execution_id, nombre_indicador, entidad_asociada, resultado, detalles),
             )
-
-            conn.commit()
-        finally:
-            conn.close()
+            # No hacer commit aquí - lo hará el proceso principal
+        else:
+            # Crear nueva conexión (comportamiento original)
+            new_conn = get_db_connection()
+            try:
+                cursor = new_conn.cursor()
+                cursor.execute(
+                    """
+                    INSERT INTO DQM_indicadores_calidad 
+                    (id_ejecucion, nombre_indicador, entidad_asociada, resultado, detalles)
+                    VALUES (?, ?, ?, ?, ?)
+                """,
+                    (execution_id, nombre_indicador, entidad_asociada, resultado, detalles),
+                )
+                new_conn.commit()
+            finally:
+                new_conn.close()
 
     try:
-        execute_with_retry(_log_metric)
+        if conn is not None:
+            # Ejecución directa si tenemos conexión
+            _log_metric()
+        else:
+            # Usar retry solo si creamos nueva conexión
+            execute_with_retry(_log_metric)
         logging.info(
             f"Métrica de calidad registrada: {nombre_indicador} - {entidad_asociada}: {resultado}"
         )
@@ -362,6 +381,16 @@ def validate_table_count(
 
     try:
         count = execute_with_retry(_validate_count)
+        if count is None:
+            log_quality_metric(
+                execution_id=execution_id,
+                nombre_indicador="COUNT_VALIDATION",
+                entidad_asociada=table_name,
+                resultado=QualityResult.ERROR.value,
+                detalles="Error ejecutando validación de conteo",
+                severidad=QualitySeverity.HIGH.value
+            )
+            return False
 
         if count >= expected_min:
             result = QualityResult.PASS.value
@@ -436,6 +465,16 @@ def validate_no_nulls(
 
     try:
         null_count = execute_with_retry(_validate_nulls)
+        if null_count is None:
+            log_quality_metric(
+                execution_id=execution_id,
+                nombre_indicador="NULL_VALIDATION",
+                entidad_asociada=f"{table_name}.{column_name}",
+                resultado=QualityResult.ERROR.value,
+                detalles="Error ejecutando validación de nulos",
+                severidad=QualitySeverity.HIGH.value
+            )
+            return False
 
         if null_count == 0:
             result = QualityResult.PASS.value
@@ -520,6 +559,16 @@ def validate_referential_integrity(
 
     try:
         orphan_count = execute_with_retry(_validate_integrity)
+        if orphan_count is None:
+            log_quality_metric(
+                execution_id=execution_id,
+                nombre_indicador="REFERENTIAL_INTEGRITY",
+                entidad_asociada=f"{child_table}.{fk_column} -> {parent_table}.{pk_column}",
+                resultado=QualityResult.ERROR.value,
+                detalles="Error ejecutando validación de integridad referencial",
+                severidad=QualitySeverity.HIGH.value
+            )
+            return False
 
         if orphan_count == 0:
             result = QualityResult.PASS.value
@@ -599,6 +648,16 @@ def validate_data_range(
 
     try:
         out_of_range_count = execute_with_retry(_validate_range)
+        if out_of_range_count is None:
+            log_quality_metric(
+                execution_id=execution_id,
+                nombre_indicador="RANGE_VALIDATION",
+                entidad_asociada=f"{table_name}.{column_name}",
+                resultado=QualityResult.ERROR.value,
+                detalles="Error ejecutando validación de rango",
+                severidad=QualitySeverity.HIGH.value
+            )
+            return False
 
         if out_of_range_count == 0:
             result = QualityResult.PASS.value
@@ -633,7 +692,7 @@ def validate_data_range(
         return False
 
 
-def log_record_count(execution_id: int, operation: str, table_name: str, count: int):
+def log_record_count(execution_id: int, operation: str, table_name: str, count: int, conn: Optional[sqlite3.Connection] = None):
     """
     Registra el conteo de registros de una operación específica.
 
@@ -642,6 +701,7 @@ def log_record_count(execution_id: int, operation: str, table_name: str, count: 
         operation: Tipo de operación (LOADED, INSERTED, UPDATED, etc.)
         table_name: Nombre de la tabla
         count: Número de registros
+        conn: Conexión existente (opcional)
     """
     log_quality_metric(
         execution_id=execution_id,
@@ -649,7 +709,8 @@ def log_record_count(execution_id: int, operation: str, table_name: str, count: 
         entidad_asociada=table_name,
         resultado=str(count),
         detalles=f"Operación: {operation}, Registros: {count}",
-        severidad=QualitySeverity.LOW.value  # Informacional
+        severidad=QualitySeverity.LOW.value,  # Informacional
+        conn=conn
     )
 
 
@@ -796,7 +857,20 @@ def validate_completeness_score(
                 connection.close()
 
     try:
-        avg_completeness, field_details, total_records = execute_with_retry(_calculate_completeness)
+        result_tuple = execute_with_retry(_calculate_completeness)
+        if result_tuple is None:
+            # Error en la ejecución, registrar y retornar 0
+            log_quality_metric(
+                execution_id=execution_id,
+                nombre_indicador="COMPLETENESS_SCORE",
+                entidad_asociada=table_name,
+                resultado=QualityResult.ERROR.value,
+                detalles="Error ejecutando validación de completitud",
+                severidad=QualitySeverity.HIGH.value
+            )
+            return 0.0
+            
+        avg_completeness, field_details, total_records = result_tuple
         
         # Determinar resultado y severidad
         if avg_completeness >= QualityThresholds.COMPLETENESS_HIGH:
@@ -917,7 +991,19 @@ def validate_format_patterns(
                 connection.close()
 
     try:
-        invalid_count, total_count, invalid_samples = execute_with_retry(_validate_pattern)
+        result_tuple = execute_with_retry(_validate_pattern)
+        if result_tuple is None:
+            log_quality_metric(
+                execution_id=execution_id,
+                nombre_indicador="FORMAT_VALIDATION",
+                entidad_asociada=f"{table_name}.{column_name}",
+                resultado=QualityResult.ERROR.value,
+                detalles="Error ejecutando validación de formato",
+                severidad=QualitySeverity.HIGH.value
+            )
+            return False
+            
+        invalid_count, total_count, invalid_samples = result_tuple
         
         if total_count == 0:
             result = QualityResult.WARNING.value
@@ -1020,7 +1106,20 @@ def validate_business_key_uniqueness(
                 connection.close()
 
     try:
-        duplicates, total_valid_records = execute_with_retry(_validate_uniqueness)
+        result_tuple = execute_with_retry(_validate_uniqueness)
+        if result_tuple is None:
+            # Error en la ejecución, registrar y retornar False
+            log_quality_metric(
+                execution_id=execution_id,
+                nombre_indicador="BUSINESS_KEY_UNIQUENESS",
+                entidad_asociada=table_name,
+                resultado=QualityResult.ERROR.value,
+                detalles="Error ejecutando validación de unicidad",
+                severidad=QualitySeverity.HIGH.value
+            )
+            return False
+            
+        duplicates, total_valid_records = result_tuple
         
         if len(duplicates) == 0:
             result = QualityResult.PASS.value
@@ -1149,7 +1248,19 @@ def validate_data_freshness(
                 connection.close()
 
     try:
-        max_date, hours_old, total_records, date_range_info = execute_with_retry(_validate_freshness)
+        result_tuple = execute_with_retry(_validate_freshness)
+        if result_tuple is None:
+            log_quality_metric(
+                execution_id=execution_id,
+                nombre_indicador="DATA_FRESHNESS",
+                entidad_asociada=f"{table_name}.{date_column}",
+                resultado=QualityResult.ERROR.value,
+                detalles="Error ejecutando validación de frescura",
+                severidad=QualitySeverity.HIGH.value
+            )
+            return False
+            
+        max_date, hours_old, total_records, date_range_info = result_tuple
         
         if max_date is None:
             result = QualityResult.WARNING.value
@@ -1251,7 +1362,19 @@ def validate_cross_field_logic(
                 connection.close()
 
     try:
-        all_passed, violations_summary = execute_with_retry(_validate_logic)
+        result_tuple = execute_with_retry(_validate_logic)
+        if result_tuple is None:
+            log_quality_metric(
+                execution_id=execution_id,
+                nombre_indicador="CROSS_FIELD_LOGIC",
+                entidad_asociada=table_name,
+                resultado=QualityResult.ERROR.value,
+                detalles="Error ejecutando validación de lógica cruzada",
+                severidad=QualitySeverity.HIGH.value
+            )
+            return False
+            
+        all_passed, violations_summary = result_tuple
         
         if all_passed:
             result = QualityResult.PASS.value
@@ -1357,7 +1480,19 @@ def validate_domain_constraints(
                 connection.close()
 
     try:
-        invalid_values, total_values = execute_with_retry(_validate_domain)
+        result_tuple = execute_with_retry(_validate_domain)
+        if result_tuple is None:
+            log_quality_metric(
+                execution_id=execution_id,
+                nombre_indicador="DOMAIN_CONSTRAINTS",
+                entidad_asociada=f"{table_name}.{column_name}",
+                resultado=QualityResult.ERROR.value,
+                detalles="Error ejecutando validación de dominio",
+                severidad=QualitySeverity.HIGH.value
+            )
+            return False
+            
+        invalid_values, total_values = result_tuple
         
         if len(invalid_values) == 0:
             result = QualityResult.PASS.value
