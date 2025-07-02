@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 from ..quality_utils import (
     get_process_execution_id, 
+    update_process_execution,
     log_quality_metric,
     validate_table_count,
     validate_completeness_score,
@@ -409,12 +410,23 @@ def main():
     execution_id = get_process_execution_id("step_08_load_ingesta2_to_staging")
     
     conn = None
+    success = False
     try:
         conn = sqlite3.connect(DB_PATH)
         logging.info(f"Conexión exitosa a la base de datos {DB_PATH}.")
         create_and_load_staging_tables(conn, execution_id)
+        success = True
+        logging.info("Paso 8 completado exitosamente.")
+        
+        # Marcar proceso como exitoso
+        update_process_execution(execution_id, "Exitoso", "Carga de Ingesta2 completada exitosamente")
+        
     except sqlite3.Error as e:
         logging.error(f"Error de base de datos en el Paso 8: {e}")
+        update_process_execution(execution_id, "Fallido", f"Error de base de datos: {str(e)}")
+    except Exception as e:
+        logging.error(f"Error inesperado en el Paso 8: {e}")
+        update_process_execution(execution_id, "Fallido", f"Error inesperado: {str(e)}")
     finally:
         if conn:
             conn.close()
