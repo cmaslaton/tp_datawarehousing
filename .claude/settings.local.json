@@ -14,7 +14,8 @@
       "Bash(pip install:*)",
       "Bash(PYTHONPATH=/mnt/c/Users/Carli/OneDrive/Documentos/GitHub/tp_datawarehousing/src python3 tp_datawarehousing/steps/step_08b_data_remediation.py)",
       "Bash(PYTHONPATH=/mnt/c/Users/Carli/OneDrive/Documentos/GitHub/tp_datawarehousing/src python3 src/tp_datawarehousing/steps/step_08b_data_remediation.py)",
-      "Bash(PYTHONPATH=/mnt/c/Users/Carli/OneDrive/Documentos/GitHub/tp_datawarehousing/src python3 -c \"\nimport sys\nsys.path.insert(0, ''/mnt/c/Users/Carli/OneDrive/Documentos/GitHub/tp_datawarehousing/src'')\nfrom tp_datawarehousing.steps.step_08b_data_remediation import main\nmain()\n\")"
+      "Bash(PYTHONPATH=/mnt/c/Users/Carli/OneDrive/Documentos/GitHub/tp_datawarehousing/src python3 -c \"\nimport sys\nsys.path.insert(0, ''/mnt/c/Users/Carli/OneDrive/Documentos/GitHub/tp_datawarehousing/src'')\nfrom tp_datawarehousing.steps.step_08b_data_remediation import main\nmain()\n\")",
+      "Bash(mkdir:*)"
     ],
     "deny": []
   }
