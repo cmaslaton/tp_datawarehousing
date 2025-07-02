@@ -1,182 +1,129 @@
-# CLAUDE.md - Data Warehousing Academic Project
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Project Overview
 
-This is a comprehensive **Data Warehousing Academic Project** (`tp_datawarehousing`) that implements a complete end-to-end data warehouse solution using the Northwind database as the primary data source. The project demonstrates professional data warehousing practices including ETL processes, dimensional modeling, data quality management, and analytical reporting.
+This is a comprehensive Data Warehousing academic project (`tp_datawarehousing`) that implements a complete ETL pipeline with quality controls. The project processes business data through multiple layers from staging to final dimensional model, including data quality monitoring (DQM) and automated reporting.
 
-## Technology Stack
+## Key Commands
 
-- **Language**: Python 3.11+
-- **Database**: SQLite (single-file database: `db/tp_dwa.db`)
-- **Core Libraries**: 
-  - `pandas` 2.3.0 - Data manipulation and analysis
-  - `numpy` 2.3.0 - Numerical computing
-  - `sqlite3` - Database operations (built-in)
-- **Package Management**: 
-  - `pyproject.toml` (PEP 621 standard)
-  - `uv.lock` (modern Python dependency resolution)
-- **Architecture**: Modular ETL pipeline with orchestration
-
-## Project Structure
-
-```
-tp_datawarehousing/
-├── db/                          # Database files
-│   └── tp_dwa.db               # Main SQLite database
-├── docs/                        # Documentation
-│   ├── DER.png                 # Entity Relationship Diagram
-│   ├── step_01_analysis.md     # Step-by-step analysis docs
-│   └── ... (step_02 through step_10)
-├── src/tp_datawarehousing/     # Main source code
-│   ├── main.py                 # Main orchestrator
-│   ├── quality_utils.py        # Data quality utilities
-│   └── steps/                  # Modular ETL steps
-│       ├── step_01_setup_staging_area.py
-│       ├── step_02_load_staging_data.py
-│       ├── step_03_create_ingestion_layer.py
-│       ├── step_04_link_world_data.py
-│       ├── step_05_create_dwh_model.py
-│       ├── step_06_create_dqm.py
-│       ├── step_07_initial_dwh_load.py
-│       ├── step_08_load_ingesta2_to_staging.py
-│       ├── step_09_update_dwh_with_ingesta2.py
-│       ├── step_10_1_ventas_mensuales_categoria_pais.py
-│       ├── step_10_2_performance_empleados_trimestral.py
-│       └── step_10_3_analisis_logistica_shippers.py
-├── check_quality_metrics.py    # Quality metrics reporter
-├── pyproject.toml              # Project configuration
-├── requirements.txt            # Dependencies
-└── README.md                   # Project documentation
-```
-
-## Data Architecture
-
-The project implements a **comprehensive data warehouse architecture** with the following layers:
-
-### 1. Staging Layer (TMP_*)
-- **TMP_categories, TMP_products, TMP_suppliers** - Master data entities
-- **TMP_orders, TMP_order_details** - Transaction data
-- **TMP_customers, TMP_employees** - Business actors
-- **TMP_shippers, TMP_territories, TMP_regions** - Geographic and logistics
-- **TMP_world_data_2023** - External enrichment data
-
-### 2. Ingestion Layer (ING_*)
-- Clean, validated data with integrity constraints
-- Business rules enforcement
-- Data type standardization
-
-### 3. Data Warehouse Layer (DWH_*)
-- **Dimensional Model**: Star schema design
-- **6 Dimensions**: Time, Customers (SCD Type 2), Products, Employees, Geography, Shippers
-- **1 Fact Table**: Sales facts with derived metrics
-- **SCD Type 2**: Slowly Changing Dimensions for customer history
-
-### 4. Data Quality Mart (DQM_*)
-- **DQM_ejecucion_procesos** - Process execution tracking
-- **DQM_indicadores_calidad** - Quality metrics and validation results
-- Comprehensive quality monitoring and reporting
-
-## Key Features
-
-### ETL Pipeline Orchestration
-- **Modular Design**: Each ETL step is a separate, testable module
-- **Sequential Execution**: Orchestrated through `main.py`
-- **Error Handling**: Robust error management with rollback capabilities
-- **Logging**: Comprehensive logging throughout the pipeline
-
-### Data Quality Management
-- **Built-in Quality Utils**: Comprehensive data validation framework
-- **Multiple Validation Types**:
-  - Record count validation
-  - NULL value checks
-  - Referential integrity validation
-  - Data range validation
-  - Custom business rule validation
-- **Quality Metrics Tracking**: All validations logged in DQM tables
-- **Retry Logic**: Robust database operation retry mechanism with exponential backoff
-
-### Analytical Capabilities
-- **3 Data Products**:
-  - Monthly sales by category and country
-  - Quarterly employee performance analysis
-  - Logistics and shipping analysis
-- **Dimensional Modeling**: Optimized for analytical queries
-- **Historical Tracking**: SCD Type 2 implementation for customer changes
-
-## Build and Run Commands
-
-### Installation
+### Installation and Setup
 ```bash
-# Install in development mode
+# Install project in development mode
 pip install -e .
 
-# Or install dependencies directly
+# Install dependencies
 pip install -r requirements.txt
 ```
 
-### Execution
+### Running the Pipeline
 ```bash
-# Run the complete ETL pipeline
+# Main pipeline execution (runs all steps sequentially)
 python -m tp_datawarehousing.main
 
-# Or use the installed entry point
+# Alternative command
 tp-datawarehousing
 
-# Check quality metrics after execution
+# Check data quality metrics after execution
 python check_quality_metrics.py
+
+# Database optimization (if needed)
+python optimize_database.py
 ```
 
-### Database Access
+### Individual Step Execution
 ```bash
-# Access the SQLite database directly
-sqlite3 db/tp_dwa.db
+# Each step can be run individually (in src/tp_datawarehousing/steps/)
+python -m tp_datawarehousing.steps.step_01_setup_staging_area
+python -m tp_datawarehousing.steps.step_02_load_staging_data
+# ... etc for steps 01-10
 ```
+
+## Architecture Overview
+
+### Layer Structure (Prefixed Tables)
+- **TMP_**: Staging area for raw data validation
+- **ING_**: Ingestion layer with referential integrity 
+- **DWA_**: Data Warehouse dimensional model (star schema)
+- **DQM_**: Data Quality Mart for monitoring and metrics
+- **MET_**: Metadata layer for documentation
+- **DP_**: Data Products (aggregated business views)
+
+### Pipeline Flow (10 Steps)
+1. **Setup Staging Area** - Create database structure and metadata tables
+2. **Load Staging Data** - Import CSV files from Ingesta1 to TMP_ tables
+3. **Create Ingestion Layer** - Add referential integrity constraints (ING_)
+4. **Link World Data** - Standardize country names with external dataset
+5. **Create DWH Model** - Build dimensional star schema (DWA_)
+6. **Create DQM** - Setup data quality monitoring framework
+7. **Initial DWH Load** - Load data with quality checks and SCD implementation
+8. **Load Ingesta2** - Import incremental data to TMP2_ staging
+9. **Update DWH** - Process incremental updates with SCD Type 2
+10. **Create Data Products** - Generate business-focused aggregated tables
+
+### Data Quality Framework
+- **Ingestion Quality**: Null checks, format validation, range validation
+- **Integration Quality**: Referential integrity, cross-table consistency
+- **Business Logic**: Custom validation rules, completeness scores
+- **Monitoring**: All quality metrics stored in DQM with execution tracking
+
+## Key Files and Directories
+
+### Source Code Structure
+- `src/tp_datawarehousing/main.py` - Main orchestrator script
+- `src/tp_datawarehousing/steps/` - Individual pipeline steps (step_01 to step_10)
+- `src/tp_datawarehousing/quality_utils.py` - Comprehensive data quality utilities
+
+### Data and Configuration
+- `db/tp_dwa.db` - Main SQLite database (created automatically)
+- `csvs - dashboards/` - Source CSV files and output data products
+- `docs/` - Step-by-step analysis documentation
+- `pyproject.toml` - Project configuration and dependencies
+
+### Dashboards and Reports
+- `dash_dqm.pbix` - Data Quality Mart dashboard (Power BI)
+- `dash_prods.pbix` - Data Products dashboard (Power BI)
+- `check_quality_metrics.py` - Console-based quality report
+
+## Database Technology
+
+- **SQLite** with WAL mode for concurrent access
+- **Optimized for quality**: Extensive retry logic for locked database scenarios
+- **Transaction management**: Automatic rollback on failures
+- **Connection pooling**: Managed connections with timeout handling
+
+## Quality Control Standards
+
+The project implements professional-grade data quality controls:
+- **Completeness validation** with configurable thresholds
+- **Format pattern matching** (emails, dates, codes)
+- **Business rule validation** (cross-field logic)
+- **Referential integrity checks**
+- **Data freshness monitoring**
+- **Duplicate detection and SCD Type 2** for historical tracking
 
 ## Development Patterns
 
-### Code Organization
-- **Separation of Concerns**: Each step handles a specific ETL phase
-- **Configuration Management**: Database path and settings centralized
-- **Professional Structure**: Follows Python package best practices
-- **Metadata Management**: Institutional memory through MET_* tables
-
 ### Error Handling
-- **Transaction Safety**: Operations wrapped in transactions with rollback
-- **Retry Logic**: Automatic retry for database lock situations
-- **Quality Gates**: Each step validates data before proceeding
-- **Comprehensive Logging**: All operations logged with timestamps
+- All database operations use retry logic with exponential backoff
+- Quality failures are logged but don't necessarily stop pipeline
+- Comprehensive logging with structured quality metrics
 
-### Data Quality Patterns
-- **Validation Functions**: Reusable validation utilities
-- **Quality Metrics**: Quantitative quality measurement
-- **Process Tracking**: End-to-end process monitoring
-- **Failure Recovery**: Graceful handling of data quality issues
+### Modular Design
+- Each step is independent and can be run separately
+- Shared utilities in `quality_utils.py`
+- Configuration centralized in constants
 
-## Academic Context
+### Data Processing
+- Pandas for data manipulation and CSV processing
+- SQL for all data warehouse operations
+- Incremental processing with change data capture (CDC)
 
-This project is designed as a **comprehensive academic exercise** demonstrating:
-- Professional data warehousing methodologies
-- ETL best practices
-- Data quality management
-- Dimensional modeling techniques
-- Business intelligence foundations
+## Important Notes
 
-The project follows academic requirements while implementing industry-standard practices, making it suitable for both learning and professional reference.
-
-## Quality Assurance
-
-- **Data Validation**: Multi-layer validation at each ETL step
-- **Process Monitoring**: Complete execution tracking
-- **Quality Reporting**: Automated quality metrics dashboard
-- **Error Recovery**: Robust error handling and recovery mechanisms
-- **Performance Optimization**: Database tuning and connection management
-
-## Usage Notes
-
-1. **Database Creation**: The pipeline automatically creates the SQLite database
-2. **Idempotency**: Steps can be re-run safely (tables recreated as needed)
-3. **Quality Monitoring**: Use `check_quality_metrics.py` to review data quality
-4. **Modular Execution**: Individual steps can be run independently for development
-5. **Professional Logging**: All operations logged with appropriate detail levels
-
-This project represents a complete, production-ready data warehouse implementation suitable for academic study and professional reference.
+- The project requires Python 3.11+ with pandas and numpy
+- SQLite database is created automatically in `db/` directory
+- All quality metrics are stored and can be queried via DQM tables
+- The pipeline is designed to handle both initial loads and incremental updates
+- Power BI dashboards are included for business intelligence visualization

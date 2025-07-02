@@ -7,6 +7,7 @@ from tp_datawarehousing.steps import (
     step_06_create_dqm,
     step_07_initial_dwh_load,
     step_08_load_ingesta2_to_staging,
+    step_08b_data_remediation,
     step_09_update_dwh_with_ingesta2,
 )
 
@@ -82,6 +83,14 @@ def main():
     logging.info("--- Ejecutando Paso 8: Cargando Ingesta2 a Staging (TMP2) ---")
     step_08_load_ingesta2_to_staging.main()
     logging.info("--- Paso 8: Finalizado ---")
+
+    # --- Paso 8b: Remediación Automática de Problemas de Calidad ---
+    logging.info("--- Ejecutando Paso 8b: Remediación Automática de Calidad ---")
+    remediation_success = step_08b_data_remediation.main()
+    if remediation_success:
+        logging.info("--- Paso 8b: Remediación completada exitosamente ---")
+    else:
+        logging.warning("--- Paso 8b: Remediación completada con advertencias ---")
 
     # --- Paso 9: Actualizar DWH con Ingesta2 ---
     logging.info("--- Ejecutando Paso 9: Actualizando DWH con Ingesta2 ---")
