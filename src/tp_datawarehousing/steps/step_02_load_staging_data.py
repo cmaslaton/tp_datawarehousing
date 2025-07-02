@@ -5,7 +5,7 @@ import os
 import re
 import time
 from pathlib import Path
-from tp_datawarehousing.quality_utils import (
+from tp_datawarehousing.utils.quality_utils import (
     get_process_execution_id, 
     update_process_execution,
     log_quality_metric,

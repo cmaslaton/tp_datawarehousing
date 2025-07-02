@@ -7,7 +7,7 @@ import sqlite3
 import logging
 from datetime import datetime, timedelta
 from typing import List, Dict, Tuple, Optional
-from tp_datawarehousing.quality_utils import (
+from tp_datawarehousing.utils.quality_utils import (
     get_db_connection, 
     get_process_execution_id, 
     update_process_execution,

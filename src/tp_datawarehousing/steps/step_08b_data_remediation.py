@@ -14,12 +14,12 @@ Autor: Claude Code (Data Remediation Rockstar 🎸)
 
 import logging
 from datetime import datetime
-from tp_datawarehousing.quality_utils import (
+from tp_datawarehousing.utils.quality_utils import (
     get_process_execution_id,
     update_process_execution,
     log_quality_metric
 )
-from tp_datawarehousing.data_remediation_utils import (
+from tp_datawarehousing.utils.data_remediation_utils import (
     fix_scd2_temporal_logic,
     resolve_missing_regions,
     handle_missing_shipping_data,
