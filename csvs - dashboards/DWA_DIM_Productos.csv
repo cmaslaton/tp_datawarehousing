@@ -1,0 +1,78 @@
+sk_producto,nk_producto_id,nombre_producto,cantidad_por_unidad,precio_unitario,nombre_categoria,descripcion_categoria,nombre_proveedor,pais_proveedor,descontinuado
+155,1,Chai,10 boxes x 20 bags,18,Beverages,Soft drinks coffees teas beers and ales,Exotic Liquids,United Kingdom,0
+156,2,Chang,24 - 12 oz bottles,19,Beverages,Soft drinks coffees teas beers and ales,Exotic Liquids,United Kingdom,0
+157,3,Aniseed Syrup,12 - 550 ml bottles,10,Condiments,Sweet and savory sauces relishes spreads and seasonings,Exotic Liquids,United Kingdom,0
+158,4,Chef Anton's Cajun Seasoning,48 - 6 oz jars,22,Condiments,Sweet and savory sauces relishes spreads and seasonings,New Orleans Cajun Delights,United States,0
+159,5,Chef Anton's Gumbo Mix,36 boxes,21.35,Condiments,Sweet and savory sauces relishes spreads and seasonings,New Orleans Cajun Delights,United States,1
+160,6,Grandma's Boysenberry Spread,12 - 8 oz jars,25,Condiments,Sweet and savory sauces relishes spreads and seasonings,Grandma Kelly's Homestead,United States,0
+161,7,Uncle Bob's Organic Dried Pears,12 - 1 lb pkgs.,30,Produce,Dried fruit and bean curd,Grandma Kelly's Homestead,United States,0
+162,8,Northwoods Cranberry Sauce,12 - 12 oz jars,40,Condiments,Sweet and savory sauces relishes spreads and seasonings,Grandma Kelly's Homestead,United States,0
+163,9,Mishi Kobe Niku,18 - 500 g pkgs.,97,Meat/Poultry,Prepared meats,Tokyo Traders,Japan,1
+164,10,Ikura,12 - 200 ml jars,31,Seafood,Seaweed and fish,Tokyo Traders,Japan,0
+165,11,Queso Cabrales,1 kg pkg.,21,Dairy Products,Cheeses,Cooperativa de Quesos 'Las Cabras',Spain,0
+166,12,Queso Manchego La Pastora,10 - 500 g pkgs.,38,Dairy Products,Cheeses,Cooperativa de Quesos 'Las Cabras',Spain,0
+167,13,Konbu,2 kg box,6,Seafood,Seaweed and fish,Mayumi's,Japan,0
+168,14,Tofu,40 - 100 g pkgs.,23.25,Produce,Dried fruit and bean curd,Mayumi's,Japan,0
+169,15,Genen Shouyu,24 - 250 ml bottles,15.5,Condiments,Sweet and savory sauces relishes spreads and seasonings,Mayumi's,Japan,0
+170,16,Pavlova,32 - 500 g boxes,17.45,Confections,Desserts candies and sweet breads,Pavlova Ltd.,Australia,0
+171,17,Alice Mutton,20 - 1 kg tins,39,Meat/Poultry,Prepared meats,Pavlova Ltd.,Australia,1
+172,18,Carnarvon Tigers,16 kg pkg.,62.5,Seafood,Seaweed and fish,Pavlova Ltd.,Australia,0
+173,19,Teatime Chocolate Biscuits,10 boxes x 12 pieces,9.2,Confections,Desserts candies and sweet breads,Specialty Biscuits Ltd.,United Kingdom,0
+174,20,Sir Rodney's Marmalade,30 gift boxes,81,Confections,Desserts candies and sweet breads,Specialty Biscuits Ltd.,United Kingdom,0
+175,21,Sir Rodney's Scones,24 pkgs. x 4 pieces,10,Confections,Desserts candies and sweet breads,Specialty Biscuits Ltd.,United Kingdom,0
+176,22,Gustaf's Knäckebröd,24 - 500 g pkgs.,21,Grains/Cereals,Breads crackers pasta and cereal,PB Knäckebröd AB,Sweden,0
+177,23,Tunnbröd,12 - 250 g pkgs.,9,Grains/Cereals,Breads crackers pasta and cereal,PB Knäckebröd AB,Sweden,0
+178,24,Guaraná Fantástica,12 - 355 ml cans,4.5,Beverages,Soft drinks coffees teas beers and ales,Refrescos Americanas LTDA,Brazil,1
+179,25,NuNuCa Nuß-Nougat-Creme,20 - 450 g glasses,14,Confections,Desserts candies and sweet breads,Heli Süßwaren GmbH & Co. KG,Germany,0
+180,26,Gumbär Gummibärchen,100 - 250 g bags,31.23,Confections,Desserts candies and sweet breads,Heli Süßwaren GmbH & Co. KG,Germany,0
+181,27,Schoggi Schokolade,100 - 100 g pieces,43.9,Confections,Desserts candies and sweet breads,Heli Süßwaren GmbH & Co. KG,Germany,0
+182,28,Rössle Sauerkraut,25 - 825 g cans,45.6,Produce,Dried fruit and bean curd,Plutzer Lebensmittelgroßmärkte AG,Germany,1
+183,29,Thüringer Rostbratwurst,50 bags x 30 sausgs.,123.79,Meat/Poultry,Prepared meats,Plutzer Lebensmittelgroßmärkte AG,Germany,1
+184,30,Nord-Ost Matjeshering,10 - 200 g glasses,25.89,Seafood,Seaweed and fish,Nord-Ost-Fisch Handelsgesellschaft mbH,Germany,0
+185,31,Gorgonzola Telino,12 - 100 g pkgs,12.5,Dairy Products,Cheeses,Formaggi Fortini s.r.l.,Italy,0
+186,32,Mascarpone Fabioli,24 - 200 g pkgs.,32,Dairy Products,Cheeses,Formaggi Fortini s.r.l.,Italy,0
+187,33,Geitost,500 g,2.5,Dairy Products,Cheeses,Norske Meierier,Norway,0
+188,34,Sasquatch Ale,24 - 12 oz bottles,14,Beverages,Soft drinks coffees teas beers and ales,Bigfoot Breweries,United States,0
+189,35,Steeleye Stout,24 - 12 oz bottles,18,Beverages,Soft drinks coffees teas beers and ales,Bigfoot Breweries,United States,0
+190,36,Inlagd Sill,24 - 250 g  jars,19,Seafood,Seaweed and fish,Svensk Sjöföda AB,Sweden,0
+191,37,Gravad lax,12 - 500 g pkgs.,26,Seafood,Seaweed and fish,Svensk Sjöföda AB,Sweden,0
+192,38,Côte de Blaye,12 - 75 cl bottles,263.5,Beverages,Soft drinks coffees teas beers and ales,Aux joyeux ecclésiastiques,France,0
+193,39,Chartreuse verte,750 cc per bottle,18,Beverages,Soft drinks coffees teas beers and ales,Aux joyeux ecclésiastiques,France,0
+194,40,Boston Crab Meat,24 - 4 oz tins,18.4,Seafood,Seaweed and fish,New England Seafood Cannery,United States,0
+195,41,Jack's New England Clam Chowder,12 - 12 oz cans,9.65,Seafood,Seaweed and fish,New England Seafood Cannery,United States,0
+196,42,Singaporean Hokkien Fried Mee,32 - 1 kg pkgs.,14,Grains/Cereals,Breads crackers pasta and cereal,Leka Trading,Singapore,1
+197,43,Ipoh Coffee,16 - 500 g tins,46,Beverages,Soft drinks coffees teas beers and ales,Leka Trading,Singapore,0
+198,44,Gula Malacca,20 - 2 kg bags,19.45,Condiments,Sweet and savory sauces relishes spreads and seasonings,Leka Trading,Singapore,0
+199,45,Rogede sild,1k pkg.,9.5,Seafood,Seaweed and fish,Lyngbysild,Denmark,0
+200,46,Spegesild,4 - 450 g glasses,12,Seafood,Seaweed and fish,Lyngbysild,Denmark,0
+201,47,Zaanse koeken,10 - 4 oz boxes,9.5,Confections,Desserts candies and sweet breads,Zaanse Snoepfabriek,Netherlands,0
+202,48,Chocolade,10 pkgs.,12.75,Confections,Desserts candies and sweet breads,Zaanse Snoepfabriek,Netherlands,0
+203,49,Maxilaku,24 - 50 g pkgs.,20,Confections,Desserts candies and sweet breads,Karkki Oy,Finland,0
+204,50,Valkoinen suklaa,12 - 100 g bars,16.25,Confections,Desserts candies and sweet breads,Karkki Oy,Finland,0
+205,51,Manjimup Dried Apples,50 - 300 g pkgs.,53,Produce,Dried fruit and bean curd,G'day Mate,Australia,0
+206,52,Filo Mix,16 - 2 kg boxes,7,Grains/Cereals,Breads crackers pasta and cereal,G'day Mate,Australia,0
+207,53,Perth Pasties,48 pieces,32.8,Meat/Poultry,Prepared meats,G'day Mate,Australia,1
+208,54,Tourtière,16 pies,7.45,Meat/Poultry,Prepared meats,Ma Maison,Canada,0
+209,55,Pâté chinois,24 boxes x 2 pies,24,Meat/Poultry,Prepared meats,Ma Maison,Canada,0
+210,56,Gnocchi di nonna Alice,24 - 250 g pkgs.,38,Grains/Cereals,Breads crackers pasta and cereal,Pasta Buttini s.r.l.,Italy,0
+211,57,Ravioli Angelo,24 - 250 g pkgs.,19.5,Grains/Cereals,Breads crackers pasta and cereal,Pasta Buttini s.r.l.,Italy,0
+212,58,Escargots de Bourgogne,24 pieces,13.25,Seafood,Seaweed and fish,Escargots Nouveaux,France,0
+213,59,Raclette Courdavault,5 kg pkg.,55,Dairy Products,Cheeses,Gai pâturage,France,0
+214,60,Camembert Pierrot,15 - 300 g rounds,34,Dairy Products,Cheeses,Gai pâturage,France,0
+215,61,Sirop d'érable,24 - 500 ml bottles,28.5,Condiments,Sweet and savory sauces relishes spreads and seasonings,Forêts d'érables,Canada,0
+216,62,Tarte au sucre,48 pies,49.3,Confections,Desserts candies and sweet breads,Forêts d'érables,Canada,0
+217,63,Vegie-spread,15 - 625 g jars,43.9,Condiments,Sweet and savory sauces relishes spreads and seasonings,Pavlova Ltd.,Australia,0
+218,64,Wimmers gute Semmelknödel,20 bags x 4 pieces,33.25,Grains/Cereals,Breads crackers pasta and cereal,Plutzer Lebensmittelgroßmärkte AG,Germany,0
+219,65,Louisiana Fiery Hot Pepper Sauce,32 - 8 oz bottles,21.05,Condiments,Sweet and savory sauces relishes spreads and seasonings,New Orleans Cajun Delights,United States,0
+220,66,Louisiana Hot Spiced Okra,24 - 8 oz jars,17,Condiments,Sweet and savory sauces relishes spreads and seasonings,New Orleans Cajun Delights,United States,0
+221,67,Laughing Lumberjack Lager,24 - 12 oz bottles,14,Beverages,Soft drinks coffees teas beers and ales,Bigfoot Breweries,United States,0
+222,68,Scottish Longbreads,10 boxes x 8 pieces,12.5,Confections,Desserts candies and sweet breads,Specialty Biscuits Ltd.,United Kingdom,0
+223,69,Gudbrandsdalsost,10 kg pkg.,36,Dairy Products,Cheeses,Norske Meierier,Norway,0
+224,70,Outback Lager,24 - 355 ml bottles,15,Beverages,Soft drinks coffees teas beers and ales,Pavlova Ltd.,Australia,0
+225,71,Flotemysost,10 - 500 g pkgs.,21.5,Dairy Products,Cheeses,Norske Meierier,Norway,0
+226,72,Mozzarella di Giovanni,24 - 200 g pkgs.,34.8,Dairy Products,Cheeses,Formaggi Fortini s.r.l.,Italy,0
+227,73,Röd Kaviar,24 - 150 g jars,15,Seafood,Seaweed and fish,Svensk Sjöföda AB,Sweden,0
+228,74,Longlife Tofu,5 kg pkg.,10,Produce,Dried fruit and bean curd,Tokyo Traders,Japan,0
+229,75,Rhönbräu Klosterbier,24 - 0.5 l bottles,7.75,Beverages,Soft drinks coffees teas beers and ales,Plutzer Lebensmittelgroßmärkte AG,Germany,0
+230,76,Lakkalikööri,500 ml,18,Beverages,Soft drinks coffees teas beers and ales,Karkki Oy,Finland,0
+231,77,Original Frankfurter grüne Soße,12 boxes,13,Condiments,Sweet and savory sauces relishes spreads and seasonings,Plutzer Lebensmittelgroßmärkte AG,Germany,0

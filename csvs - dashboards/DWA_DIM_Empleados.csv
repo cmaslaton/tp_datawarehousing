@@ -1,0 +1,10 @@
+sk_empleado,nk_empleado_id,nombre_completo,titulo,fecha_nacimiento,fecha_contratacion,edad_en_contratacion,ciudad,region,pais,nombre_jefe
+19,1,Nancy Davolio,Sales Representative,1948-12-08 00:00:00.000,1992-05-01 00:00:00.000,43,Seattle,WA,United States,Andrew Fuller
+20,2,Andrew Fuller,Vice President Sales,1952-02-19 00:00:00.000,1992-08-14 00:00:00.000,40,Tacoma,WA,United States,
+21,3,Janet Leverling,Sales Representative,1963-08-30 00:00:00.000,1992-04-01 00:00:00.000,28,Kirkland,WA,United States,Andrew Fuller
+22,4,Margaret Peacock,Sales Representative,1937-09-19 00:00:00.000,1993-05-03 00:00:00.000,55,Redmond,WA,United States,Andrew Fuller
+23,5,Steven Buchanan,Sales Manager,1955-03-04 00:00:00.000,1993-10-17 00:00:00.000,38,London,,United Kingdom,Andrew Fuller
+24,6,Michael Suyama,Sales Representative,1963-07-02 00:00:00.000,1993-10-17 00:00:00.000,30,London,,United Kingdom,Steven Buchanan
+25,7,Robert King,Sales Representative,1960-05-29 00:00:00.000,1994-01-02 00:00:00.000,33,London,,United Kingdom,Steven Buchanan
+26,8,Laura Callahan,Inside Sales Coordinator,1958-01-09 00:00:00.000,1994-03-05 00:00:00.000,36,Seattle,WA,United States,Andrew Fuller
+27,9,Anne Dodsworth,Sales Representative,1966-01-27 00:00:00.000,1994-11-15 00:00:00.000,28,London,,United Kingdom,Steven Buchanan

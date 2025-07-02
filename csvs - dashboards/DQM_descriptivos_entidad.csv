@@ -1,0 +1,12 @@
+id_descriptivo;id_ejecucion;nombre_entidad;nombre_metrica;valor_metrica
+1;3;ING_orders;conteo_filas;0
+2;3;ING_order_details;conteo_filas;0
+3;3;ING_products;conteo_filas;0
+4;3;ING_customers;conteo_filas;0
+5;3;ING_employees;conteo_filas;0
+6;3;ING_order_details;conteo_filas;0
+7;3;DWA_FACT_Ventas;conteo_filas;0
+8;5;DWA_DIM_Clientes;registros_modificados;0
+9;5;DWA_DIM_Clientes;registros_nuevos;2
+10;5;DWA_FACT_Ventas;hechos_actualizados;0
+11;5;DWA_FACT_Ventas;hechos_nuevos;0

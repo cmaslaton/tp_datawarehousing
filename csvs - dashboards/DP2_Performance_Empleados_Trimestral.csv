@@ -1,0 +1,73 @@
+anio;trimestre;sk_empleado;nombre_completo;titulo;edad_en_contratacion;ciudad;pais;ordenes_procesadas;ventas_totales;venta_promedio_por_orden;productos_diferentes_vendidos;clientes_diferentes_atendidos;ranking_ventas_trimestre
+1996;3;22;Margaret Peacock;Sales Representative;55;Redmond;United States;15;18815.53;1254.37;31;13;1
+1996;3;26;Laura Callahan;Inside Sales Coordinator;36;Seattle;United States;11;14781.30;1343.75;22;11;2
+1996;3;19;Nancy Davolio;Sales Representative;43;Seattle;United States;11;13821.78;1256.53;23;9;3
+1996;3;24;Michael Suyama;Sales Representative;30;London;United Kingdom;9;9082.75;1009.19;18;9;4
+1996;3;21;Janet Leverling;Sales Representative;28;Kirkland;United States;7;8177.30;1168.19;22;7;5
+1996;3;20;Andrew Fuller;Vice President Sales;40;Tacoma;United States;8;5940.80;742.60;13;8;6
+1996;3;27;Anne Dodsworth;Sales Representative;28;London;United Kingdom;2;4364.30;2182.15;7;2;7
+1996;3;23;Steven Buchanan;Sales Manager;38;London;United Kingdom;4;3058.82;764.70;8;4;8
+1996;3;25;Robert King;Sales Representative;33;London;United Kingdom;3;1686.00;562.00;7;3;9
+1996;4;22;Margaret Peacock;Sales Representative;55;Redmond;United States;16;31129.59;1945.60;40;15;1
+1996;4;19;Nancy Davolio;Sales Representative;43;Seattle;United States;15;21942.74;1462.85;28;15;2
+1996;4;20;Andrew Fuller;Vice President Sales;40;Tacoma;United States;8;15816.26;1977.03;23;8;3
+1996;4;23;Steven Buchanan;Sales Manager;38;London;United Kingdom;7;15325.10;2189.30;13;6;4
+1996;4;25;Robert King;Sales Representative;33;London;United Kingdom;8;13546.16;1693.27;17;8;5
+1996;4;21;Janet Leverling;Sales Representative;28;Kirkland;United States;11;10046.66;913.33;18;10;6
+1996;4;26;Laura Callahan;Inside Sales Coordinator;36;Seattle;United States;8;7594.82;949.35;16;8;7
+1996;4;24;Michael Suyama;Sales Representative;30;London;United Kingdom;6;7559.86;1259.98;13;6;8
+1996;4;27;Anne Dodsworth;Sales Representative;28;London;United Kingdom;3;5530.22;1843.41;8;3;9
+1997;1;22;Margaret Peacock;Sales Representative;55;Redmond;United States;18;41426.74;2301.49;35;16;1
+1997;1;21;Janet Leverling;Sales Representative;28;Kirkland;United States;19;28793.06;1515.42;37;17;2
+1997;1;25;Robert King;Sales Representative;33;London;United Kingdom;6;18940.34;3156.72;17;6;3
+1997;1;26;Laura Callahan;Inside Sales Coordinator;36;Seattle;United States;19;18684.32;983.38;33;16;4
+1997;1;19;Nancy Davolio;Sales Representative;43;Seattle;United States;10;14402.08;1440.21;23;10;5
+1997;1;20;Andrew Fuller;Vice President Sales;40;Tacoma;United States;9;7488.78;832.09;15;9;6
+1997;1;24;Michael Suyama;Sales Representative;30;London;United Kingdom;6;3899.44;649.91;13;6;7
+1997;1;23;Steven Buchanan;Sales Manager;38;London;United Kingdom;3;2520.40;840.13;9;3;8
+1997;1;27;Anne Dodsworth;Sales Representative;28;London;United Kingdom;2;2471.98;1235.99;6;2;9
+1997;2;21;Janet Leverling;Sales Representative;28;Kirkland;United States;16;34056.94;2128.56;36;15;1
+1997;2;22;Margaret Peacock;Sales Representative;55;Redmond;United States;18;24474.11;1359.67;36;17;2
+1997;2;20;Andrew Fuller;Vice President Sales;40;Tacoma;United States;10;24374.17;2437.42;27;9;3
+1997;2;19;Nancy Davolio;Sales Representative;43;Seattle;United States;10;14824.31;1482.43;24;10;4
+1997;2;24;Michael Suyama;Sales Representative;30;London;United Kingdom;8;13806.01;1725.75;20;7;5
+1997;2;25;Robert King;Sales Representative;33;London;United Kingdom;12;12605.92;1050.49;25;11;6
+1997;2;23;Steven Buchanan;Sales Manager;38;London;United Kingdom;4;7537.68;1884.42;10;4;7
+1997;2;26;Laura Callahan;Inside Sales Coordinator;36;Seattle;United States;9;7465.81;829.53;17;9;8
+1997;2;27;Anne Dodsworth;Sales Representative;28;London;United Kingdom;6;4187.10;697.85;11;6;9
+1997;3;19;Nancy Davolio;Sales Representative;43;Seattle;United States;18;32077.18;1782.07;31;16;1
+1997;3;22;Margaret Peacock;Sales Representative;55;Redmond;United States;22;29947.73;1361.26;38;19;2
+1997;3;25;Robert King;Sales Representative;33;London;United Kingdom;13;25520.43;1963.11;27;12;3
+1997;3;20;Andrew Fuller;Vice President Sales;40;Tacoma;United States;11;17309.15;1573.56;24;10;4
+1997;3;23;Steven Buchanan;Sales Manager;38;London;United Kingdom;6;12085.81;2014.30;15;6;5
+1997;3;26;Laura Callahan;Inside Sales Coordinator;36;Seattle;United States;14;10800.41;771.46;22;11;6
+1997;3;21;Janet Leverling;Sales Representative;28;Kirkland;United States;10;10469.47;1046.95;23;10;7
+1997;3;27;Anne Dodsworth;Sales Representative;28;London;United Kingdom;4;10245.95;2561.49;9;3;8
+1997;3;24;Michael Suyama;Sales Representative;30;London;United Kingdom;5;5481.65;1096.33;13;5;9
+1997;4;21;Janet Leverling;Sales Representative;28;Kirkland;United States;26;34861.70;1340.83;46;20;1
+1997;4;22;Margaret Peacock;Sales Representative;55;Redmond;United States;23;33299.42;1447.80;43;21;2
+1997;4;19;Nancy Davolio;Sales Representative;43;Seattle;United States;17;31844.51;1873.21;33;15;3
+1997;4;20;Andrew Fuller;Vice President Sales;40;Tacoma;United States;11;21272.04;1933.82;23;11;4
+1997;4;24;Michael Suyama;Sales Representative;30;London;United Kingdom;14;19939.27;1424.23;30;14;5
+1997;4;26;Laura Callahan;Inside Sales Coordinator;36;Seattle;United States;12;19082.08;1590.17;25;12;6
+1997;4;27;Anne Dodsworth;Sales Representative;28;London;United Kingdom;7;9405.36;1343.62;13;7;7
+1997;4;23;Steven Buchanan;Sales Manager;38;London;United Kingdom;5;8572.59;1714.52;14;4;8
+1997;4;25;Robert King;Sales Representative;33;London;United Kingdom;5;3404.50;680.90;9;5;9
+1998;1;21;Janet Leverling;Sales Representative;28;Kirkland;United States;28;63605.37;2271.62;44;24;1
+1998;1;19;Nancy Davolio;Sales Representative;43;Seattle;United States;29;44227.82;1525.10;46;24;2
+1998;1;20;Andrew Fuller;Vice President Sales;40;Tacoma;United States;19;41416.30;2179.81;33;16;3
+1998;1;22;Margaret Peacock;Sales Representative;55;Redmond;United States;32;38187.48;1193.36;49;28;4
+1998;1;26;Laura Callahan;Inside Sales Coordinator;36;Seattle;United States;19;32167.84;1693.04;39;15;5
+1998;1;27;Anne Dodsworth;Sales Representative;28;London;United Kingdom;15;31601.66;2106.78;29;14;6
+1998;1;23;Steven Buchanan;Sales Manager;38;London;United Kingdom;12;19481.90;1623.49;26;10;7
+1998;1;25;Robert King;Sales Representative;33;London;United Kingdom;14;19113.48;1365.25;30;14;8
+1998;1;24;Michael Suyama;Sales Representative;30;London;United Kingdom;14;8897.21;635.51;20;14;9
+1998;2;20;Andrew Fuller;Vice President Sales;40;Tacoma;United States;20;32920.26;1646.01;34;20;1
+1998;2;25;Robert King;Sales Representative;33;London;United Kingdom;11;29751.40;2704.67;19;11;2
+1998;2;19;Nancy Davolio;Sales Representative;43;Seattle;United States;13;19104.70;1469.59;42;13;3
+1998;2;26;Laura Callahan;Inside Sales Coordinator;36;Seattle;United States;12;16491.70;1374.31;28;11;4
+1998;2;22;Margaret Peacock;Sales Representative;55;Redmond;United States;12;15948.46;1329.04;25;11;5
+1998;2;21;Janet Leverling;Sales Representative;28;Kirkland;United States;10;12957.36;1295.74;19;10;6
+1998;2;27;Anne Dodsworth;Sales Representative;28;London;United Kingdom;4;9501.50;2375.38;10;4;7
+1998;2;24;Michael Suyama;Sales Representative;30;London;United Kingdom;5;5246.95;1049.39;11;5;8
+1998;2;23;Steven Buchanan;Sales Manager;38;London;United Kingdom;1;210.00;210.00;1;1;9
