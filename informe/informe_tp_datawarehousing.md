@@ -9,11 +9,12 @@
 
 ## 📋 RESUMEN EJECUTIVO
 
-Este informe documenta la implementación completa de un Data Warehouse Analítico (DWA) end-to-end, desde la adquisición de datos hasta la publicación de productos de datos y visualización. El proyecto implementa un pipeline de 10 pasos con un **sistema avanzado de remediación automática de calidad de datos**, utilizando arquitectura dimensional clásica (esquema estrella) y tecnologías modernas de gestión de datos.
+Este informe documenta la implementación completa de un Data Warehouse Analítico (DWA) end-to-end, desde la adquisición de datos hasta la publicación de productos de datos y visualización. El proyecto implementa un pipeline de 10 pasos con un **sistema progresivo de calidad de datos** que primero identifica problemas en Ingesta1 y luego aplica remediación automática en Ingesta2, utilizando arquitectura dimensional clásica (esquema estrella) y tecnologías modernas de gestión de datos.
 
 ### **Resultados Principales:**
 - ✅ **Pipeline ETL completo** con 10 steps orquestados
-- ✅ **Sistema de calidad de datos** con 181 problemas identificados y categorizados
+- ✅ **Sistema de calidad progresivo**: detección en Ingesta1 + remediación en Ingesta2
+- ✅ **181 problemas identificados** en primera carga, **83.3% resueltos** en segunda carga
 - ✅ **Motor de remediación automática** que resuelve 6 categorías de problemas
 - ✅ **Esquema estrella** con 6 dimensiones y 1 tabla de hechos
 - ✅ **SCD Tipo 2** implementado para manejo histórico
@@ -122,9 +123,11 @@ world-data-2023.csv → TMP_world_data_2023 (195 registros)
 [+ 4 tablas adicionales]
 ```
 
-#### **Problemas Detectados:**
+#### **Problemas Detectados (Solo Identificación):**
 - **181 problemas de calidad** identificados automáticamente
 - Categorización por severidad: CRITICAL, HIGH, WARNING
+- **⚠️ Importante:** En Ingesta1 solo se DETECTAN problemas, NO se aplica remediación
+- Los problemas se registran en DQM para análisis posterior
 
 ---
 
@@ -293,9 +296,10 @@ Framework robusto para monitoreo continuo con **4 niveles de severidad** (CRITIC
 **Archivo:** `step_07_initial_dwh_load.py`  
 **Objetivo:** Realizar la primera carga del data warehouse con validaciones
 
-#### **Controles de Calidad de Ingesta (8a):**
+#### **Controles de Calidad de Ingesta (8a) - Solo Detección:**
 - **Validación de claves primarias:** Verificación de nulos en PKs de 5 tablas críticas
 - **Validación de valores negativos:** Precios y cantidades en order_details
+- **⚠️ Importante:** Solo se DETECTAN problemas, no se aplican correcciones
 - **Criterio de aceptación:** Si fallan validaciones críticas, se aborta la carga
 
 #### **Carga de Dimensiones:**
@@ -353,10 +357,29 @@ Data warehouse operativo con **993 registros en dimensiones** y **2,163 hechos**
 
 ### **🛠️ PASO 8b: Remediación Automática de Calidad**
 **Archivo:** `step_08b_data_remediation.py`  
-**Objetivo:** Corregir automáticamente problemas de calidad detectados
+**Objetivo:** Corregir automáticamente problemas de calidad detectados en Ingesta2
 
 > **⭐ INNOVACIÓN PRINCIPAL DEL PROYECTO ⭐**  
-> Este paso representa la contribución más significativa del proyecto: un **sistema enterprise-grade de remediación automática** que va más allá de la detección para aplicar correcciones inteligentes.
+> Este paso representa la contribución más significativa del proyecto: un **sistema enterprise-grade de remediación automática** que aplica correcciones inteligentes basadas en el aprendizaje de problemas detectados en Ingesta1.
+
+#### **📋 Estrategia de Calidad de Datos:**
+**INGESTA 1** (Steps 1-7): **Solo DETECCIÓN** de problemas  
+**INGESTA 2** (Steps 8-9): **DETECCIÓN + REMEDIACIÓN** automática  
+
+**Flujo de Remediación (Siguiendo Mejores Prácticas):**
+```
+Step 8:  Ingesta2 → TMP2_ (staging sucio)
+Step 8b: Remediación → TMP2_ (staging limpio) ← AQUÍ SE CORRIGE
+Step 9:  TMP2_ → DWA_ (DWH recibe datos ya limpios)
+```
+
+**Justificación técnica:**
+- ✅ **Corrección en staging, ANTES del DWH final** - principio fundamental
+- ✅ Permite aprender patrones de calidad antes de remediar
+- ✅ Evita correcciones incorrectas en datos históricos
+- ✅ **DWH permanece íntegro** - nunca recibe datos sucios
+- ✅ **Rerun capability** - si falla, se reinicia desde staging
+- ✅ Sigue mejores prácticas de data governance empresarial
 
 #### **Sistema de Remediación Multi-Capa:**
 
@@ -782,7 +805,7 @@ Todos los productos de datos se registran automáticamente en:
 - **Detección de outliers:** Valores atípicos en métricas de negocio
 - **Patrones de calidad:** Tendencias históricas en el DQM
 
-### **Nivel 4: Validaciones de Remediación**
+### **Nivel 4: Validaciones de Remediación (Solo en Ingesta2)**
 - **Pre-remediación:** Diagnóstico completo de problemas detectados
 - **Post-remediación:** Validación de que las correcciones se aplicaron
 - **Efectos secundarios:** Verificación de que no se introdujeron nuevos problemas
@@ -840,7 +863,7 @@ src/tp_datawarehousing/
 
 **Problemática abordada:** Los sistemas de calidad tradicionales se limitan a **detectar** problemas sin **resolverlos** automáticamente, generando alertas que requieren intervención manual especializada.
 
-**Solución implementada:** Motor de remediación automática que **detecta, clasifica y corrige** problemas de calidad usando múltiples estrategias inteligentes.
+**Solución implementada:** Estrategia bifásica con **detección** en Ingesta1 y **detección + remediación automática** en Ingesta2, usando múltiples estrategias inteligentes basadas en el aprendizaje de patrones previos.
 
 **Innovaciones específicas:**
 - **Motor de inferencia geográfica** con 89+ países mapeados y fuzzy matching
@@ -895,7 +918,11 @@ src/tp_datawarehousing/
 **Problema:** 14 tipos de validaciones × 47 tablas = 658 checks potenciales por ejecución.  
 **Solución:** Paralelización de validaciones + caching de resultados + early termination.
 
-### **5. Escalabilidad del Sistema de Remediación**
+### **5. Remediación sin Corrupción del DWH**
+**Problema:** Corregir problemas de calidad sin afectar la integridad del data warehouse final.  
+**Solución:** **Remediación exclusivamente en staging (TMP2_)** antes de cargar al DWH - principio fundamental respetado.
+
+### **6. Escalabilidad del Sistema de Remediación**
 **Problema:** Lógica de remediación hardcodeada no escalable para nuevos tipos de problemas.  
 **Solución:** Arquitectura modular con strategy pattern y configuración basada en metadatos.
 
@@ -908,6 +935,7 @@ src/tp_datawarehousing/
 2. **Retry logic exponencial** mejora significativamente la robustez del pipeline
 3. **Logging estructurado desde el inicio** facilita debugging y auditoría
 4. **Separación de validación y remediación** permite mejor testing y mantenimiento
+5. **Remediación en staging es clave** - nunca corregir directamente en DWH final
 
 ### **De Negocio:**
 1. **Calidad de datos es un proceso, no un evento** - requiere monitoreo continuo
