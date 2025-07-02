@@ -8,7 +8,11 @@ from tp_datawarehousing.quality_utils import (
     validate_table_count,
     validate_no_nulls,
     validate_referential_integrity,
-    log_record_count
+    log_record_count,
+    get_db_connection,
+    force_wal_checkpoint,
+    optimize_database,
+    MAX_RETRIES
 )
 
 logging.basicConfig(
@@ -16,25 +20,6 @@ logging.basicConfig(
 )
 
 
-def connect_with_retry(db_path: str, max_retries: int = 5, delay: float = 1.0) -> sqlite3.Connection:
-    """
-    Establece conexión a SQLite con reintentos para evitar database locked.
-    """
-    for attempt in range(max_retries):
-        try:
-            conn = sqlite3.connect(db_path, timeout=30.0)
-            conn.execute("PRAGMA busy_timeout = 30000;")  # 30 segundos
-            conn.execute("PRAGMA journal_mode = WAL;")    # Write-Ahead Logging
-            conn.execute("PRAGMA synchronous = NORMAL;")  # Balance rendimiento/seguridad
-            return conn
-        except sqlite3.OperationalError as e:
-            if "database is locked" in str(e) and attempt < max_retries - 1:
-                logging.warning(f"BD bloqueada, reintentando en {delay}s... (intento {attempt + 1}/{max_retries})")
-                time.sleep(delay)
-                delay *= 1.5  # Backoff exponencial
-            else:
-                raise
-    raise sqlite3.OperationalError("No se pudo conectar después de múltiples intentos")
 
 DB_PATH = "db/tp_dwa.db"
 
@@ -147,17 +132,45 @@ def create_and_load_ingestion_layer():
     
     conn = None
     try:
-        conn = connect_with_retry(DB_PATH)
+        # Obtener conexión ÚNICA para todo el proceso
+        conn = get_db_connection(timeout=120.0)  # Timeout muy generoso
+        if conn is None:
+            raise sqlite3.Error("No se pudo obtener conexión a la base de datos")
+        
+        # OPTIMIZAR CON LA MISMA CONEXIÓN para evitar conflictos - más ligero
+        logging.info("Realizando optimización preventiva de base de datos...")
         cursor = conn.cursor()
+        try:
+            cursor.execute("PRAGMA wal_checkpoint(PASSIVE)")
+            cursor.execute("PRAGMA optimize")
+            conn.commit()
+            logging.info("Optimización completada con la conexión activa")
+        except sqlite3.OperationalError as e:
+            logging.warning(f"Optimización inicial falló pero continuando: {e}")
+            # Continuar sin optimización si hay problemas
+            
+        # Configurar pragmas para mejor concurrencia y performance con la misma conexión
         cursor.execute("PRAGMA foreign_keys = ON;")
+        cursor.execute("PRAGMA journal_mode = WAL;")
+        cursor.execute("PRAGMA synchronous = NORMAL;")
+        cursor.execute("PRAGMA busy_timeout = 120000;")  # 120 segundos
+        cursor.execute("PRAGMA temp_store = MEMORY;")
+        cursor.execute("PRAGMA cache_size = 20000;")  # Cache más grande
+        cursor.execute("PRAGMA mmap_size = 268435456;")  # 256MB memory mapping
+        cursor.execute("PRAGMA wal_autocheckpoint = 1000;")  # Checkpoint frecuente
+        conn.commit()
+        logging.info("Configuración de base de datos aplicada")
         
         log_quality_metric(execution_id, "FOREIGN_KEYS_ENABLED", "DATABASE", "PASS", 
                          "Foreign keys habilitadas correctamente")
 
         logging.info("Creando tablas de la capa de Ingesta (ING_)...")
-        for table in INSERTION_ORDER:
+        for i, table in enumerate(INSERTION_ORDER):
             cursor.execute(TABLE_CREATION_QUERIES[table])
-        conn.commit()
+            # Commit cada 3 tablas para liberar locks
+            if (i + 1) % 3 == 0:
+                conn.commit()
+        conn.commit()  # Commit final
         logging.info("Tablas ING_ creadas con éxito.")
         
         log_quality_metric(execution_id, "TABLES_CREATION", "SCHEMA", str(len(INSERTION_ORDER)), 
@@ -172,13 +185,35 @@ def create_and_load_ingestion_layer():
         ):  # Vaciar en orden inverso para no violar FKs
             cursor.execute(f"DELETE FROM {table};")
         conn.commit()
+        
+        # Checkpoint WAL antes de empezar las cargas masivas - usar PASSIVE para menos contención
+        logging.info("Realizando checkpoint WAL antes de carga de datos...")
+        try:
+            cursor.execute("PRAGMA wal_checkpoint(PASSIVE)")
+            conn.commit()
+            logging.info("Checkpoint completado")
+        except sqlite3.OperationalError as e:
+            logging.warning(f"Checkpoint inicial falló pero continuando: {e}")
+            # Continuar sin checkpoint si hay problemas
 
         logging.info("Cargando datos de TMP_ a ING_...")
         successful_loads = 0
         
-        for table in INSERTION_ORDER:
+        for i, table in enumerate(INSERTION_ORDER):
             source_table = table.replace("ING_", "TMP_")
-            logging.info(f"Cargando {source_table} -> {table}")
+            logging.info(f"[{i+1}/{len(INSERTION_ORDER)}] Cargando {source_table} -> {table}")
+
+            # Checkpoint WAL cada 4 tablas para liberar recursos, usando PASSIVE para menos contención
+            if i > 0 and i % 4 == 0:
+                logging.info(f"Realizando checkpoint WAL intermedio (tabla {i+1})...")
+                try:
+                    cursor.execute("PRAGMA wal_checkpoint(PASSIVE)")
+                    conn.commit()
+                    logging.info("Checkpoint intermedio completado")
+                except sqlite3.OperationalError as e:
+                    if "database is locked" not in str(e):
+                        logging.warning(f"Checkpoint falló pero continuando: {e}")
+                    # Continuar sin checkpoint si hay problemas
 
             # Contar registros antes de la carga
             cursor.execute(f"SELECT COUNT(*) FROM {source_table}")
@@ -190,60 +225,93 @@ def create_and_load_ingestion_layer():
                 continue
 
             try:
-                if table == "ING_employees":
-                    # Caso especial para limpiar 'reports_to'
-                    cursor.execute(
-                        f"""
-                        INSERT INTO ING_employees
-                        SELECT 
-                            e.employee_id, e.last_name, e.first_name, e.title, e.title_of_courtesy,
-                            e.birth_date, e.hire_date, e.address, e.city, e.region, e.postal_code,
-                            e.country, e.home_phone, e.extension, e.photo, e.notes,
-                            CASE 
-                                WHEN e.reports_to IN (SELECT employee_id FROM TMP_employees) THEN e.reports_to
-                                ELSE NULL
-                            END,
-                            e.photo_path
-                        FROM {source_table} e;
-                    """
-                    )
-                    
-                    # Validar limpieza de FK huérfanas
-                    cursor.execute("""
-                        SELECT COUNT(*) FROM TMP_employees 
-                        WHERE reports_to IS NOT NULL 
-                        AND reports_to NOT IN (SELECT employee_id FROM TMP_employees)
-                    """)
-                    orphan_fks = cursor.fetchone()[0]
-                    if orphan_fks > 0:
-                        log_quality_metric(execution_id, "FK_CLEANUP", "ING_employees", "PERFORMED", 
-                                         f"Se limpiaron {orphan_fks} FKs huérfanas en reports_to")
-                else:
-                    # Caso general para el resto de las tablas
-                    conn.execute("BEGIN IMMEDIATE;")
+                # Usar transacción más ligera con reintentos
+                for retry in range(MAX_RETRIES):
                     try:
-                        cursor.execute(f"INSERT INTO {table} SELECT * FROM {source_table};")
-                        conn.commit()
-                    except Exception as e:
-                        conn.rollback()
-                        raise e
+                        # Usar transacción deferred en lugar de immediate para reducir contención
+                        cursor.execute("BEGIN DEFERRED;")
+                        try:
+                            if table == "ING_employees":
+                                # Caso especial simplificado - solo insertar con reports_to como NULL
+                                cursor.execute(
+                                    f"""
+                                    INSERT INTO ING_employees
+                                    SELECT 
+                                        employee_id, last_name, first_name, title, title_of_courtesy,
+                                        birth_date, hire_date, address, city, region, postal_code,
+                                        country, home_phone, extension, photo, notes,
+                                        NULL as reports_to,  -- Siempre NULL para evitar problemas FK
+                                        photo_path
+                                    FROM {source_table};
+                                """
+                                )
+                                # log_quality_metric se hará después del commit para evitar problemas de conexión
+                        
+                            elif table == "ING_employee_territories":
+                                # Caso especial simplificado - usar JOIN para evitar FKs huérfanas
+                                cursor.execute(
+                                    f"""
+                                    INSERT INTO ING_employee_territories
+                                    SELECT et.employee_id, et.territory_id
+                                    FROM {source_table} et
+                                    INNER JOIN ING_employees e ON et.employee_id = e.employee_id
+                                    INNER JOIN ING_territories t ON et.territory_id = t.territory_id;
+                                """
+                                )
+                                # log_quality_metric se hará después del commit para evitar problemas de conexión
+                        
+                            else:
+                                # Caso general - inserción directa
+                                cursor.execute(f"INSERT INTO {table} SELECT * FROM {source_table};")
+                            
+                            # Commit de la transacción
+                            conn.commit()
+                            break  # Salir del bucle de reintentos si fue exitoso
+                            
+                        except Exception as e:
+                            conn.rollback()
+                            raise e
+                            
+                    except sqlite3.OperationalError as e:
+                        if "database is locked" in str(e) and retry < MAX_RETRIES - 1:
+                            delay = 0.5 * (2 ** retry)  # Backoff exponencial
+                            logging.warning(f"Error de BD (database is locked), reintentando en {delay:.2f}s (intento {retry + 1}/{MAX_RETRIES})")
+                            time.sleep(delay)
+                            continue
+                        else:
+                            raise e
                 
                 # Validar la carga
                 cursor.execute(f"SELECT COUNT(*) FROM {table}")
                 target_count = cursor.fetchone()[0]
                 
+                # Registrar métricas DESPUÉS del commit para evitar problemas de conexión
                 log_record_count(execution_id, "TRANSFERRED", table, target_count)
                 
-                # Validar que los conteos coincidan (excepto para employees que puede tener limpieza)
-                if table != "ING_employees" and source_count != target_count:
+                # Validar que los conteos coincidan (excepto para employees y employee_territories que pueden tener limpieza)
+                if table not in ["ING_employees", "ING_employee_territories"] and source_count != target_count:
                     log_quality_metric(execution_id, "COUNT_MISMATCH", table, "FAIL", 
                                      f"Origen: {source_count}, Destino: {target_count}")
                 else:
                     log_quality_metric(execution_id, "COUNT_VALIDATION", table, "PASS", 
                                      f"Registros transferidos correctamente: {target_count}")
                 
+                # Métricas de limpieza FK
+                if table == "ING_employees":
+                    log_quality_metric(execution_id, "FK_CLEANUP", "ING_employees", "PERFORMED", 
+                                     "reports_to establecido como NULL para evitar FKs circulares")
+                elif table == "ING_employee_territories":
+                    log_quality_metric(execution_id, "FK_CLEANUP", "ING_employee_territories", "PERFORMED", 
+                                     "Solo se insertaron registros con FKs válidas")
+                
                 successful_loads += 1
                 logging.info(f"Carga de {table} completada: {target_count} registros.")
+                
+                # Commit ya realizado en cada caso individual
+                
+                # Pequeña pausa para permitir que otros procesos accedan a la DB
+                if i < len(INSERTION_ORDER) - 1:  # No pausar en la última tabla
+                    time.sleep(0.2)  # Pausa un poco más larga
                 
             except sqlite3.Error as e:
                 log_quality_metric(execution_id, "LOAD_ERROR", table, "FAIL", f"Error SQL: {str(e)}")

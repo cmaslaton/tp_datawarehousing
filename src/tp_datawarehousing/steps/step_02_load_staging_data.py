@@ -185,7 +185,7 @@ def load_csv_to_table(conn: sqlite3.Connection, file_path: Path, table_name: str
                              json.dumps(renamed_cols_map, ensure_ascii=False), QualitySeverity.LOW.value)
 
         # Control de calidad: Validar tipos de datos críticos
-        validate_data_types(df, table_name, file_path.name, execution_id)
+        validate_data_types(df, table_name, file_path.name, execution_id, conn)
 
         # Cargar datos en la tabla con transacción explícita
         records_before = len(df)
@@ -214,7 +214,7 @@ def load_csv_to_table(conn: sqlite3.Connection, file_path: Path, table_name: str
         return False
 
 
-def validate_data_types(df: pd.DataFrame, table_name: str, file_name: str, execution_id: int):
+def validate_data_types(df: pd.DataFrame, table_name: str, file_name: str, execution_id: int, conn: sqlite3.Connection):
     """
     Valida tipos de datos específicos según la tabla.
     """
@@ -281,7 +281,7 @@ def validate_data_types(df: pd.DataFrame, table_name: str, file_name: str, execu
     
     # NUEVAS VALIDACIONES AVANZADAS - MEJORES PRÁCTICAS PROFESIONALES
     
-    # 1. Completeness Score para campos críticos por tabla
+    # 1. Completeness Score para campos críticos por tabla (usando DataFrame)
     critical_fields_map = {
         "customers": ["customer_id", "company_name"],
         "orders": ["order_id", "customer_id", "order_date"],
@@ -295,15 +295,15 @@ def validate_data_types(df: pd.DataFrame, table_name: str, file_name: str, execu
             # Solo validar campos que existen en el DataFrame
             existing_fields = [f for f in fields if f in df.columns]
             if existing_fields:
-                validate_completeness_score(execution_id, table_name, existing_fields)
+                validate_dataframe_completeness(execution_id, table_name, df, existing_fields)
             break
     
     # 2. Format Validation para campos específicos
     if "customers" in table_name.lower():
         if "customer_id" in df.columns:
-            validate_format_patterns(execution_id, table_name, "customer_id", "customer_id")
+            validate_dataframe_format(execution_id, table_name, df, "customer_id", "customer_id")
         if "postal_code" in df.columns:
-            validate_format_patterns(execution_id, table_name, "postal_code", "postal_code")
+            validate_dataframe_format(execution_id, table_name, df, "postal_code", "postal_code")
     
     # 3. Business Key Uniqueness
     business_keys_map = {
@@ -319,7 +319,7 @@ def validate_data_types(df: pd.DataFrame, table_name: str, file_name: str, execu
         if table_key in table_name.lower():
             existing_keys = [k for k in keys if k in df.columns]
             if existing_keys:
-                validate_business_key_uniqueness(execution_id, table_name, existing_keys)
+                validate_dataframe_uniqueness(execution_id, table_name, df, existing_keys)
             break
     
     # 4. Cross-field Logic Validation
@@ -330,14 +330,217 @@ def validate_data_types(df: pd.DataFrame, table_name: str, file_name: str, execu
                 "description": "Fecha de envío debe ser posterior o igual a fecha de pedido"
             }
         ]
-        validate_cross_field_logic(execution_id, table_name, validations)
+        validate_dataframe_logic(execution_id, table_name, df, validations)
     
     # 5. Domain Constraints para campos categóricos
     if "world_data" in table_name.lower():
         # Validar códigos de continente estándar
         if "continent" in df.columns:
             valid_continents = ["Asia", "Europe", "North America", "South America", "Africa", "Oceania", "Antarctica"]
-            validate_domain_constraints(execution_id, table_name, "continent", valid_continents, case_sensitive=False)
+            validate_dataframe_domain(execution_id, table_name, df, "continent", valid_continents, case_sensitive=False)
+
+
+def validate_dataframe_completeness(execution_id: int, table_name: str, df: pd.DataFrame, critical_fields: list):
+    """Valida completitud de campos críticos en un DataFrame."""
+    try:
+        total_records = len(df)
+        if total_records == 0:
+            log_quality_metric(execution_id, "COMPLETENESS_SCORE", table_name, "WARNING", "DataFrame vacío")
+            return 0.0
+        
+        field_completeness = {}
+        for field in critical_fields:
+            if field in df.columns:
+                complete_count = df[field].notna().sum()
+                field_percentage = (complete_count / total_records) * 100
+                field_completeness[field] = field_percentage
+        
+        avg_completeness = sum(field_completeness.values()) / len(field_completeness) if field_completeness else 0
+        
+        if avg_completeness >= 95:
+            result = "PASS"
+            severity = QualitySeverity.LOW.value
+        elif avg_completeness >= 80:
+            result = "WARNING"
+            severity = QualitySeverity.MEDIUM.value
+        else:
+            result = "FAIL"
+            severity = QualitySeverity.HIGH.value
+        
+        field_summary = ", ".join([f"{field}: {pct:.1f}%" for field, pct in field_completeness.items()])
+        detalles = f"Completitud promedio: {avg_completeness:.1f}% ({field_summary})"
+        
+        log_quality_metric(execution_id, "COMPLETENESS_SCORE", table_name, result, detalles, severity)
+        return avg_completeness
+        
+    except Exception as e:
+        log_quality_metric(execution_id, "COMPLETENESS_SCORE", table_name, "ERROR", f"Error: {str(e)}", QualitySeverity.HIGH.value)
+        return 0.0
+
+
+def validate_dataframe_uniqueness(execution_id: int, table_name: str, df: pd.DataFrame, business_keys: list):
+    """Valida unicidad de claves de negocio en un DataFrame."""
+    try:
+        # Filtrar solo columnas que existen
+        existing_keys = [k for k in business_keys if k in df.columns]
+        if not existing_keys:
+            log_quality_metric(execution_id, "BUSINESS_KEY_UNIQUENESS", table_name, "WARNING", "No hay claves de negocio válidas")
+            return False
+        
+        # Contar duplicados
+        duplicates = df.duplicated(subset=existing_keys, keep=False)
+        duplicate_count = duplicates.sum()
+        total_records = len(df)
+        
+        if duplicate_count == 0:
+            result = "PASS"
+            severity = QualitySeverity.LOW.value
+            detalles = f"Todas las claves de negocio son únicas ({total_records} registros)"
+        else:
+            duplicate_percentage = (duplicate_count / total_records) * 100
+            if duplicate_percentage < 1:
+                result = "WARNING"
+                severity = QualitySeverity.MEDIUM.value
+            else:
+                result = "FAIL"
+                severity = QualitySeverity.HIGH.value
+            detalles = f"Duplicados encontrados: {duplicate_count}/{total_records} ({duplicate_percentage:.1f}%)"
+        
+        log_quality_metric(execution_id, "BUSINESS_KEY_UNIQUENESS", table_name, result, detalles, severity)
+        return duplicate_count == 0
+        
+    except Exception as e:
+        log_quality_metric(execution_id, "BUSINESS_KEY_UNIQUENESS", table_name, "ERROR", f"Error: {str(e)}", QualitySeverity.HIGH.value)
+        return False
+
+
+def validate_dataframe_format(execution_id: int, table_name: str, df: pd.DataFrame, column_name: str, pattern_type: str):
+    """Valida formatos en un DataFrame."""
+    import re
+    patterns = {
+        'customer_id': r'^[A-Z]{3,5}$',
+        'postal_code': r'^[\d\w\s\-]{3,10}$'
+    }
+    
+    try:
+        if pattern_type not in patterns or column_name not in df.columns:
+            log_quality_metric(execution_id, "FORMAT_VALIDATION", f"{table_name}.{column_name}", "WARNING", f"Patrón no definido: {pattern_type}")
+            return False
+        
+        pattern = patterns[pattern_type]
+        valid_values = df[column_name].dropna().astype(str)
+        if len(valid_values) == 0:
+            log_quality_metric(execution_id, "FORMAT_VALIDATION", f"{table_name}.{column_name}", "WARNING", "No hay valores para validar")
+            return True
+        
+        invalid_count = (~valid_values.str.match(pattern)).sum()
+        total_count = len(valid_values)
+        
+        if invalid_count == 0:
+            result = "PASS"
+            severity = QualitySeverity.LOW.value
+            detalles = f"Todos los {total_count} valores siguen el patrón {pattern_type}"
+        else:
+            invalid_percentage = (invalid_count / total_count) * 100
+            if invalid_percentage < 5:
+                result = "WARNING"
+                severity = QualitySeverity.MEDIUM.value
+            else:
+                result = "FAIL"
+                severity = QualitySeverity.HIGH.value
+            detalles = f"Formato inválido: {invalid_count}/{total_count} ({invalid_percentage:.1f}%)"
+        
+        log_quality_metric(execution_id, "FORMAT_VALIDATION", f"{table_name}.{column_name}", result, detalles, severity)
+        return invalid_count == 0
+        
+    except Exception as e:
+        log_quality_metric(execution_id, "FORMAT_VALIDATION", f"{table_name}.{column_name}", "ERROR", f"Error: {str(e)}", QualitySeverity.HIGH.value)
+        return False
+
+
+def validate_dataframe_logic(execution_id: int, table_name: str, df: pd.DataFrame, validations: list):
+    """Valida lógica de negocio en un DataFrame."""
+    try:
+        all_passed = True
+        violations_summary = []
+        
+        for validation in validations:
+            rule = validation['rule']
+            description = validation.get('description', rule)
+            
+            # Para shipped_date >= order_date
+            if 'shipped_date >= order_date' in rule:
+                violations = ((df['shipped_date'].notna()) & (df['order_date'].notna()) & 
+                            (pd.to_datetime(df['shipped_date'], errors='coerce') < pd.to_datetime(df['order_date'], errors='coerce'))).sum()
+            else:
+                violations = 0  # Para otras reglas futuras
+            
+            if violations > 0:
+                all_passed = False
+                violations_summary.append(f"{description}: {violations} violaciones")
+        
+        if all_passed:
+            result = "PASS"
+            severity = QualitySeverity.LOW.value
+            detalles = f"Todas las {len(validations)} validaciones lógicas pasaron"
+        else:
+            result = "FAIL"
+            severity = QualitySeverity.HIGH.value
+            detalles = "; ".join(violations_summary)
+        
+        log_quality_metric(execution_id, "CROSS_FIELD_LOGIC", table_name, result, detalles, severity)
+        return all_passed
+        
+    except Exception as e:
+        log_quality_metric(execution_id, "CROSS_FIELD_LOGIC", table_name, "ERROR", f"Error: {str(e)}", QualitySeverity.HIGH.value)
+        return False
+
+
+def validate_dataframe_domain(execution_id: int, table_name: str, df: pd.DataFrame, column_name: str, valid_values: list, case_sensitive: bool = True):
+    """Valida dominios en un DataFrame."""
+    try:
+        if column_name not in df.columns:
+            log_quality_metric(execution_id, "DOMAIN_CONSTRAINTS", f"{table_name}.{column_name}", "WARNING", "Columna no encontrada")
+            return False
+        
+        column_data = df[column_name].dropna().astype(str)
+        if len(column_data) == 0:
+            log_quality_metric(execution_id, "DOMAIN_CONSTRAINTS", f"{table_name}.{column_name}", "WARNING", "No hay valores para validar")
+            return True
+        
+        if not case_sensitive:
+            column_data = column_data.str.upper()
+            valid_values_processed = [str(v).upper() for v in valid_values]
+        else:
+            valid_values_processed = [str(v) for v in valid_values]
+        
+        invalid_mask = ~column_data.isin(valid_values_processed)
+        invalid_count = invalid_mask.sum()
+        total_count = len(column_data)
+        
+        if invalid_count == 0:
+            result = "PASS"
+            severity = QualitySeverity.LOW.value
+            detalles = f"Todos los {total_count} valores están en el dominio permitido"
+        else:
+            invalid_percentage = (invalid_count / total_count) * 100
+            if invalid_percentage < 5:
+                result = "WARNING"
+                severity = QualitySeverity.MEDIUM.value
+            else:
+                result = "FAIL"
+                severity = QualitySeverity.HIGH.value
+            
+            examples = column_data[invalid_mask].unique()[:3].tolist()
+            examples_str = ", ".join([f"'{v}'" for v in examples])
+            detalles = f"Valores fuera de dominio: {invalid_count}/{total_count} ({invalid_percentage:.1f}%). Ejemplos: {examples_str}"
+        
+        log_quality_metric(execution_id, "DOMAIN_CONSTRAINTS", f"{table_name}.{column_name}", result, detalles, severity)
+        return invalid_count == 0
+        
+    except Exception as e:
+        log_quality_metric(execution_id, "DOMAIN_CONSTRAINTS", f"{table_name}.{column_name}", "ERROR", f"Error: {str(e)}", QualitySeverity.HIGH.value)
+        return False
 
 
 def load_all_staging_data():

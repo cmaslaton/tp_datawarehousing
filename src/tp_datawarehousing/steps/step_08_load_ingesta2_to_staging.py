@@ -4,7 +4,15 @@ import logging
 import re
 import json
 from pathlib import Path
-from ..quality_utils import get_process_execution_id, log_quality_metric
+from ..quality_utils import (
+    get_process_execution_id, 
+    log_quality_metric,
+    validate_table_count,
+    validate_completeness_score,
+    validate_business_key_uniqueness,
+    QualityResult,
+    QualitySeverity
+)
 
 # --- Configuración de Logging ---
 logging.basicConfig(
@@ -127,9 +135,267 @@ def create_and_load_staging_tables(conn: sqlite3.Connection, execution_id: int):
             logging.info(
                 f"Carga exitosa de {len(df)} registros en la tabla {table_name}."
             )
+            
+            # AGREGAR VALIDACIONES DE CALIDAD ESPECÍFICAS
+            perform_data_quality_validations(execution_id, table_name, file_path.name, conn)
+            
         except Exception as e:
             logging.error(
                 f"Error al cargar el archivo {file_path.name} a la tabla {table_name}: {e}"
+            )
+
+
+def perform_data_quality_validations(execution_id: int, table_name: str, file_name: str, conn: sqlite3.Connection):
+    """
+    Realiza validaciones específicas de calidad de datos para cada tabla de Ingesta2.
+    Detecta los problemas específicos que mencionaste.
+    """
+    cursor = conn.cursor()
+    
+    # Validación 1: Conteo básico
+    validate_table_count(execution_id, table_name, 1, conn)
+    
+    # Validaciones específicas por tabla
+    if table_name == "TMP2_customers":
+        # Validar completitud de campos críticos para customers
+        validate_completeness_score(
+            execution_id, 
+            table_name, 
+            ["customer_id", "company_name", "country", "region"],  # region es crítico
+            conn
+        )
+        
+        # Validar unicidad de customer_id
+        validate_business_key_uniqueness(
+            execution_id,
+            table_name,
+            ["customer_id"],
+            conn
+        )
+        
+        # Validación específica para region (problema detectado)
+        validate_null_percentage(execution_id, table_name, "region", file_name, conn)
+        
+    elif table_name == "TMP2_orders":
+        # Validar completitud de campos críticos para orders
+        validate_completeness_score(
+            execution_id,
+            table_name,
+            ["order_id", "customer_id", "order_date", "shipped_date", "ship_region", "ship_postal_code"],
+            conn
+        )
+        
+        # Validar unicidad de order_id
+        validate_business_key_uniqueness(
+            execution_id,
+            table_name,
+            ["order_id"],
+            conn
+        )
+        
+        # Validaciones específicas para problemas detectados
+        validate_null_percentage(execution_id, table_name, "shipped_date", file_name, conn)
+        validate_null_percentage(execution_id, table_name, "ship_region", file_name, conn)
+        validate_null_percentage(execution_id, table_name, "ship_postal_code", file_name, conn)
+        
+        # Validar lógica de negocio: shipped_date >= order_date
+        validate_shipping_logic(execution_id, table_name, conn)
+        
+    elif table_name == "TMP2_order_details":
+        # Validar completitud de campos críticos
+        validate_completeness_score(
+            execution_id,
+            table_name,
+            ["order_id", "product_id", "unit_price", "quantity"],
+            conn
+        )
+        
+        # Validar unicidad de la clave compuesta
+        validate_business_key_uniqueness(
+            execution_id,
+            table_name,
+            ["order_id", "product_id"],
+            conn
+        )
+        
+        # Validar rangos de valores para campos numéricos
+        validate_numeric_ranges(execution_id, table_name, conn)
+
+
+def validate_null_percentage(execution_id: int, table_name: str, column_name: str, file_name: str, conn: sqlite3.Connection):
+    """
+    Calcula y reporta el porcentaje de valores nulos en una columna específica.
+    """
+    cursor = conn.cursor()
+    
+    try:
+        # Contar total de registros
+        cursor.execute(f"SELECT COUNT(*) FROM {table_name}")
+        total_records = cursor.fetchone()[0]
+        
+        # Contar valores nulos
+        cursor.execute(f"SELECT COUNT(*) FROM {table_name} WHERE {column_name} IS NULL OR TRIM({column_name}) = ''")
+        null_count = cursor.fetchone()[0]
+        
+        if total_records == 0:
+            percentage = 0
+        else:
+            percentage = (null_count / total_records) * 100
+        
+        # Determinar resultado basado en umbrales
+        if percentage == 0:
+            result = QualityResult.PASS.value
+            severity = QualitySeverity.LOW.value
+        elif percentage < 10:
+            result = QualityResult.WARNING.value
+            severity = QualitySeverity.MEDIUM.value
+        else:
+            result = QualityResult.FAIL.value
+            severity = QualitySeverity.HIGH.value
+        
+        detalles = f"Valores nulos/vacíos: {null_count}/{total_records} ({percentage:.1f}%)"
+        
+        log_quality_metric(
+            execution_id,
+            "NULL_PERCENTAGE",
+            f"{table_name}.{column_name}",
+            result,
+            detalles,
+            severity
+        )
+        
+        # Log específico del problema detectado
+        if column_name == "region" and table_name == "TMP2_customers" and percentage > 0:
+            log_quality_metric(
+                execution_id,
+                "BUSINESS_ISSUE_DETECTED",
+                f"{file_name}.{column_name}",
+                "CRITICAL",
+                f"🔴 PROBLEMA DETECTADO: {null_count} clientes sin región en archivo con solo {total_records} registros",
+                QualitySeverity.CRITICAL.value
+            )
+        elif column_name in ["shipped_date", "ship_region", "ship_postal_code"] and table_name == "TMP2_orders":
+            expected_reason = {
+                "shipped_date": "órdenes aún no despachadas",
+                "ship_region": "regiones no aplicables", 
+                "ship_postal_code": "códigos postales omitidos"
+            }
+            log_quality_metric(
+                execution_id,
+                "BUSINESS_ISSUE_DETECTED", 
+                f"{file_name}.{column_name}",
+                "WARNING" if percentage < 50 else "CRITICAL",
+                f"🟡 REVISAR: {null_count} valores faltantes en {column_name} - posiblemente {expected_reason[column_name]}",
+                QualitySeverity.MEDIUM.value if percentage < 50 else QualitySeverity.HIGH.value
+            )
+    
+    except sqlite3.Error as e:
+        log_quality_metric(
+            execution_id,
+            "NULL_PERCENTAGE_ERROR",
+            f"{table_name}.{column_name}",
+            QualityResult.ERROR.value,
+            f"Error calculando porcentaje de nulos: {str(e)}",
+            QualitySeverity.HIGH.value
+        )
+
+
+def validate_shipping_logic(execution_id: int, table_name: str, conn: sqlite3.Connection):
+    """
+    Valida que las fechas de envío sean posteriores o iguales a las fechas de pedido.
+    """
+    cursor = conn.cursor()
+    
+    try:
+        cursor.execute(f"""
+            SELECT COUNT(*) FROM {table_name} 
+            WHERE shipped_date IS NOT NULL 
+            AND order_date IS NOT NULL 
+            AND shipped_date < order_date
+        """)
+        
+        violations = cursor.fetchone()[0]
+        
+        if violations == 0:
+            result = QualityResult.PASS.value
+            severity = QualitySeverity.LOW.value
+            detalles = "Todas las fechas de envío son posteriores a las fechas de pedido"
+        else:
+            result = QualityResult.FAIL.value
+            severity = QualitySeverity.HIGH.value
+            detalles = f"🔴 LÓGICA DE NEGOCIO VIOLADA: {violations} órdenes con fecha_envío < fecha_pedido"
+        
+        log_quality_metric(
+            execution_id,
+            "SHIPPING_DATE_LOGIC",
+            table_name,
+            result,
+            detalles,
+            severity
+        )
+        
+    except sqlite3.Error as e:
+        log_quality_metric(
+            execution_id,
+            "SHIPPING_DATE_LOGIC_ERROR",
+            table_name,
+            QualityResult.ERROR.value,
+            f"Error validando lógica de fechas: {str(e)}",
+            QualitySeverity.HIGH.value
+        )
+
+
+def validate_numeric_ranges(execution_id: int, table_name: str, conn: sqlite3.Connection):
+    """
+    Valida que los valores numéricos estén en rangos esperados.
+    """
+    cursor = conn.cursor()
+    
+    numeric_validations = [
+        ("unit_price", 0, None, "Precio unitario debe ser positivo"),
+        ("quantity", 1, 1000, "Cantidad debe estar entre 1 y 1000"),
+        ("discount", 0, 1, "Descuento debe estar entre 0 y 1")
+    ]
+    
+    for column, min_val, max_val, description in numeric_validations:
+        try:
+            conditions = []
+            if min_val is not None:
+                conditions.append(f"{column} < {min_val}")
+            if max_val is not None:
+                conditions.append(f"{column} > {max_val}")
+            
+            if conditions:
+                where_clause = " OR ".join(conditions)
+                cursor.execute(f"SELECT COUNT(*) FROM {table_name} WHERE {where_clause}")
+                violations = cursor.fetchone()[0]
+                
+                if violations == 0:
+                    result = QualityResult.PASS.value
+                    severity = QualitySeverity.LOW.value
+                    detalles = f"{description} - Sin violaciones"
+                else:
+                    result = QualityResult.FAIL.value
+                    severity = QualitySeverity.MEDIUM.value
+                    detalles = f"🟡 {description} - {violations} violaciones encontradas"
+                
+                log_quality_metric(
+                    execution_id,
+                    "NUMERIC_RANGE_VALIDATION",
+                    f"{table_name}.{column}",
+                    result,
+                    detalles,
+                    severity
+                )
+        
+        except sqlite3.Error as e:
+            log_quality_metric(
+                execution_id,
+                "NUMERIC_RANGE_ERROR",
+                f"{table_name}.{column}",
+                QualityResult.ERROR.value,
+                f"Error validando rango numérico: {str(e)}",
+                QualitySeverity.HIGH.value
             )
 
 
