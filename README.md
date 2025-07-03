@@ -1,47 +1,116 @@
-# tp_datawarehousing
+# Data Warehousing Project
 
-Este proyecto contiene la resolución del Trabajo Práctico de Data Warehousing.
+Un proyecto de ETL (Extracción, Transformación, Carga) desarrollado como trabajo práctico de Data Warehousing, implementado siguiendo principios de desarrollo profesional y arquitectura modular.
 
-## Principios de Desarrollo
+## 📋 Tabla de Contenidos
 
-Este proyecto se adhiere a un conjunto de principios de desarrollo profesional para garantizar un código de alta calidad, mantenible y escalable.
+- [Características](#características)
+- [Requisitos](#requisitos)
+- [Instalación](#instalación)
+- [Uso](#uso)
+- [Estructura del Proyecto](#estructura-del-proyecto)
+- [Principios de Desarrollo](#principios-de-desarrollo)
+- [Contribución](#contribución)
 
-### 1. Estructura de Proyecto Profesional
+## ✨ Características
 
-Se sigue una estructura de directorios basada en las mejores prácticas de la comunidad de Python, separando el código fuente (`src`), los datos (`.data`) y la documentación (`.docs`). Esto mejora la claridad y facilita la instalación del paquete.
+- **Arquitectura Modular**: Cada paso del proceso ETL está implementado como un módulo independiente
+- **Orquestación Centralizada**: Control de flujo unificado a través del módulo principal
+- **Gestión de Configuración**: Uso de archivos de configuración y variables de entorno
+- **Logging Robusto**: Sistema de registro completo para monitoreo y depuración
+- **Estructura Profesional**: Organización basada en estándares de la comunidad Python
+
+## 🔧 Requisitos
+
+- Python 3.8 o superior
+- pip (gestor de paquetes de Python)
+
+## 📦 Instalación
+
+1. **Clonar el repositorio**:
+   ```bash
+   git clone https://github.com/usuario/tp_datawarehousing.git
+   cd tp_datawarehousing
+   ```
+
+2. **Crear un entorno virtual** (recomendado):
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # En Windows: venv\Scripts\activate
+   ```
+
+3. **Instalar el proyecto en modo desarrollo**:
+   ```bash
+   pip install -e .
+   ```
+
+## 🚀 Uso
+
+### Ejecución del Pipeline Completo
+
+```bash
+python -m tp_datawarehousing.main
+```
+
+### Opciones de Configuración
+
+El proyecto utiliza archivos de configuración para gestionar parámetros. Asegúrate de configurar las variables de entorno necesarias antes de ejecutar el proyecto.
+
+## 📁 Estructura del Proyecto
 
 ```
 tp_datawarehousing/
-├── .data/
-├── .docs/
+├── .data/                    # Datos del proyecto
+├── .docs/                    # Documentación
 ├── src/
 │   └── tp_datawarehousing/
 │       ├── __init__.py
-│       ├── main.py
-│       └── steps/
+│       ├── main.py          # Orquestador principal
+│       └── steps/           # Módulos ETL individuales
 │           └── ...
-├── pyproject.toml
-└── README.md
+├── pyproject.toml           # Configuración del proyecto
+└── README.md               # Este archivo
 ```
 
-### 2. Desarrollo Modular y Orquestación
+## 🏗️ Principios de Desarrollo
 
-- **Modularidad:** Cada paso lógico y discreto del proceso de ETL (Extracción, Transformación, Carga) se implementará en su propio script de Python, ubicado en el directorio `src/tp_datawarehousing/steps/`.
-- **Orquestación:** El script `src/tp_datawarehousing/main.py` actuará como el orquestador principal. Será responsable de llamar a cada paso modular en la secuencia correcta, controlando el flujo completo del proceso.
+### 1. Modularidad y Separación de Responsabilidades
+- Cada paso del proceso ETL está implementado como un módulo independiente
+- Facilita el mantenimiento, testing y reutilización de código
 
-### 3. Gestión de Dependencias
+### 2. Orquestación Centralizada
+- El módulo `main.py` coordina la ejecución de todos los pasos
+- Control de flujo claro y predecible
 
-Todas las dependencias del proyecto se gestionan a través del archivo `pyproject.toml`, siguiendo el estándar de PEP 621. Se recomienda encarecidamente el uso de un entorno virtual.
+### 3. Gestión de Configuración
+- Sin valores hardcodeados en el código
+- Uso de archivos de configuración y variables de entorno
+- Mayor seguridad y portabilidad
 
-### 4. Gestión de Configuración
+### 4. Logging y Monitoreo
+- Sistema de logging robusto para seguimiento de ejecución
+- Registro de eventos, advertencias y errores
+- Facilita la depuración y el mantenimiento
 
-Se evitará el uso de valores "hardcodeados" (como credenciales o rutas de archivos) en el código. En su lugar, se favorecerá el uso de archivos de configuración o variables de entorno para gestionar estos parámetros, haciendo que el proyecto sea más seguro y portable.
+### 5. Estándares de Calidad
+- Estructura de proyecto siguiendo PEP 621
+- Gestión de dependencias a través de `pyproject.toml`
+- Código limpio y documentado
 
-### 5. Logging y Manejo de Errores
+## 🤝 Contribución
 
-Se implementará un sistema de `logging` robusto para registrar los eventos clave, advertencias y errores durante la ejecución. Esto es crucial para la monitorización, la depuración y el mantenimiento del flujo de datos.
+Las contribuciones son bienvenidas. Para contribuir:
 
-# Comandos
+1. Fork el proyecto
+2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
+3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
+4. Push a la rama (`git push origin feature/AmazingFeature`)
+5. Abre un Pull Request
 
-pip install -e .
-python -m tp_datawarehousing.main
+## 📄 Licencia
+
+Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más detalles.
+
+---
+
+**Desarrollado como trabajo práctico de Data Warehousing**
