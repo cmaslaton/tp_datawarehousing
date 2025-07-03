@@ -10,7 +10,6 @@ Un proyecto de ETL (Extracción, Transformación, Carga) desarrollado como traba
 - [Uso](#uso)
 - [Estructura del Proyecto](#estructura-del-proyecto)
 - [Principios de Desarrollo](#principios-de-desarrollo)
-- [Contribución](#contribución)
 
 ## ✨ Características
 
@@ -97,20 +96,6 @@ tp_datawarehousing/
 - Gestión de dependencias a través de `pyproject.toml`
 - Código limpio y documentado
 
-## 🤝 Contribución
-
-Las contribuciones son bienvenidas. Para contribuir:
-
-1. Fork el proyecto
-2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
-3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
-4. Push a la rama (`git push origin feature/AmazingFeature`)
-5. Abre un Pull Request
-
-## 📄 Licencia
-
-Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más detalles.
-
 ---
 
-**Desarrollado como trabajo práctico de Data Warehousing**
+**Desarrollado como trabajo práctico d Introducción a Data Warehousing**
