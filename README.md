@@ -28,7 +28,7 @@ Un proyecto de ETL (Extracción, Transformación, Carga) desarrollado como traba
 
 1. **Clonar el repositorio**:
    ```bash
-   git clone https://github.com/usuario/tp_datawarehousing.git
+   git clone https://github.com/cmaslaton/tp_datawarehousing.git
    cd tp_datawarehousing
    ```
 
