@@ -104,5 +104,3 @@ tp_datawarehousing/
 - Código limpio y documentado
 
 ---
-
-**Desarrollado como trabajo práctico d Introducción a Data Warehousing**
