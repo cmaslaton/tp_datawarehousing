@@ -1,1283 +1,1283 @@
-anio,mes,nombre_categoria,pais,total_ventas
-1996,7,Dairy Products,Germany,2618
-1996,7,Confections,Belgium,2462.4
-1996,7,Produce,Germany,1863.4
-1996,7,Dairy Products,Switzerland,1320
-1996,7,Produce,Brazil,1261.3999999999999
-1996,7,Dairy Products,Belgium,1135.5
-1996,7,Meat/Poultry,Venezuela,990
-1996,7,Meat/Poultry,France,936
-1996,7,Seafood,Austria,931.5
-1996,7,Beverages,Brazil,892.8000000000001
-1996,7,Condiments,Austria,884
-1996,7,Confections,Venezuela,877.5
-1996,7,Seafood,Germany,827.4
-1996,7,Confections,Brazil,800
-1996,7,Grains/Cereals,Germany,780
-1996,7,Beverages,Austria,708.8
-1996,7,Dairy Products,United States,642.1999999999999
-1996,7,Confections,Austria,625.5
-1996,7,Beverages,Sweden,532
-1996,7,Confections,Switzerland,486.5
-1996,7,Confections,Germany,443.25
-1996,7,Grains/Cereals,France,416.06
-1996,7,Meat/Poultry,Brazil,393
-1996,7,Seafood,Switzerland,380
-1996,7,Beverages,Germany,372.6
-1996,7,Produce,United States,360
-1996,7,Beverages,Switzerland,349.9
-1996,7,Dairy Products,Finland,346.55999999999995
-1996,7,Meat/Poultry,Switzerland,342.71999999999997
-1996,7,Dairy Products,France,342
-1996,7,Condiments,Brazil,339
-1996,7,Condiments,France,336
-1996,7,Beverages,France,240
-1996,7,Produce,Austria,216
-1996,7,Dairy Products,Brazil,200
-1996,7,Produce,Switzerland,168
-1996,7,Seafood,Sweden,163.625
-1996,7,Condiments,United States,163.20000000000002
-1996,7,Condiments,Venezuela,156
-1996,7,Dairy Products,Austria,122.88000000000002
-1996,7,Dairy Products,Venezuela,111.2
-1996,7,Beverages,Venezuela,86.4
-1996,7,Confections,Mexico,80
-1996,7,Seafood,Brazil,77
-1996,7,Grains/Cereals,United States,60.8
-1996,7,Seafood,Mexico,20.8
-1996,8,Beverages,Germany,2451.84
-1996,8,Confections,Germany,2443.675
-1996,8,Confections,Brazil,2008.6
-1996,8,Seafood,Germany,1873.74
-1996,8,Dairy Products,United States,1686.4
-1996,8,Meat/Poultry,Brazil,1485
-1996,8,Meat/Poultry,Germany,1105.56
-1996,8,Dairy Products,Venezuela,1035.4
-1996,8,Seafood,Mexico,1020
-1996,8,Beverages,Finland,919.9999999999999
-1996,8,Beverages,United States,848.4
-1996,8,Condiments,Brazil,778.8
-1996,8,Produce,Germany,728
-1996,8,Dairy Products,Sweden,660
-1996,8,Dairy Products,Germany,590.5
-1996,8,Dairy Products,France,538.6
-1996,8,Condiments,Sweden,528.8
-1996,8,Meat/Poultry,United States,468
-1996,8,Seafood,Finland,456
-1996,8,Confections,United States,388.79999999999995
-1996,8,Meat/Poultry,Sweden,384
-1996,8,Condiments,Germany,325.5
-1996,8,Seafood,Sweden,300
-1996,8,Dairy Products,Italy,250.79999999999998
-1996,8,Condiments,Venezuela,248
-1996,8,Condiments,United Kingdom,240
-1996,8,Grains/Cereals,United Kingdom,239.4
-1996,8,Beverages,Sweden,229.2
-1996,8,Beverages,Brazil,224
-1996,8,Seafood,Brazil,208.8
-1996,8,Condiments,Mexico,175.5
-1996,8,Confections,Venezuela,131.4
-1996,8,Seafood,Spain,124.19999999999999
-1996,8,Beverages,Spain,79.2
-1996,8,Produce,Brazil,76.32
-1996,8,Beverages,Mexico,73.2
-1996,8,Meat/Poultry,Italy,53.1
-1996,8,Beverages,Italy,41.04
-1996,8,Grains/Cereals,Spain,31.2
-1996,8,Confections,Italy,27
-1996,8,Confections,Spain,7.3
-1996,9,Confections,United States,4404.5
-1996,9,Meat/Poultry,United States,2227.5
-1996,9,Seafood,United States,1488.2
-1996,9,Beverages,Republic of Ireland,1344
-1996,9,Meat/Poultry,Belgium,1248
-1996,9,Dairy Products,Republic of Ireland,1041.6
-1996,9,Produce,Belgium,1019.1999999999999
-1996,9,Condiments,Republic of Ireland,952
-1996,9,Beverages,Germany,945.1999999999999
-1996,9,Dairy Products,United States,921.6
-1996,9,Beverages,France,864
-1996,9,Dairy Products,France,757.6
-1996,9,Seafood,Spain,736.2
-1996,9,Beverages,United States,676.8
-1996,9,Dairy Products,Venezuela,633.6
-1996,9,Grains/Cereals,Germany,608
-1996,9,Confections,Republic of Ireland,591
-1996,9,Meat/Poultry,Germany,524
-1996,9,Beverages,United Kingdom,516.8
-1996,9,Dairy Products,Mexico,503.2
-1996,9,Confections,Mexico,480
-1996,9,Seafood,Republic of Ireland,456
-1996,9,Condiments,Spain,453.6
-1996,9,Beverages,Belgium,441.59999999999997
-1996,9,Confections,Venezuela,417
-1996,9,Condiments,Italy,408
-1996,9,Seafood,Germany,329.4
-1996,9,Meat/Poultry,Spain,291.5
-1996,9,Beverages,Brazil,240
-1996,9,Confections,Italy,200
-1996,9,Grains/Cereals,France,188.79999999999998
-1996,9,Produce,Germany,145.6
-1996,9,Confections,Spain,135
-1996,9,Confections,Brazil,109.5
-1996,9,Beverages,Mexico,60
-1996,9,Grains/Cereals,Republic of Ireland,22.4
-1996,10,Beverages,United States,4862
-1996,10,Condiments,United States,2386.7999999999997
-1996,10,Dairy Products,Germany,2295
-1996,10,Meat/Poultry,Canada,2074.7999999999997
-1996,10,Produce,Republic of Ireland,1628.1599999999999
-1996,10,Grains/Cereals,Germany,1618
-1996,10,Seafood,Canada,1600
-1996,10,Dairy Products,United States,1496
-1996,10,Seafood,Germany,1430.4
-1996,10,Beverages,France,1398.3999999999999
-1996,10,Confections,Canada,1200.48
-1996,10,Dairy Products,Finland,1135.2
-1996,10,Confections,Venezuela,1058.25
-1996,10,Seafood,France,1037.78
-1996,10,Condiments,Portugal,957.12
-1996,10,Seafood,Sweden,834
-1996,10,Seafood,United States,755.8199999999999
-1996,10,Confections,Germany,680.3999999999999
-1996,10,Dairy Products,Sweden,672
-1996,10,Meat/Poultry,United States,624
-1996,10,Meat/Poultry,Germany,614.4000000000001
-1996,10,Dairy Products,Venezuela,590.75
-1996,10,Beverages,Germany,565.4399999999999
-1996,10,Produce,Mexico,509.59999999999997
-1996,10,Beverages,Mexico,432
-1996,10,Condiments,Spain,422.40000000000003
-1996,10,Dairy Products,Portugal,396
-1996,10,Dairy Products,Denmark,352.59999999999997
-1996,10,Grains/Cereals,United States,346.55999999999995
-1996,10,Dairy Products,Republic of Ireland,322.88
-1996,10,Confections,United States,317.46500000000003
-1996,10,Beverages,Spain,310
-1996,10,Beverages,Sweden,304
-1996,10,Grains/Cereals,Spain,249.6
-1996,10,Meat/Poultry,Mexico,249.6
-1996,10,Beverages,United Kingdom,230.4
-1996,10,Produce,Finland,186
-1996,10,Condiments,Germany,182
-1996,10,Condiments,Canada,176
-1996,10,Produce,Germany,167.4
-1996,10,Seafood,United Kingdom,154
-1996,10,Grains/Cereals,Mexico,112
-1996,10,Confections,France,100
-1996,10,Confections,Portugal,100
-1996,10,Grains/Cereals,Canada,89.60000000000001
-1996,10,Meat/Poultry,France,88.5
-1996,10,Beverages,Republic of Ireland,85.12
-1996,10,Confections,Finland,72
-1996,10,Grains/Cereals,France,44.8
-1996,11,Beverages,Austria,12437.2
-1996,11,Meat/Poultry,France,3771.8
-1996,11,Dairy Products,United Kingdom,3682.2
-1996,11,Dairy Products,Germany,2422.4
-1996,11,Condiments,United States,2296
-1996,11,Beverages,France,2248.6
-1996,11,Condiments,Germany,2240
-1996,11,Produce,France,1940
-1996,11,Confections,France,1295.5
-1996,11,Condiments,Austria,1293.425
-1996,11,Grains/Cereals,Austria,1227.9
-1996,11,Meat/Poultry,United States,1152.48
-1996,11,Beverages,Germany,1130.64
-1996,11,Confections,United Kingdom,739.4799999999999
-1996,11,Beverages,Brazil,643.62
-1996,11,Grains/Cereals,United States,608
-1996,11,Seafood,Venezuela,595.2
-1996,11,Confections,Germany,584
-1996,11,Dairy Products,France,466.56
-1996,11,Produce,Austria,425.88
-1996,11,Dairy Products,Mexico,403.20000000000005
-1996,11,Beverages,Denmark,403.2
-1996,11,Confections,Venezuela,398.4
-1996,11,Meat/Poultry,Mexico,396
-1996,11,Grains/Cereals,United Kingdom,390
-1996,11,Condiments,Denmark,324.8
-1996,11,Seafood,France,288.8
-1996,11,Grains/Cereals,Germany,280.8
-1996,11,Condiments,Spain,272
-1996,11,Meat/Poultry,Germany,230.39999999999998
-1996,11,Dairy Products,Venezuela,174.08
-1996,11,Beverages,Mexico,172.8
-1996,11,Dairy Products,Austria,161.28000000000003
-1996,11,Confections,Brazil,112
-1996,11,Meat/Poultry,Denmark,106.2
-1996,11,Meat/Poultry,Portugal,100.3
-1996,11,Seafood,Austria,100.10000000000001
-1996,11,Beverages,United Kingdom,90
-1996,11,Seafood,Brazil,58.8
-1996,11,Beverages,Portugal,36
-1996,11,Confections,Austria,36
-1996,12,Beverages,Brazil,6490
-1996,12,Meat/Poultry,United States,4112.6
-1996,12,Dairy Products,Austria,2700.48
-1996,12,Dairy Products,Brazil,2303.7
-1996,12,Confections,United States,1824.05
-1996,12,Confections,Sweden,1814.3999999999999
-1996,12,Meat/Poultry,Venezuela,1650.6000000000001
-1996,12,Dairy Products,Germany,1615.8000000000002
-1996,12,Meat/Poultry,Austria,1386
-1996,12,Produce,United States,1056.9
-1996,12,Meat/Poultry,United Kingdom,1048
-1996,12,Seafood,Republic of Ireland,1013.74
-1996,12,Seafood,Austria,882
-1996,12,Dairy Products,Republic of Ireland,834.88
-1996,12,Condiments,Brazil,807.8400000000001
-1996,12,Grains/Cereals,Switzerland,798
-1996,12,Confections,Canada,788
-1996,12,Dairy Products,Norway,786
-1996,12,Dairy Products,United States,755.2
-1996,12,Beverages,United States,717
-1996,12,Grains/Cereals,United Kingdom,697.6
-1996,12,Produce,Portugal,648.7199999999999
-1996,12,Produce,United Kingdom,618.8
-1996,12,Confections,Denmark,600
-1996,12,Confections,Brazil,583.1999999999999
-1996,12,Condiments,Austria,544
-1996,12,Beverages,Austria,518.4
-1996,12,Dairy Products,Denmark,516
-1996,12,Dairy Products,Sweden,511.2
-1996,12,Beverages,Denmark,504
-1996,12,Meat/Poultry,Republic of Ireland,471.6
-1996,12,Grains/Cereals,United States,410.4
-1996,12,Produce,Austria,400
-1996,12,Dairy Products,Canada,399
-1996,12,Seafood,Canada,396.8
-1996,12,Beverages,Canada,360
-1996,12,Beverages,Republic of Ireland,360
-1996,12,Dairy Products,Poland,300
-1996,12,Grains/Cereals,Germany,288
-1996,12,Meat/Poultry,Canada,288
-1996,12,Beverages,United Kingdom,244.79999999999998
-1996,12,Seafood,Venezuela,241.92000000000002
-1996,12,Dairy Products,Venezuela,230.4
-1996,12,Produce,Norway,218.39999999999998
-1996,12,Confections,United Kingdom,195
-1996,12,Seafood,United Kingdom,187.2
-1996,12,Beverages,Switzerland,183.6
-1996,12,Seafood,Poland,159
-1996,12,Condiments,Denmark,145.6
-1996,12,Produce,Switzerland,136
-1996,12,Produce,Venezuela,112
-1996,12,Seafood,Germany,86.39999999999999
-1996,12,Seafood,France,72.96
-1996,12,Confections,Portugal,68
-1996,12,Seafood,Brazil,55.440000000000005
-1996,12,Beverages,Norway,54
-1996,12,Seafood,United States,48
-1997,1,Beverages,Denmark,10540
-1997,1,Beverages,Canada,8954.560000000001
-1997,1,Confections,France,2955
-1997,1,Dairy Products,Austria,2464
-1997,1,Condiments,Austria,2281.5
-1997,1,Grains/Cereals,United States,2128
-1997,1,Dairy Products,Switzerland,2097.6
-1997,1,Meat/Poultry,United Kingdom,2079
-1997,1,Meat/Poultry,Brazil,1730.85
-1997,1,Produce,Brazil,1375.92
-1997,1,Grains/Cereals,Austria,1344
-1997,1,Confections,Austria,1255.0149999999999
-1997,1,Confections,Italy,1215.45
-1997,1,Dairy Products,Germany,1194
-1997,1,Meat/Poultry,Canada,1170
-1997,1,Meat/Poultry,Austria,1123.2
-1997,1,Dairy Products,Brazil,1120
-1997,1,Dairy Products,Canada,1118.8
-1997,1,Confections,Brazil,1112.65
-1997,1,Dairy Products,United States,1072
-1997,1,Condiments,Republic of Ireland,921.375
-1997,1,Beverages,Germany,912
-1997,1,Beverages,France,763.2
-1997,1,Seafood,Canada,705.25
-1997,1,Grains/Cereals,Spain,676.4000000000001
-1997,1,Produce,Austria,651
-1997,1,Confections,Republic of Ireland,520
-1997,1,Beverages,United Kingdom,504
-1997,1,Condiments,Canada,496
-1997,1,Confections,United Kingdom,480
-1997,1,Grains/Cereals,Italy,425.59999999999997
-1997,1,Confections,Germany,418
-1997,1,Confections,Canada,411
-1997,1,Condiments,Venezuela,400
-1997,1,Seafood,United States,372.59999999999997
-1997,1,Condiments,Germany,364.8
-1997,1,Condiments,Denmark,364
-1997,1,Condiments,United States,336
-1997,1,Produce,Finland,334.8
-1997,1,Seafood,Brazil,319.5
-1997,1,Grains/Cereals,Finland,312
-1997,1,Meat/Poultry,United States,298.4
-1997,1,Confections,Denmark,270
-1997,1,Meat/Poultry,Finland,262
-1997,1,Confections,United States,249
-1997,1,Beverages,Brazil,230.4
-1997,1,Produce,Argentina,223.20000000000002
-1997,1,Seafood,France,208
-1997,1,Seafood,Italy,192
-1997,1,Meat/Poultry,France,179.4
-1997,1,Confections,Finland,146
-1997,1,Produce,Germany,120
-1997,1,Confections,Argentina,96
-1997,1,Condiments,Brazil,88.39999999999999
-1997,1,Seafood,Denmark,14.399999999999999
-1997,2,Condiments,United States,3216.7
-1997,2,Confections,United States,2333.935
-1997,2,Meat/Poultry,Germany,2073.6
-1997,2,Meat/Poultry,United States,2019.6
-1997,2,Grains/Cereals,France,1924.6000000000001
-1997,2,Meat/Poultry,Finland,1703
-1997,2,Dairy Products,Germany,1611
-1997,2,Confections,France,1601.4
-1997,2,Dairy Products,France,1144
-1997,2,Grains/Cereals,Germany,1100.7
-1997,2,Produce,Belgium,1092
-1997,2,Seafood,France,1051.2
-1997,2,Condiments,Germany,938.1600000000001
-1997,2,Meat/Poultry,Venezuela,864
-1997,2,Dairy Products,Belgium,860
-1997,2,Grains/Cereals,Portugal,851.1999999999999
-1997,2,Condiments,Austria,816
-1997,2,Confections,Belgium,747
-1997,2,Beverages,Belgium,736
-1997,2,Confections,Germany,724.04
-1997,2,Condiments,Brazil,588
-1997,2,Beverages,United States,581.4
-1997,2,Condiments,Finland,570
-1997,2,Produce,United States,546
-1997,2,Confections,Sweden,531
-1997,2,Dairy Products,Finland,516
-1997,2,Dairy Products,Austria,504
-1997,2,Meat/Poultry,Austria,472
-1997,2,Dairy Products,Canada,456
-1997,2,Grains/Cereals,Belgium,456
-1997,2,Beverages,Sweden,440.52
-1997,2,Produce,Italy,436.79999999999995
-1997,2,Seafood,Venezuela,434.70000000000005
-1997,2,Beverages,United Kingdom,422
-1997,2,Meat/Poultry,Sweden,400.5
-1997,2,Produce,France,364.79999999999995
-1997,2,Seafood,Argentina,294
-1997,2,Confections,Brazil,292
-1997,2,Beverages,Finland,288
-1997,2,Dairy Products,United Kingdom,278
-1997,2,Beverages,Germany,244
-1997,2,Confections,Venezuela,240
-1997,2,Produce,Canada,240
-1997,2,Seafood,Sweden,231
-1997,2,Confections,Canada,222.4
-1997,2,Grains/Cereals,United Kingdom,201.60000000000002
-1997,2,Grains/Cereals,Canada,159.60000000000002
-1997,2,Confections,Argentina,149.39999999999998
-1997,2,Confections,United Kingdom,137.70000000000002
-1997,2,Beverages,France,133.92000000000002
-1997,2,Dairy Products,Sweden,100.80000000000001
-1997,2,Dairy Products,Italy,80.64000000000001
-1997,2,Dairy Products,Brazil,34.4
-1997,2,Meat/Poultry,France,28.320000000000007
-1997,3,Beverages,United States,7213.2
-1997,3,Dairy Products,Venezuela,2724
-1997,3,Dairy Products,United States,2640
-1997,3,Seafood,France,1971.2
-1997,3,Produce,United Kingdom,1610.3999999999999
-1997,3,Meat/Poultry,Denmark,1603.8
-1997,3,Dairy Products,Germany,1320
-1997,3,Beverages,Venezuela,1288.8
-1997,3,Dairy Products,Brazil,1256
-1997,3,Produce,Venezuela,1188
-1997,3,Confections,Brazil,1167.5
-1997,3,Produce,Mexico,878.4
-1997,3,Grains/Cereals,United States,798
-1997,3,Grains/Cereals,United Kingdom,759.2
-1997,3,Meat/Poultry,United States,733.6
-1997,3,Grains/Cereals,Portugal,729.6
-1997,3,Condiments,Belgium,693.6
-1997,3,Grains/Cereals,Belgium,560
-1997,3,Meat/Poultry,Venezuela,554.88
-1997,3,Beverages,Germany,552
-1997,3,Dairy Products,Portugal,544
-1997,3,Beverages,Portugal,542.4
-1997,3,Dairy Products,France,528
-1997,3,Beverages,Belgium,514.08
-1997,3,Seafood,Denmark,499.20000000000005
-1997,3,Condiments,Portugal,484.785
-1997,3,Confections,United States,413.525
-1997,3,Seafood,Germany,357.6
-1997,3,Confections,Denmark,325
-1997,3,Condiments,United States,322.75
-1997,3,Grains/Cereals,France,320.8
-1997,3,Seafood,Mexico,308.7
-1997,3,Confections,Venezuela,300
-1997,3,Dairy Products,Belgium,297.5
-1997,3,Beverages,United Kingdom,273.59999999999997
-1997,3,Confections,Austria,250.20000000000002
-1997,3,Dairy Products,United Kingdom,230.39999999999998
-1997,3,Confections,France,228
-1997,3,Dairy Products,Austria,189
-1997,3,Confections,Belgium,153.29999999999998
-1997,3,Seafood,United Kingdom,151.8
-1997,3,Seafood,United States,147
-1997,3,Condiments,Venezuela,144
-1997,3,Confections,Italy,134.39999999999998
-1997,3,Confections,Portugal,126
-1997,3,Confections,United Kingdom,112
-1997,3,Meat/Poultry,Brazil,106.20000000000002
-1997,3,Beverages,Italy,100.8
-1997,3,Beverages,Denmark,90
-1997,3,Beverages,Mexico,62
-1997,3,Seafood,Brazil,48
-1997,4,Confections,Germany,6687.3
-1997,4,Beverages,Mexico,4981.5
-1997,4,Meat/Poultry,United States,4784.4400000000005
-1997,4,Dairy Products,Germany,4436.6
-1997,4,Confections,Austria,3159
-1997,4,Grains/Cereals,Austria,2660
-1997,4,Seafood,Republic of Ireland,2101.05
-1997,4,Condiments,France,1800.9
-1997,4,Produce,Republic of Ireland,1627.5
-1997,4,Produce,France,1621.56
-1997,4,Produce,Austria,1596
-1997,4,Condiments,Germany,1562
-1997,4,Grains/Cereals,Switzerland,1520
-1997,4,Meat/Poultry,Germany,1468.2
-1997,4,Beverages,Germany,945
-1997,4,Grains/Cereals,Brazil,912
-1997,4,Produce,Venezuela,912
-1997,4,Seafood,Germany,842.24
-1997,4,Condiments,Austria,820.95
-1997,4,Confections,Canada,786.3
-1997,4,Condiments,United States,712.5
-1997,4,Dairy Products,Brazil,536.8
-1997,4,Confections,Venezuela,500
-1997,4,Beverages,United States,479.1
-1997,4,Seafood,Switzerland,471.2
-1997,4,Grains/Cereals,Germany,425.59999999999997
-1997,4,Condiments,Republic of Ireland,421
-1997,4,Grains/Cereals,Venezuela,420
-1997,4,Beverages,Austria,387.5
-1997,4,Dairy Products,Switzerland,323
-1997,4,Grains/Cereals,Canada,284.79999999999995
-1997,4,Grains/Cereals,Republic of Ireland,280
-1997,4,Dairy Products,France,259.2
-1997,4,Dairy Products,United Kingdom,220
-1997,4,Seafood,Mexico,199.5
-1997,4,Meat/Poultry,Mexico,196.79999999999998
-1997,4,Condiments,Mexico,175.04999999999998
-1997,4,Meat/Poultry,Norway,164
-1997,4,Confections,Mexico,162.5625
-1997,4,Seafood,Canada,154
-1997,4,Produce,Germany,136.8
-1997,4,Confections,United States,120
-1997,4,Seafood,Argentina,96.5
-1997,4,Seafood,Venezuela,92
-1997,4,Seafood,Brazil,91.8
-1997,4,Beverages,United Kingdom,90
-1997,4,Confections,Argentina,75
-1997,4,Beverages,Venezuela,63
-1997,4,Beverages,Argentina,54
-1997,4,Condiments,Canada,52
-1997,4,Confections,Brazil,48.449999999999996
-1997,4,Grains/Cereals,United Kingdom,42
-1997,4,Beverages,Brazil,38.25
-1997,4,Beverages,Norway,36
-1997,5,Beverages,Germany,8010
-1997,5,Confections,Germany,3120.725
-1997,5,Beverages,Sweden,2760
-1997,5,Dairy Products,Germany,2528.625
-1997,5,Produce,Germany,2162.4
-1997,5,Beverages,Austria,2050
-1997,5,Seafood,United Kingdom,2049.66
-1997,5,Confections,France,1972
-1997,5,Seafood,Germany,1861.7
-1997,5,Condiments,Germany,1713.5
-1997,5,Dairy Products,Mexico,1687.5
-1997,5,Dairy Products,Venezuela,1617
-1997,5,Meat/Poultry,Austria,1560
-1997,5,Grains/Cereals,Finland,1473
-1997,5,Confections,United Kingdom,1363.5
-1997,5,Dairy Products,Switzerland,1105.8
-1997,5,Beverages,Brazil,1090.35
-1997,5,Condiments,Sweden,1045
-1997,5,Meat/Poultry,United Kingdom,877.5
-1997,5,Dairy Products,Sweden,835.1999999999999
-1997,5,Seafood,France,818.4
-1997,5,Condiments,Portugal,778
-1997,5,Dairy Products,United Kingdom,725.0999999999999
-1997,5,Dairy Products,Finland,690
-1997,5,Condiments,Brazil,682.0200000000001
-1997,5,Seafood,Sweden,662.9
-1997,5,Dairy Products,United States,602.2
-1997,5,Confections,Portugal,593.3
-1997,5,Condiments,Austria,570
-1997,5,Beverages,France,540
-1997,5,Grains/Cereals,Venezuela,535.5
-1997,5,Condiments,United Kingdom,408
-1997,5,Seafood,Switzerland,400
-1997,5,Dairy Products,Belgium,360
-1997,5,Meat/Poultry,Belgium,336
-1997,5,Produce,United States,319.2
-1997,5,Produce,Switzerland,318
-1997,5,Beverages,Portugal,306
-1997,5,Produce,France,300
-1997,5,Meat/Poultry,Spain,280.8
-1997,5,Condiments,Spain,256.5
-1997,5,Confections,Belgium,250
-1997,5,Confections,Finland,244.29999999999998
-1997,5,Beverages,Venezuela,232.5
-1997,5,Beverages,Finland,230.39999999999998
-1997,5,Meat/Poultry,Germany,229.46
-1997,5,Dairy Products,Brazil,174.15
-1997,5,Grains/Cereals,Germany,171
-1997,5,Seafood,Mexico,165.6
-1997,5,Confections,Spain,146
-1997,5,Meat/Poultry,Sweden,111.75
-1997,5,Dairy Products,Argentina,110
-1997,5,Beverages,United Kingdom,105
-1997,5,Beverages,United States,98
-1997,5,Grains/Cereals,Mexico,87.75
-1997,5,Seafood,Finland,60
-1997,6,Grains/Cereals,Canada,2704.65
-1997,6,Produce,Sweden,2650
-1997,6,Dairy Products,Republic of Ireland,2360
-1997,6,Dairy Products,Germany,1704
-1997,6,Meat/Poultry,Mexico,1522
-1997,6,Grains/Cereals,United States,1415.5
-1997,6,Produce,United States,1406
-1997,6,Meat/Poultry,Finland,1237.9
-1997,6,Dairy Products,France,1218.5
-1997,6,Meat/Poultry,United States,1162.8
-1997,6,Beverages,United States,1102.55
-1997,6,Grains/Cereals,Germany,1075.5
-1997,6,Seafood,France,1066.26
-1997,6,Produce,United Kingdom,1060
-1997,6,Dairy Products,Finland,999.6
-1997,6,Seafood,Sweden,919.9999999999999
-1997,6,Condiments,Germany,863.3249999999999
-1997,6,Dairy Products,Denmark,835.1999999999999
-1997,6,Confections,United States,750.6
-1997,6,Beverages,Mexico,740
-1997,6,Seafood,Germany,600.3075
-1997,6,Meat/Poultry,United Kingdom,590.4
-1997,6,Beverages,Germany,587
-1997,6,Confections,Germany,554.625
-1997,6,Grains/Cereals,Brazil,490
-1997,6,Seafood,Brazil,475
-1997,6,Dairy Products,United States,456.25
-1997,6,Confections,Italy,443.7
-1997,6,Meat/Poultry,France,410.4
-1997,6,Condiments,Mexico,408.45
-1997,6,Condiments,United States,389
-1997,6,Beverages,United Kingdom,360
-1997,6,Grains/Cereals,Austria,333.2
-1997,6,Produce,Germany,331.3125
-1997,6,Grains/Cereals,United Kingdom,327
-1997,6,Beverages,Brazil,310
-1997,6,Seafood,Spain,310
-1997,6,Dairy Products,Canada,299.25
-1997,6,Dairy Products,Sweden,288
-1997,6,Dairy Products,Mexico,250
-1997,6,Confections,United Kingdom,237.5
-1997,6,Produce,Austria,217.3875
-1997,6,Condiments,Sweden,194.5
-1997,6,Confections,Sweden,188.45999999999998
-1997,6,Beverages,France,180
-1997,6,Produce,Republic of Ireland,159
-1997,6,Beverages,Sweden,104.625
-1997,6,Beverages,Canada,101.25
-1997,6,Dairy Products,Italy,45
-1997,6,Seafood,United Kingdom,45
-1997,6,Seafood,United States,36.8
-1997,7,Beverages,United States,5666.625
-1997,7,Seafood,United States,4835.3
-1997,7,Meat/Poultry,United States,3929.8
-1997,7,Dairy Products,United States,3714.975
-1997,7,Dairy Products,Canada,3612.375
-1997,7,Confections,United States,3030
-1997,7,Condiments,Austria,2767.08
-1997,7,Grains/Cereals,Germany,2184
-1997,7,Seafood,Germany,2000
-1997,7,Dairy Products,Venezuela,1925
-1997,7,Grains/Cereals,United States,1860
-1997,7,Dairy Products,Austria,1755
-1997,7,Confections,Germany,1589.1425000000002
-1997,7,Produce,United States,1350
-1997,7,Dairy Products,Germany,870
-1997,7,Condiments,United States,842.88
-1997,7,Condiments,Canada,741
-1997,7,Confections,Brazil,724.28
-1997,7,Condiments,Brazil,612
-1997,7,Seafood,France,609.25
-1997,7,Beverages,Austria,531
-1997,7,Dairy Products,Poland,510
-1997,7,Confections,Canada,497.325
-1997,7,Confections,United Kingdom,493
-1997,7,Seafood,Venezuela,403.2
-1997,7,Grains/Cereals,Austria,390
-1997,7,Meat/Poultry,Brazil,384
-1997,7,Meat/Poultry,Denmark,372.5
-1997,7,Condiments,Germany,368.125
-1997,7,Beverages,Brazil,360
-1997,7,Beverages,Canada,360
-1997,7,Beverages,Venezuela,310
-1997,7,Produce,Denmark,300
-1997,7,Beverages,Poland,298
-1997,7,Condiments,Denmark,188.75
-1997,7,Beverages,Portugal,162
-1997,7,Beverages,Germany,147.6
-1997,7,Meat/Poultry,Finland,120
-1997,7,Confections,Portugal,68.85000000000001
-1997,7,Confections,France,60
-1997,7,Beverages,France,54
-1997,7,Grains/Cereals,Italy,23.8
-1997,8,Confections,Austria,4281.4925
-1997,8,Seafood,France,3125
-1997,8,Seafood,Brazil,2763.5
-1997,8,Grains/Cereals,Brazil,2481
-1997,8,Meat/Poultry,Spain,2475.8
-1997,8,Beverages,Germany,2123.25
-1997,8,Dairy Products,Venezuela,2088
-1997,8,Produce,France,1845
-1997,8,Condiments,Canada,1750
-1997,8,Beverages,Brazil,1717.375
-1997,8,Grains/Cereals,Canada,1635
-1997,8,Seafood,Venezuela,1294
-1997,8,Dairy Products,Austria,1162.8
-1997,8,Dairy Products,Sweden,1110
-1997,8,Meat/Poultry,Brazil,1002.4999999999999
-1997,8,Produce,Germany,1001.25
-1997,8,Beverages,Venezuela,950
-1997,8,Produce,Belgium,912
-1997,8,Confections,Brazil,841.9375
-1997,8,Grains/Cereals,Italy,840
-1997,8,Meat/Poultry,United States,742.74
-1997,8,Confections,United States,739.5
-1997,8,Confections,Canada,607.5
-1997,8,Dairy Products,Germany,587.5
-1997,8,Condiments,Finland,550
-1997,8,Dairy Products,Belgium,522
-1997,8,Beverages,France,521.3
-1997,8,Seafood,Norway,500
-1997,8,Condiments,Italy,486.225
-1997,8,Dairy Products,Republic of Ireland,483.75
-1997,8,Condiments,Denmark,456
-1997,8,Produce,United States,456
-1997,8,Seafood,United States,446.25
-1997,8,Condiments,Venezuela,442.05
-1997,8,Seafood,Republic of Ireland,418.5
-1997,8,Meat/Poultry,Sweden,393.59999999999997
-1997,8,Confections,Germany,349.2
-1997,8,Condiments,Republic of Ireland,341.25
-1997,8,Dairy Products,Mexico,340
-1997,8,Dairy Products,United Kingdom,322.5
-1997,8,Beverages,United Kingdom,300
-1997,8,Grains/Cereals,Spain,299.25
-1997,8,Meat/Poultry,Germany,273.59999999999997
-1997,8,Confections,Denmark,240
-1997,8,Dairy Products,Brazil,210
-1997,8,Beverages,Republic of Ireland,202.5
-1997,8,Condiments,United States,194.5
-1997,8,Grains/Cereals,United Kingdom,90
-1997,8,Seafood,Finland,79.5
-1997,8,Grains/Cereals,Mexico,70
-1997,8,Produce,Mexico,69.75
-1997,8,Seafood,Austria,66.3
-1997,8,Confections,United Kingdom,46
-1997,8,Beverages,Canada,22.5
-1997,8,Seafood,Germany,18
-1997,9,Dairy Products,United States,5137.5
-1997,9,Meat/Poultry,Republic of Ireland,4875.4
-1997,9,Meat/Poultry,Switzerland,4456.4400000000005
-1997,9,Beverages,Sweden,3881.25
-1997,9,Dairy Products,Germany,3498.5
-1997,9,Seafood,Germany,3459.1
-1997,9,Grains/Cereals,United States,3061
-1997,9,Confections,United States,2983.075
-1997,9,Seafood,United States,1929.6
-1997,9,Dairy Products,Austria,1536.8
-1997,9,Confections,Germany,1533.95
-1997,9,Condiments,United States,1265.14
-1997,9,Produce,United States,1122.775
-1997,9,Seafood,Brazil,1116.955
-1997,9,Grains/Cereals,Germany,1051.875
-1997,9,Produce,France,1007
-1997,9,Meat/Poultry,Austria,936
-1997,9,Condiments,Germany,864.5
-1997,9,Confections,Mexico,860.765
-1997,9,Produce,Germany,697.5
-1997,9,Confections,France,667.5
-1997,9,Dairy Products,France,660
-1997,9,Seafood,Portugal,632.4
-1997,9,Seafood,Republic of Ireland,604.9
-1997,9,Beverages,Brazil,570
-1997,9,Seafood,Denmark,570
-1997,9,Beverages,Germany,543.75
-1997,9,Seafood,France,524.4
-1997,9,Condiments,Mexico,476.45
-1997,9,Confections,Austria,468.45
-1997,9,Grains/Cereals,France,462
-1997,9,Meat/Poultry,Germany,414.4
-1997,9,Grains/Cereals,Portugal,387.59999999999997
-1997,9,Grains/Cereals,Brazil,280
-1997,9,Beverages,Finland,276
-1997,9,Condiments,Portugal,268.3875
-1997,9,Dairy Products,Sweden,258
-1997,9,Condiments,France,252.60000000000002
-1997,9,Condiments,Sweden,237.6
-1997,9,Dairy Products,Brazil,237.5
-1997,9,Beverages,Mexico,232.5
-1997,9,Meat/Poultry,United States,223.5
-1997,9,Condiments,Switzerland,210.5
-1997,9,Beverages,United States,180
-1997,9,Seafood,Italy,154.4
-1997,9,Confections,Brazil,142.5
-1997,9,Dairy Products,Mexico,92
-1997,9,Grains/Cereals,Finland,84
-1997,9,Seafood,Mexico,62
-1997,9,Confections,Finland,52.349999999999994
-1997,9,Grains/Cereals,United Kingdom,45
-1997,9,Beverages,Republic of Ireland,43.2
-1997,9,Meat/Poultry,Sweden,40.230000000000004
-1997,10,Meat/Poultry,United States,6691.2
-1997,10,Meat/Poultry,Germany,5063.35
-1997,10,Confections,Germany,4119.4
-1997,10,Dairy Products,Germany,3598
-1997,10,Seafood,United States,3538.5525
-1997,10,Beverages,Germany,3400
-1997,10,Confections,United States,3183.5
-1997,10,Dairy Products,United States,3015
-1997,10,Produce,Germany,2700
-1997,10,Produce,Denmark,2462.4
-1997,10,Dairy Products,Republic of Ireland,2329
-1997,10,Condiments,Germany,2328.675
-1997,10,Beverages,United States,2120.4
-1997,10,Condiments,Brazil,2024.5
-1997,10,Dairy Products,Sweden,1925
-1997,10,Meat/Poultry,Austria,1707.6059999999998
-1997,10,Produce,Brazil,1484
-1997,10,Condiments,Austria,1299.8374999999999
-1997,10,Grains/Cereals,Republic of Ireland,1140
-1997,10,Grains/Cereals,United Kingdom,780
-1997,10,Seafood,Germany,760
-1997,10,Seafood,France,651
-1997,10,Dairy Products,France,645
-1997,10,Grains/Cereals,Brazil,598
-1997,10,Beverages,Sweden,567.5
-1997,10,Beverages,Brazil,535.5
-1997,10,Beverages,Republic of Ireland,535.5
-1997,10,Seafood,Sweden,525
-1997,10,Grains/Cereals,United States,513
-1997,10,Dairy Products,Brazil,512
-1997,10,Meat/Poultry,United Kingdom,504
-1997,10,Seafood,Denmark,502.2
-1997,10,Seafood,Canada,496
-1997,10,Beverages,Venezuela,459
-1997,10,Condiments,Finland,400
-1997,10,Dairy Products,Venezuela,378
-1997,10,Produce,Argentina,371
-1997,10,Beverages,United Kingdom,357
-1997,10,Dairy Products,Austria,315
-1997,10,Confections,Brazil,306
-1997,10,Seafood,Venezuela,298.125
-1997,10,Condiments,Argentina,285
-1997,10,Beverages,Denmark,196
-1997,10,Dairy Products,Finland,152
-1997,10,Meat/Poultry,Brazil,144
-1997,10,Condiments,Canada,142.5
-1997,10,Seafood,Brazil,115.80000000000001
-1997,10,Beverages,Austria,114
-1997,10,Confections,Italy,93.5
-1997,10,Meat/Poultry,Republic of Ireland,93.47999999999999
-1997,10,Beverages,Finland,90
-1997,10,Condiments,United States,85.4
-1997,10,Confections,Argentina,50
-1997,10,Confections,Venezuela,48.3
-1997,11,Dairy Products,Canada,2918
-1997,11,Dairy Products,Germany,2718.6
-1997,11,Grains/Cereals,United States,2683.6
-1997,11,Seafood,United States,2394
-1997,11,Confections,Switzerland,2078.084
-1997,11,Confections,United States,1539
-1997,11,Produce,Switzerland,1510.5
-1997,11,Seafood,Germany,1500
-1997,11,Dairy Products,Switzerland,1440
-1997,11,Produce,Sweden,1284
-1997,11,Grains/Cereals,France,1185.75
-1997,11,Dairy Products,Austria,1180
-1997,11,Dairy Products,Finland,1168.75
-1997,11,Seafood,Switzerland,1037.7
-1997,11,Dairy Products,United States,961
-1997,11,Confections,Venezuela,950
-1997,11,Beverages,United States,924
-1997,11,Beverages,Venezuela,900
-1997,11,Seafood,Brazil,887.1
-1997,11,Condiments,Republic of Ireland,842
-1997,11,Grains/Cereals,Switzerland,812
-1997,11,Condiments,Brazil,750
-1997,11,Meat/Poultry,Italy,741
-1997,11,Seafood,Denmark,736
-1997,11,Dairy Products,France,710.625
-1997,11,Beverages,Switzerland,600
-1997,11,Grains/Cereals,United Kingdom,570
-1997,11,Beverages,United Kingdom,552
-1997,11,Condiments,United Kingdom,550
-1997,11,Dairy Products,United Kingdom,543
-1997,11,Condiments,United States,536.4
-1997,11,Dairy Products,Italy,522.5
-1997,11,Confections,France,514.7625
-1997,11,Dairy Products,Brazil,510
-1997,11,Condiments,Austria,395.09999999999997
-1997,11,Grains/Cereals,Italy,361
-1997,11,Beverages,Brazil,360
-1997,11,Beverages,France,360
-1997,11,Seafood,Austria,337.75
-1997,11,Seafood,Finland,323
-1997,11,Dairy Products,Mexico,320
-1997,11,Seafood,United Kingdom,319.2
-1997,11,Condiments,Germany,311.2
-1997,11,Meat/Poultry,Brazil,288
-1997,11,Seafood,France,253.8
-1997,11,Condiments,Canada,200
-1997,11,Condiments,France,199.975
-1997,11,Produce,United States,182.4
-1997,11,Grains/Cereals,Sweden,175
-1997,11,Beverages,Republic of Ireland,155
-1997,11,Produce,Finland,98.8125
-1997,11,Seafood,Italy,93.19999999999999
-1997,11,Produce,Italy,50
-1997,12,Produce,Austria,6042
-1997,12,Meat/Poultry,Germany,3874.6270000000004
-1997,12,Dairy Products,Germany,3170
-1997,12,Meat/Poultry,Spain,3026.8500000000004
-1997,12,Beverages,United States,2956.5
-1997,12,Dairy Products,United Kingdom,2686
-1997,12,Meat/Poultry,France,2352.01
-1997,12,Meat/Poultry,Austria,2310.75
-1997,12,Grains/Cereals,Sweden,2280
-1997,12,Confections,Germany,2272
-1997,12,Beverages,Austria,2149.4
-1997,12,Confections,Belgium,1882
-1997,12,Seafood,France,1875
-1997,12,Beverages,Brazil,1577.9
-1997,12,Produce,United Kingdom,1571.4
-1997,12,Condiments,Germany,1515.6000000000001
-1997,12,Produce,Sweden,1484
-1997,12,Condiments,France,1359.1
-1997,12,Seafood,United Kingdom,1251.1
-1997,12,Dairy Products,Austria,1234
-1997,12,Produce,Denmark,1192.5
-1997,12,Dairy Products,Brazil,1145
-1997,12,Confections,Austria,1134.25
-1997,12,Beverages,Germany,1131
-1997,12,Meat/Poultry,Denmark,1080
-1997,12,Produce,Germany,1050
-1997,12,Beverages,Belgium,1035
-1997,12,Condiments,Brazil,960
-1997,12,Grains/Cereals,Venezuela,931
-1997,12,Confections,Denmark,924.375
-1997,12,Beverages,France,915.75
-1997,12,Dairy Products,Italy,887.4
-1997,12,Grains/Cereals,Brazil,870
-1997,12,Condiments,Sweden,850
-1997,12,Seafood,Denmark,760.4625
-1997,12,Dairy Products,Venezuela,691.2
-1997,12,Confections,France,625
-1997,12,Grains/Cereals,Finland,608
-1997,12,Beverages,Venezuela,602.5
-1997,12,Seafood,Italy,588.4
-1997,12,Condiments,Denmark,570
-1997,12,Confections,Venezuela,524.6640000000001
-1997,12,Confections,Brazil,409.26
-1997,12,Condiments,Venezuela,389.5
-1997,12,Confections,United States,367.5
-1997,12,Produce,Brazil,355.5
-1997,12,Produce,Finland,350
-1997,12,Seafood,Brazil,310.68000000000006
-1997,12,Seafood,Venezuela,310
-1997,12,Beverages,Sweden,288
-1997,12,Seafood,Germany,285.35
-1997,12,Confections,Sweden,285
-1997,12,Seafood,Austria,243.67499999999998
-1997,12,Beverages,Poland,190
-1997,12,Confections,Poland,187.5
-1997,12,Seafood,United States,186
-1997,12,Condiments,Austria,180
-1997,12,Confections,United Kingdom,166.6
-1997,12,Grains/Cereals,Austria,159.6
-1997,12,Grains/Cereals,United Kingdom,140
-1997,12,Grains/Cereals,France,126
-1997,12,Produce,France,112.5
-1997,12,Grains/Cereals,Denmark,99.75
-1997,12,Seafood,Sweden,96.5
-1997,12,Meat/Poultry,United Kingdom,46.935
-1997,12,Meat/Poultry,Brazil,35.760000000000005
-1997,12,Beverages,Italy,30.599999999999998
-1997,12,Grains/Cereals,Belgium,28
-1997,12,Meat/Poultry,Poland,22.35
-1997,12,Dairy Products,Sweden,18.75
-1997,12,Meat/Poultry,Finland,17.880000000000003
-1997,12,Dairy Products,Argentina,12.5
-1998,1,Beverages,United States,10161.75
-1998,1,Beverages,Germany,8445
-1998,1,Confections,United States,5058.32
-1998,1,Dairy Products,Brazil,3684.3
-1998,1,Grains/Cereals,Germany,3496.325
-1998,1,Grains/Cereals,Austria,3292.5
-1998,1,Seafood,Austria,2966.5
-1998,1,Confections,Germany,2962.024
-1998,1,Seafood,United States,2771.6
-1998,1,Dairy Products,Belgium,2750
-1998,1,Grains/Cereals,United States,2698
-1998,1,Beverages,Norway,2666
-1998,1,Dairy Products,United States,2472.5
-1998,1,Seafood,Venezuela,2436.375
-1998,1,Dairy Products,Venezuela,2358
-1998,1,Seafood,Germany,2278.9
-1998,1,Dairy Products,Italy,2072.8
-1998,1,Dairy Products,Austria,2040
-1998,1,Beverages,France,1962.5
-1998,1,Meat/Poultry,United States,1872
-1998,1,Dairy Products,Germany,1451.25
-1998,1,Condiments,United Kingdom,1440.5
-1998,1,Seafood,Brazil,1269.6599999999999
-1998,1,Grains/Cereals,Belgium,1140
-1998,1,Meat/Poultry,Germany,1117.2425
-1998,1,Confections,Sweden,1104.7875
-1998,1,Beverages,Argentina,1004
-1998,1,Condiments,France,975.71
-1998,1,Meat/Poultry,Brazil,940.804
-1998,1,Meat/Poultry,Sweden,928.4250000000001
-1998,1,Confections,France,875.7
-1998,1,Beverages,Mexico,790
-1998,1,Beverages,Brazil,776.65
-1998,1,Dairy Products,United Kingdom,714
-1998,1,Seafood,France,672.4
-1998,1,Condiments,Belgium,657
-1998,1,Seafood,Sweden,611.8
-1998,1,Produce,Germany,540
-1998,1,Condiments,Germany,510.8
-1998,1,Seafood,Belgium,496
-1998,1,Produce,France,468
-1998,1,Grains/Cereals,Venezuela,454.5
-1998,1,Beverages,Belgium,450
-1998,1,Dairy Products,France,446
-1998,1,Confections,Brazil,433
-1998,1,Beverages,Sweden,418.5
-1998,1,Confections,Argentina,405
-1998,1,Grains/Cereals,France,392.25
-1998,1,Grains/Cereals,Brazil,325.25
-1998,1,Produce,United States,318
-1998,1,Dairy Products,Mexico,315
-1998,1,Condiments,Sweden,300
-1998,1,Meat/Poultry,United Kingdom,291
-1998,1,Grains/Cereals,Mexico,280
-1998,1,Condiments,United States,268.3875
-1998,1,Condiments,Italy,260
-1998,1,Confections,Mexico,250
-1998,1,Confections,Venezuela,205.2
-1998,1,Produce,Belgium,200
-1998,1,Beverages,Venezuela,198
-1998,1,Seafood,Italy,193
-1998,1,Beverages,United Kingdom,190
-1998,1,Condiments,Venezuela,175.5
-1998,1,Condiments,Brazil,150
-1998,1,Beverages,Austria,108
-1998,1,Beverages,Canada,75
-1998,1,Confections,Canada,70
-1998,1,Seafood,United Kingdom,60
-1998,1,Seafood,Canada,42
-1998,1,Confections,Norway,18.4
-1998,2,Beverages,Germany,16432.5
-1998,2,Meat/Poultry,Republic of Ireland,15473.75
-1998,2,Beverages,United States,11459.5
-1998,2,Seafood,Brazil,4171.25
-1998,2,Dairy Products,Austria,3400
-1998,2,Meat/Poultry,Germany,2970.96
-1998,2,Dairy Products,United States,2550
-1998,2,Confections,United States,2445.5
-1998,2,Dairy Products,Belgium,2090
-1998,2,Confections,Brazil,2023.225
-1998,2,Seafood,Austria,1674.3999999999999
-1998,2,Seafood,Germany,1655.0825
-1998,2,Confections,Germany,1539
-1998,2,Condiments,Brazil,1457.05
-1998,2,Beverages,Austria,1305
-1998,2,Confections,Spain,1301.6999999999998
-1998,2,Condiments,Germany,1200
-1998,2,Condiments,France,1187.5
-1998,2,Meat/Poultry,France,1177.8
-1998,2,Grains/Cereals,United States,1108.1
-1998,2,Dairy Products,Brazil,1050
-1998,2,Beverages,United Kingdom,1002
-1998,2,Confections,Sweden,960.9799999999999
-1998,2,Seafood,Republic of Ireland,932.04
-1998,2,Beverages,Sweden,919.5
-1998,2,Beverages,Brazil,915.75
-1998,2,Beverages,Belgium,884
-1998,2,Seafood,Sweden,776.6999999999999
-1998,2,Beverages,Spain,770
-1998,2,Meat/Poultry,Spain,696
-1998,2,Condiments,Sweden,684
-1998,2,Grains/Cereals,France,665
-1998,2,Dairy Products,Venezuela,645
-1998,2,Dairy Products,Republic of Ireland,630
-1998,2,Meat/Poultry,Sweden,612
-1998,2,Grains/Cereals,Belgium,608
-1998,2,Produce,Italy,570
-1998,2,Confections,Finland,510.4
-1998,2,Grains/Cereals,Spain,473.8125
-1998,2,Meat/Poultry,Mexico,464.5
-1998,2,Grains/Cereals,United Kingdom,450
-1998,2,Beverages,Venezuela,428.4
-1998,2,Condiments,Poland,427.5
-1998,2,Seafood,Venezuela,424.65
-1998,2,Condiments,Spain,419.9475
-1998,2,Grains/Cereals,Argentina,390
-1998,2,Seafood,France,387.1
-1998,2,Produce,Norway,360
-1998,2,Seafood,United States,358.35
-1998,2,Condiments,Finland,353
-1998,2,Condiments,Belgium,325
-1998,2,Seafood,Spain,310
-1998,2,Meat/Poultry,United States,301.03999999999996
-1998,2,Confections,Norway,261.75
-1998,2,Confections,United Kingdom,250
-1998,2,Beverages,France,248.5
-1998,2,Condiments,United States,239.97
-1998,2,Seafood,Finland,220.79999999999998
-1998,2,Grains/Cereals,Sweden,216
-1998,2,Dairy Products,United Kingdom,210
-1998,2,Confections,France,198.92999999999998
-1998,2,Dairy Products,Argentina,192
-1998,2,Beverages,Finland,180
-1998,2,Seafood,Argentina,180
-1998,2,Seafood,Belgium,142.5
-1998,2,Produce,Finland,136.8
-1998,2,Produce,Poland,106
-1998,2,Confections,Argentina,104.69999999999999
-1998,2,Grains/Cereals,Italy,93.1
-1998,2,Dairy Products,Mexico,75
-1998,2,Beverages,Poland,54
-1998,2,Seafood,Norway,48.25
-1998,3,Beverages,Brazil,17557.25
-1998,3,Confections,United States,4593.8
-1998,3,Confections,United Kingdom,4237.5
-1998,3,Confections,Canada,2958
-1998,3,Produce,United States,2648
-1998,3,Beverages,France,2531.3
-1998,3,Condiments,Denmark,2276
-1998,3,Dairy Products,Germany,2262.875
-1998,3,Dairy Products,Austria,2200
-1998,3,Dairy Products,United States,2152.5
-1998,3,Produce,Spain,2120
-1998,3,Beverages,Germany,1999.75
-1998,3,Meat/Poultry,France,1967.0600000000002
-1998,3,Produce,Germany,1865.2
-1998,3,Produce,United Kingdom,1800
-1998,3,Confections,Belgium,1797.5
-1998,3,Confections,Germany,1763.4
-1998,3,Produce,Sweden,1761.2
-1998,3,Seafood,Venezuela,1661.3000000000002
-1998,3,Confections,France,1653.48
-1998,3,Seafood,United States,1644.4
-1998,3,Condiments,Austria,1536.5
-1998,3,Dairy Products,United Kingdom,1509.75
-1998,3,Confections,Austria,1317
-1998,3,Beverages,Canada,1301.5
-1998,3,Confections,Argentina,1215
-1998,3,Condiments,Canada,1202.575
-1998,3,Confections,Venezuela,1170.11
-1998,3,Condiments,Germany,1075
-1998,3,Dairy Products,Republic of Ireland,1008
-1998,3,Condiments,Brazil,1000
-1998,3,Grains/Cereals,Switzerland,972.5999999999999
-1998,3,Dairy Products,Venezuela,959.225
-1998,3,Dairy Products,France,934.3
-1998,3,Seafood,Canada,930
-1998,3,Produce,Venezuela,912
-1998,3,Beverages,Sweden,908.9
-1998,3,Condiments,Sweden,878
-1998,3,Condiments,United Kingdom,855
-1998,3,Dairy Products,Argentina,804
-1998,3,Condiments,Belgium,779.1949999999999
-1998,3,Seafood,Denmark,775
-1998,3,Beverages,Venezuela,753.75
-1998,3,Seafood,Brazil,737.85
-1998,3,Dairy Products,Canada,716.25
-1998,3,Grains/Cereals,Canada,684
-1998,3,Seafood,Germany,672
-1998,3,Meat/Poultry,Germany,656
-1998,3,Beverages,Italy,637.5
-1998,3,Condiments,Argentina,622
-1998,3,Produce,Canada,600
-1998,3,Meat/Poultry,Brazil,585
-1998,3,Confections,Republic of Ireland,565.38
-1998,3,Confections,Italy,560
-1998,3,Seafood,Sweden,558
-1998,3,Seafood,France,552.9
-1998,3,Produce,Argentina,544.8
-1998,3,Produce,Austria,540
-1998,3,Confections,Switzerland,502.8599999999999
-1998,3,Seafood,Belgium,502
-1998,3,Beverages,Austria,495
-1998,3,Meat/Poultry,Belgium,480
-1998,3,Seafood,Switzerland,477.205
-1998,3,Beverages,Argentina,460
-1998,3,Seafood,Republic of Ireland,450
-1998,3,Grains/Cereals,United Kingdom,441
-1998,3,Condiments,United States,439
-1998,3,Dairy Products,Mexico,390
-1998,3,Beverages,Switzerland,368.125
-1998,3,Dairy Products,Spain,340
-1998,3,Dairy Products,Brazil,315
-1998,3,Beverages,Denmark,292.5
-1998,3,Grains/Cereals,United States,292.5
-1998,3,Confections,Sweden,285
-1998,3,Beverages,United Kingdom,276
-1998,3,Seafood,United Kingdom,270
-1998,3,Grains/Cereals,Venezuela,266
-1998,3,Confections,Spain,241.25
-1998,3,Produce,France,240
-1998,3,Meat/Poultry,Canada,234
-1998,3,Grains/Cereals,Spain,224
-1998,3,Beverages,Spain,180
-1998,3,Grains/Cereals,Brazil,165.29999999999998
-1998,3,Grains/Cereals,France,147
-1998,3,Grains/Cereals,Austria,133
-1998,3,Condiments,Italy,110
-1998,3,Meat/Poultry,Spain,96
-1998,3,Beverages,United States,90
-1998,3,Meat/Poultry,United Kingdom,65.6
-1998,3,Confections,Mexico,64.39999999999999
-1998,3,Seafood,Mexico,60
-1998,3,Dairy Products,Portugal,57.8
-1998,3,Dairy Products,Switzerland,35.625
-1998,3,Seafood,Spain,25.89
-1998,4,Beverages,United States,9463.75
-1998,4,Dairy Products,Germany,8898.3
-1998,4,Dairy Products,United States,7458.6
-1998,4,Dairy Products,Austria,7141.5
-1998,4,Meat/Poultry,United States,6716.235000000001
-1998,4,Meat/Poultry,Sweden,4786.125
-1998,4,Confections,Germany,3649.49
-1998,4,Dairy Products,United Kingdom,3037.5
-1998,4,Produce,Austria,3032.3999999999996
-1998,4,Beverages,Germany,2760.55
-1998,4,Condiments,United States,2701.4
-1998,4,Produce,Germany,2504.25
-1998,4,Dairy Products,Brazil,2391.6
-1998,4,Beverages,Austria,2361
-1998,4,Seafood,United States,2290
-1998,4,Meat/Poultry,Switzerland,2066.4
-1998,4,Produce,Venezuela,1972
-1998,4,Condiments,Austria,1848.85
-1998,4,Condiments,Switzerland,1843.8
-1998,4,Produce,Sweden,1800
-1998,4,Beverages,United Kingdom,1762.5
-1998,4,Seafood,Austria,1750
-1998,4,Dairy Products,Venezuela,1600
-1998,4,Confections,Venezuela,1410
-1998,4,Beverages,Belgium,1368
-1998,4,Seafood,Germany,1361.25
-1998,4,Meat/Poultry,Austria,1326
-1998,4,Produce,United Kingdom,1320
-1998,4,Confections,Canada,1301.475
-1998,4,Produce,Canada,1272
-1998,4,Beverages,Brazil,1256
-1998,4,Meat/Poultry,Portugal,1237.9
-1998,4,Grains/Cereals,United States,1210.6
-1998,4,Condiments,Portugal,1200
-1998,4,Dairy Products,Switzerland,1166.4
-1998,4,Produce,Italy,1130
-1998,4,Produce,Mexico,1060
-1998,4,Grains/Cereals,Venezuela,1041
-1998,4,Dairy Products,Denmark,940.5
-1998,4,Seafood,Republic of Ireland,922.95
-1998,4,Condiments,United Kingdom,922.425
-1998,4,Meat/Poultry,Germany,840
-1998,4,Meat/Poultry,United Kingdom,840
-1998,4,Beverages,Sweden,810
-1998,4,Grains/Cereals,Switzerland,760
-1998,4,Grains/Cereals,Austria,665
-1998,4,Confections,Austria,650
-1998,4,Dairy Products,Belgium,645
-1998,4,Condiments,Brazil,633.75
-1998,4,Confections,Poland,591.5999999999999
-1998,4,Grains/Cereals,Germany,560
-1998,4,Seafood,Sweden,553.3125
-1998,4,Dairy Products,Finland,550
-1998,4,Grains/Cereals,Sweden,525
-1998,4,Seafood,Italy,500
-1998,4,Beverages,Venezuela,499.5
-1998,4,Meat/Poultry,Brazil,468
-1998,4,Beverages,Switzerland,456
-1998,4,Seafood,Spain,446.5
-1998,4,Grains/Cereals,Belgium,434
-1998,4,Seafood,Venezuela,423.18
-1998,4,Beverages,Republic of Ireland,420
-1998,4,Seafood,Norway,388.35
-1998,4,Confections,United Kingdom,374.76
-1998,4,Condiments,Germany,373.34999999999997
-1998,4,Confections,United States,335
-1998,4,Confections,Brazil,322
-1998,4,Dairy Products,Spain,306
-1998,4,Seafood,United Kingdom,304
-1998,4,Beverages,Poland,286.5
-1998,4,Beverages,Argentina,280
-1998,4,Meat/Poultry,Italy,262.40000000000003
-1998,4,Condiments,Norway,234
-1998,4,Dairy Products,France,210
-1998,4,Produce,Poland,200
-1998,4,Condiments,Poland,199.5
-1998,4,Beverages,Finland,198
-1998,4,Grains/Cereals,Portugal,196
-1998,4,Beverages,Italy,189
-1998,4,Confections,Belgium,187.38
-1998,4,Seafood,Brazil,180
-1998,4,Grains/Cereals,Spain,146
-1998,4,Dairy Products,Italy,136
-1998,4,Dairy Products,Mexico,136
-1998,4,Condiments,Italy,130
-1998,4,Beverages,Spain,114
-1998,4,Seafood,Finland,108
-1998,4,Beverages,Canada,101.25
-1998,4,Meat/Poultry,Belgium,74.5
-1998,4,Seafood,Belgium,73.60000000000001
-1998,4,Confections,Argentina,40
-1998,4,Dairy Products,Canada,37.5
-1998,4,Beverages,France,36
-1998,4,Seafood,Argentina,36
-1998,4,Confections,Spain,25
-1998,4,Dairy Products,Argentina,25
-1998,5,Grains/Cereals,Austria,4322.5
-1998,5,Meat/Poultry,United States,3575.1000000000004
-1998,5,Beverages,Brazil,1407.6
-1998,5,Confections,United States,1237.863
-1998,5,Beverages,Germany,935
-1998,5,Beverages,United States,920
-1998,5,Beverages,Mexico,450
-1998,5,Confections,Germany,444.97499999999997
-1998,5,Produce,Venezuela,427.5
-1998,5,Seafood,Austria,386
-1998,5,Condiments,France,375
-1998,5,Confections,Austria,357.5
-1998,5,Produce,France,348.75
-1998,5,Produce,Brazil,310.08
-1998,5,Condiments,Brazil,309.4
-1998,5,Seafood,Switzerland,306
-1998,5,Seafood,United States,264.73
-1998,5,Dairy Products,Germany,250
-1998,5,Confections,Denmark,232.08499999999998
-1998,5,Dairy Products,Mexico,210
-1998,5,Condiments,United States,201.5
-1998,5,Beverages,Switzerland,192.1
-1998,5,Dairy Products,United States,168.12
-1998,5,Beverages,Austria,152
-1998,5,Seafood,Venezuela,134.67000000000002
-1998,5,Meat/Poultry,Venezuela,111.75
-1998,5,Grains/Cereals,United States,96.505
-1998,5,Seafood,Germany,86.85000000000001
-1998,5,Confections,France,69
-1998,5,Produce,United States,51.052499999999995
+anio;mes;nombre_categoria;pais;total_ventas
+1996;7;Dairy Products;Germany;2618.00
+1996;7;Confections;Belgium;2462.40
+1996;7;Produce;Germany;1863.40
+1996;7;Dairy Products;Switzerland;1320.00
+1996;7;Produce;Brazil;1261.40
+1996;7;Dairy Products;Belgium;1135.50
+1996;7;Meat/Poultry;Venezuela;990.00
+1996;7;Meat/Poultry;France;936.00
+1996;7;Seafood;Austria;931.50
+1996;7;Beverages;Brazil;892.80
+1996;7;Condiments;Austria;884.00
+1996;7;Confections;Venezuela;877.50
+1996;7;Seafood;Germany;827.40
+1996;7;Confections;Brazil;800.00
+1996;7;Grains/Cereals;Germany;780.00
+1996;7;Beverages;Austria;708.80
+1996;7;Dairy Products;United States;642.20
+1996;7;Confections;Austria;625.50
+1996;7;Beverages;Sweden;532.00
+1996;7;Confections;Switzerland;486.50
+1996;7;Confections;Germany;443.25
+1996;7;Grains/Cereals;France;416.06
+1996;7;Meat/Poultry;Brazil;393.00
+1996;7;Seafood;Switzerland;380.00
+1996;7;Beverages;Germany;372.60
+1996;7;Produce;United States;360.00
+1996;7;Beverages;Switzerland;349.90
+1996;7;Dairy Products;Finland;346.56
+1996;7;Meat/Poultry;Switzerland;342.72
+1996;7;Dairy Products;France;342.00
+1996;7;Condiments;Brazil;339.00
+1996;7;Condiments;France;336.00
+1996;7;Beverages;France;240.00
+1996;7;Produce;Austria;216.00
+1996;7;Dairy Products;Brazil;200.00
+1996;7;Produce;Switzerland;168.00
+1996;7;Seafood;Sweden;163.63
+1996;7;Condiments;United States;163.20
+1996;7;Condiments;Venezuela;156.00
+1996;7;Dairy Products;Austria;122.88
+1996;7;Dairy Products;Venezuela;111.20
+1996;7;Beverages;Venezuela;86.40
+1996;7;Confections;Mexico;80.00
+1996;7;Seafood;Brazil;77.00
+1996;7;Grains/Cereals;United States;60.80
+1996;7;Seafood;Mexico;20.80
+1996;8;Beverages;Germany;2451.84
+1996;8;Confections;Germany;2443.68
+1996;8;Confections;Brazil;2008.60
+1996;8;Seafood;Germany;1873.74
+1996;8;Dairy Products;United States;1686.40
+1996;8;Meat/Poultry;Brazil;1485.00
+1996;8;Meat/Poultry;Germany;1105.56
+1996;8;Dairy Products;Venezuela;1035.40
+1996;8;Seafood;Mexico;1020.00
+1996;8;Beverages;Finland;920.00
+1996;8;Beverages;United States;848.40
+1996;8;Condiments;Brazil;778.80
+1996;8;Produce;Germany;728.00
+1996;8;Dairy Products;Sweden;660.00
+1996;8;Dairy Products;Germany;590.50
+1996;8;Dairy Products;France;538.60
+1996;8;Condiments;Sweden;528.80
+1996;8;Meat/Poultry;United States;468.00
+1996;8;Seafood;Finland;456.00
+1996;8;Confections;United States;388.80
+1996;8;Meat/Poultry;Sweden;384.00
+1996;8;Condiments;Germany;325.50
+1996;8;Seafood;Sweden;300.00
+1996;8;Dairy Products;Italy;250.80
+1996;8;Condiments;Venezuela;248.00
+1996;8;Condiments;United Kingdom;240.00
+1996;8;Grains/Cereals;United Kingdom;239.40
+1996;8;Beverages;Sweden;229.20
+1996;8;Beverages;Brazil;224.00
+1996;8;Seafood;Brazil;208.80
+1996;8;Condiments;Mexico;175.50
+1996;8;Confections;Venezuela;131.40
+1996;8;Seafood;Spain;124.20
+1996;8;Beverages;Spain;79.20
+1996;8;Produce;Brazil;76.32
+1996;8;Beverages;Mexico;73.20
+1996;8;Meat/Poultry;Italy;53.10
+1996;8;Beverages;Italy;41.04
+1996;8;Grains/Cereals;Spain;31.20
+1996;8;Confections;Italy;27.00
+1996;8;Confections;Spain;7.30
+1996;9;Confections;United States;4404.50
+1996;9;Meat/Poultry;United States;2227.50
+1996;9;Seafood;United States;1488.20
+1996;9;Beverages;Republic of Ireland;1344.00
+1996;9;Meat/Poultry;Belgium;1248.00
+1996;9;Dairy Products;Republic of Ireland;1041.60
+1996;9;Produce;Belgium;1019.20
+1996;9;Condiments;Republic of Ireland;952.00
+1996;9;Beverages;Germany;945.20
+1996;9;Dairy Products;United States;921.60
+1996;9;Beverages;France;864.00
+1996;9;Dairy Products;France;757.60
+1996;9;Seafood;Spain;736.20
+1996;9;Beverages;United States;676.80
+1996;9;Dairy Products;Venezuela;633.60
+1996;9;Grains/Cereals;Germany;608.00
+1996;9;Confections;Republic of Ireland;591.00
+1996;9;Meat/Poultry;Germany;524.00
+1996;9;Beverages;United Kingdom;516.80
+1996;9;Dairy Products;Mexico;503.20
+1996;9;Confections;Mexico;480.00
+1996;9;Seafood;Republic of Ireland;456.00
+1996;9;Condiments;Spain;453.60
+1996;9;Beverages;Belgium;441.60
+1996;9;Confections;Venezuela;417.00
+1996;9;Condiments;Italy;408.00
+1996;9;Seafood;Germany;329.40
+1996;9;Meat/Poultry;Spain;291.50
+1996;9;Beverages;Brazil;240.00
+1996;9;Confections;Italy;200.00
+1996;9;Grains/Cereals;France;188.80
+1996;9;Produce;Germany;145.60
+1996;9;Confections;Spain;135.00
+1996;9;Confections;Brazil;109.50
+1996;9;Beverages;Mexico;60.00
+1996;9;Grains/Cereals;Republic of Ireland;22.40
+1996;10;Beverages;United States;4862.00
+1996;10;Condiments;United States;2386.80
+1996;10;Dairy Products;Germany;2295.00
+1996;10;Meat/Poultry;Canada;2074.80
+1996;10;Produce;Republic of Ireland;1628.16
+1996;10;Grains/Cereals;Germany;1618.00
+1996;10;Seafood;Canada;1600.00
+1996;10;Dairy Products;United States;1496.00
+1996;10;Seafood;Germany;1430.40
+1996;10;Beverages;France;1398.40
+1996;10;Confections;Canada;1200.48
+1996;10;Dairy Products;Finland;1135.20
+1996;10;Confections;Venezuela;1058.25
+1996;10;Seafood;France;1037.78
+1996;10;Condiments;Portugal;957.12
+1996;10;Seafood;Sweden;834.00
+1996;10;Seafood;United States;755.82
+1996;10;Confections;Germany;680.40
+1996;10;Dairy Products;Sweden;672.00
+1996;10;Meat/Poultry;United States;624.00
+1996;10;Meat/Poultry;Germany;614.40
+1996;10;Dairy Products;Venezuela;590.75
+1996;10;Beverages;Germany;565.44
+1996;10;Produce;Mexico;509.60
+1996;10;Beverages;Mexico;432.00
+1996;10;Condiments;Spain;422.40
+1996;10;Dairy Products;Portugal;396.00
+1996;10;Dairy Products;Denmark;352.60
+1996;10;Grains/Cereals;United States;346.56
+1996;10;Dairy Products;Republic of Ireland;322.88
+1996;10;Confections;United States;317.47
+1996;10;Beverages;Spain;310.00
+1996;10;Beverages;Sweden;304.00
+1996;10;Grains/Cereals;Spain;249.60
+1996;10;Meat/Poultry;Mexico;249.60
+1996;10;Beverages;United Kingdom;230.40
+1996;10;Produce;Finland;186.00
+1996;10;Condiments;Germany;182.00
+1996;10;Condiments;Canada;176.00
+1996;10;Produce;Germany;167.40
+1996;10;Seafood;United Kingdom;154.00
+1996;10;Grains/Cereals;Mexico;112.00
+1996;10;Confections;France;100.00
+1996;10;Confections;Portugal;100.00
+1996;10;Grains/Cereals;Canada;89.60
+1996;10;Meat/Poultry;France;88.50
+1996;10;Beverages;Republic of Ireland;85.12
+1996;10;Confections;Finland;72.00
+1996;10;Grains/Cereals;France;44.80
+1996;11;Beverages;Austria;12437.20
+1996;11;Meat/Poultry;France;3771.80
+1996;11;Dairy Products;United Kingdom;3682.20
+1996;11;Dairy Products;Germany;2422.40
+1996;11;Condiments;United States;2296.00
+1996;11;Beverages;France;2248.60
+1996;11;Condiments;Germany;2240.00
+1996;11;Produce;France;1940.00
+1996;11;Confections;France;1295.50
+1996;11;Condiments;Austria;1293.43
+1996;11;Grains/Cereals;Austria;1227.90
+1996;11;Meat/Poultry;United States;1152.48
+1996;11;Beverages;Germany;1130.64
+1996;11;Confections;United Kingdom;739.48
+1996;11;Beverages;Brazil;643.62
+1996;11;Grains/Cereals;United States;608.00
+1996;11;Seafood;Venezuela;595.20
+1996;11;Confections;Germany;584.00
+1996;11;Dairy Products;France;466.56
+1996;11;Produce;Austria;425.88
+1996;11;Dairy Products;Mexico;403.20
+1996;11;Beverages;Denmark;403.20
+1996;11;Confections;Venezuela;398.40
+1996;11;Meat/Poultry;Mexico;396.00
+1996;11;Grains/Cereals;United Kingdom;390.00
+1996;11;Condiments;Denmark;324.80
+1996;11;Seafood;France;288.80
+1996;11;Grains/Cereals;Germany;280.80
+1996;11;Condiments;Spain;272.00
+1996;11;Meat/Poultry;Germany;230.40
+1996;11;Dairy Products;Venezuela;174.08
+1996;11;Beverages;Mexico;172.80
+1996;11;Dairy Products;Austria;161.28
+1996;11;Confections;Brazil;112.00
+1996;11;Meat/Poultry;Denmark;106.20
+1996;11;Meat/Poultry;Portugal;100.30
+1996;11;Seafood;Austria;100.10
+1996;11;Beverages;United Kingdom;90.00
+1996;11;Seafood;Brazil;58.80
+1996;11;Beverages;Portugal;36.00
+1996;11;Confections;Austria;36.00
+1996;12;Beverages;Brazil;6490.00
+1996;12;Meat/Poultry;United States;4112.60
+1996;12;Dairy Products;Austria;2700.48
+1996;12;Dairy Products;Brazil;2303.70
+1996;12;Confections;United States;1824.05
+1996;12;Confections;Sweden;1814.40
+1996;12;Meat/Poultry;Venezuela;1650.60
+1996;12;Dairy Products;Germany;1615.80
+1996;12;Meat/Poultry;Austria;1386.00
+1996;12;Produce;United States;1056.90
+1996;12;Meat/Poultry;United Kingdom;1048.00
+1996;12;Seafood;Republic of Ireland;1013.74
+1996;12;Seafood;Austria;882.00
+1996;12;Dairy Products;Republic of Ireland;834.88
+1996;12;Condiments;Brazil;807.84
+1996;12;Grains/Cereals;Switzerland;798.00
+1996;12;Confections;Canada;788.00
+1996;12;Dairy Products;Norway;786.00
+1996;12;Dairy Products;United States;755.20
+1996;12;Beverages;United States;717.00
+1996;12;Grains/Cereals;United Kingdom;697.60
+1996;12;Produce;Portugal;648.72
+1996;12;Produce;United Kingdom;618.80
+1996;12;Confections;Denmark;600.00
+1996;12;Confections;Brazil;583.20
+1996;12;Condiments;Austria;544.00
+1996;12;Beverages;Austria;518.40
+1996;12;Dairy Products;Denmark;516.00
+1996;12;Dairy Products;Sweden;511.20
+1996;12;Beverages;Denmark;504.00
+1996;12;Meat/Poultry;Republic of Ireland;471.60
+1996;12;Grains/Cereals;United States;410.40
+1996;12;Produce;Austria;400.00
+1996;12;Dairy Products;Canada;399.00
+1996;12;Seafood;Canada;396.80
+1996;12;Beverages;Canada;360.00
+1996;12;Beverages;Republic of Ireland;360.00
+1996;12;Dairy Products;Poland;300.00
+1996;12;Grains/Cereals;Germany;288.00
+1996;12;Meat/Poultry;Canada;288.00
+1996;12;Beverages;United Kingdom;244.80
+1996;12;Seafood;Venezuela;241.92
+1996;12;Dairy Products;Venezuela;230.40
+1996;12;Produce;Norway;218.40
+1996;12;Confections;United Kingdom;195.00
+1996;12;Seafood;United Kingdom;187.20
+1996;12;Beverages;Switzerland;183.60
+1996;12;Seafood;Poland;159.00
+1996;12;Condiments;Denmark;145.60
+1996;12;Produce;Switzerland;136.00
+1996;12;Produce;Venezuela;112.00
+1996;12;Seafood;Germany;86.40
+1996;12;Seafood;France;72.96
+1996;12;Confections;Portugal;68.00
+1996;12;Seafood;Brazil;55.44
+1996;12;Beverages;Norway;54.00
+1996;12;Seafood;United States;48.00
+1997;1;Beverages;Denmark;10540.00
+1997;1;Beverages;Canada;8954.56
+1997;1;Confections;France;2955.00
+1997;1;Dairy Products;Austria;2464.00
+1997;1;Condiments;Austria;2281.50
+1997;1;Grains/Cereals;United States;2128.00
+1997;1;Dairy Products;Switzerland;2097.60
+1997;1;Meat/Poultry;United Kingdom;2079.00
+1997;1;Meat/Poultry;Brazil;1730.85
+1997;1;Produce;Brazil;1375.92
+1997;1;Grains/Cereals;Austria;1344.00
+1997;1;Confections;Austria;1255.01
+1997;1;Confections;Italy;1215.45
+1997;1;Dairy Products;Germany;1194.00
+1997;1;Meat/Poultry;Canada;1170.00
+1997;1;Meat/Poultry;Austria;1123.20
+1997;1;Dairy Products;Brazil;1120.00
+1997;1;Dairy Products;Canada;1118.80
+1997;1;Confections;Brazil;1112.65
+1997;1;Dairy Products;United States;1072.00
+1997;1;Condiments;Republic of Ireland;921.38
+1997;1;Beverages;Germany;912.00
+1997;1;Beverages;France;763.20
+1997;1;Seafood;Canada;705.25
+1997;1;Grains/Cereals;Spain;676.40
+1997;1;Produce;Austria;651.00
+1997;1;Confections;Republic of Ireland;520.00
+1997;1;Beverages;United Kingdom;504.00
+1997;1;Condiments;Canada;496.00
+1997;1;Confections;United Kingdom;480.00
+1997;1;Grains/Cereals;Italy;425.60
+1997;1;Confections;Germany;418.00
+1997;1;Confections;Canada;411.00
+1997;1;Condiments;Venezuela;400.00
+1997;1;Seafood;United States;372.60
+1997;1;Condiments;Germany;364.80
+1997;1;Condiments;Denmark;364.00
+1997;1;Condiments;United States;336.00
+1997;1;Produce;Finland;334.80
+1997;1;Seafood;Brazil;319.50
+1997;1;Grains/Cereals;Finland;312.00
+1997;1;Meat/Poultry;United States;298.40
+1997;1;Confections;Denmark;270.00
+1997;1;Meat/Poultry;Finland;262.00
+1997;1;Confections;United States;249.00
+1997;1;Beverages;Brazil;230.40
+1997;1;Produce;Argentina;223.20
+1997;1;Seafood;France;208.00
+1997;1;Seafood;Italy;192.00
+1997;1;Meat/Poultry;France;179.40
+1997;1;Confections;Finland;146.00
+1997;1;Produce;Germany;120.00
+1997;1;Confections;Argentina;96.00
+1997;1;Condiments;Brazil;88.40
+1997;1;Seafood;Denmark;14.40
+1997;2;Condiments;United States;3216.70
+1997;2;Confections;United States;2333.94
+1997;2;Meat/Poultry;Germany;2073.60
+1997;2;Meat/Poultry;United States;2019.60
+1997;2;Grains/Cereals;France;1924.60
+1997;2;Meat/Poultry;Finland;1703.00
+1997;2;Dairy Products;Germany;1611.00
+1997;2;Confections;France;1601.40
+1997;2;Dairy Products;France;1144.00
+1997;2;Grains/Cereals;Germany;1100.70
+1997;2;Produce;Belgium;1092.00
+1997;2;Seafood;France;1051.20
+1997;2;Condiments;Germany;938.16
+1997;2;Meat/Poultry;Venezuela;864.00
+1997;2;Dairy Products;Belgium;860.00
+1997;2;Grains/Cereals;Portugal;851.20
+1997;2;Condiments;Austria;816.00
+1997;2;Confections;Belgium;747.00
+1997;2;Beverages;Belgium;736.00
+1997;2;Confections;Germany;724.04
+1997;2;Condiments;Brazil;588.00
+1997;2;Beverages;United States;581.40
+1997;2;Condiments;Finland;570.00
+1997;2;Produce;United States;546.00
+1997;2;Confections;Sweden;531.00
+1997;2;Dairy Products;Finland;516.00
+1997;2;Dairy Products;Austria;504.00
+1997;2;Meat/Poultry;Austria;472.00
+1997;2;Dairy Products;Canada;456.00
+1997;2;Grains/Cereals;Belgium;456.00
+1997;2;Beverages;Sweden;440.52
+1997;2;Produce;Italy;436.80
+1997;2;Seafood;Venezuela;434.70
+1997;2;Beverages;United Kingdom;422.00
+1997;2;Meat/Poultry;Sweden;400.50
+1997;2;Produce;France;364.80
+1997;2;Seafood;Argentina;294.00
+1997;2;Confections;Brazil;292.00
+1997;2;Beverages;Finland;288.00
+1997;2;Dairy Products;United Kingdom;278.00
+1997;2;Beverages;Germany;244.00
+1997;2;Confections;Venezuela;240.00
+1997;2;Produce;Canada;240.00
+1997;2;Seafood;Sweden;231.00
+1997;2;Confections;Canada;222.40
+1997;2;Grains/Cereals;United Kingdom;201.60
+1997;2;Grains/Cereals;Canada;159.60
+1997;2;Confections;Argentina;149.40
+1997;2;Confections;United Kingdom;137.70
+1997;2;Beverages;France;133.92
+1997;2;Dairy Products;Sweden;100.80
+1997;2;Dairy Products;Italy;80.64
+1997;2;Dairy Products;Brazil;34.40
+1997;2;Meat/Poultry;France;28.32
+1997;3;Beverages;United States;7213.20
+1997;3;Dairy Products;Venezuela;2724.00
+1997;3;Dairy Products;United States;2640.00
+1997;3;Seafood;France;1971.20
+1997;3;Produce;United Kingdom;1610.40
+1997;3;Meat/Poultry;Denmark;1603.80
+1997;3;Dairy Products;Germany;1320.00
+1997;3;Beverages;Venezuela;1288.80
+1997;3;Dairy Products;Brazil;1256.00
+1997;3;Produce;Venezuela;1188.00
+1997;3;Confections;Brazil;1167.50
+1997;3;Produce;Mexico;878.40
+1997;3;Grains/Cereals;United States;798.00
+1997;3;Grains/Cereals;United Kingdom;759.20
+1997;3;Meat/Poultry;United States;733.60
+1997;3;Grains/Cereals;Portugal;729.60
+1997;3;Condiments;Belgium;693.60
+1997;3;Grains/Cereals;Belgium;560.00
+1997;3;Meat/Poultry;Venezuela;554.88
+1997;3;Beverages;Germany;552.00
+1997;3;Dairy Products;Portugal;544.00
+1997;3;Beverages;Portugal;542.40
+1997;3;Dairy Products;France;528.00
+1997;3;Beverages;Belgium;514.08
+1997;3;Seafood;Denmark;499.20
+1997;3;Condiments;Portugal;484.79
+1997;3;Confections;United States;413.53
+1997;3;Seafood;Germany;357.60
+1997;3;Confections;Denmark;325.00
+1997;3;Condiments;United States;322.75
+1997;3;Grains/Cereals;France;320.80
+1997;3;Seafood;Mexico;308.70
+1997;3;Confections;Venezuela;300.00
+1997;3;Dairy Products;Belgium;297.50
+1997;3;Beverages;United Kingdom;273.60
+1997;3;Confections;Austria;250.20
+1997;3;Dairy Products;United Kingdom;230.40
+1997;3;Confections;France;228.00
+1997;3;Dairy Products;Austria;189.00
+1997;3;Confections;Belgium;153.30
+1997;3;Seafood;United Kingdom;151.80
+1997;3;Seafood;United States;147.00
+1997;3;Condiments;Venezuela;144.00
+1997;3;Confections;Italy;134.40
+1997;3;Confections;Portugal;126.00
+1997;3;Confections;United Kingdom;112.00
+1997;3;Meat/Poultry;Brazil;106.20
+1997;3;Beverages;Italy;100.80
+1997;3;Beverages;Denmark;90.00
+1997;3;Beverages;Mexico;62.00
+1997;3;Seafood;Brazil;48.00
+1997;4;Confections;Germany;6687.30
+1997;4;Beverages;Mexico;4981.50
+1997;4;Meat/Poultry;United States;4784.44
+1997;4;Dairy Products;Germany;4436.60
+1997;4;Confections;Austria;3159.00
+1997;4;Grains/Cereals;Austria;2660.00
+1997;4;Seafood;Republic of Ireland;2101.05
+1997;4;Condiments;France;1800.90
+1997;4;Produce;Republic of Ireland;1627.50
+1997;4;Produce;France;1621.56
+1997;4;Produce;Austria;1596.00
+1997;4;Condiments;Germany;1562.00
+1997;4;Grains/Cereals;Switzerland;1520.00
+1997;4;Meat/Poultry;Germany;1468.20
+1997;4;Beverages;Germany;945.00
+1997;4;Grains/Cereals;Brazil;912.00
+1997;4;Produce;Venezuela;912.00
+1997;4;Seafood;Germany;842.24
+1997;4;Condiments;Austria;820.95
+1997;4;Confections;Canada;786.30
+1997;4;Condiments;United States;712.50
+1997;4;Dairy Products;Brazil;536.80
+1997;4;Confections;Venezuela;500.00
+1997;4;Beverages;United States;479.10
+1997;4;Seafood;Switzerland;471.20
+1997;4;Grains/Cereals;Germany;425.60
+1997;4;Condiments;Republic of Ireland;421.00
+1997;4;Grains/Cereals;Venezuela;420.00
+1997;4;Beverages;Austria;387.50
+1997;4;Dairy Products;Switzerland;323.00
+1997;4;Grains/Cereals;Canada;284.80
+1997;4;Grains/Cereals;Republic of Ireland;280.00
+1997;4;Dairy Products;France;259.20
+1997;4;Dairy Products;United Kingdom;220.00
+1997;4;Seafood;Mexico;199.50
+1997;4;Meat/Poultry;Mexico;196.80
+1997;4;Condiments;Mexico;175.05
+1997;4;Meat/Poultry;Norway;164.00
+1997;4;Confections;Mexico;162.56
+1997;4;Seafood;Canada;154.00
+1997;4;Produce;Germany;136.80
+1997;4;Confections;United States;120.00
+1997;4;Seafood;Argentina;96.50
+1997;4;Seafood;Venezuela;92.00
+1997;4;Seafood;Brazil;91.80
+1997;4;Beverages;United Kingdom;90.00
+1997;4;Confections;Argentina;75.00
+1997;4;Beverages;Venezuela;63.00
+1997;4;Beverages;Argentina;54.00
+1997;4;Condiments;Canada;52.00
+1997;4;Confections;Brazil;48.45
+1997;4;Grains/Cereals;United Kingdom;42.00
+1997;4;Beverages;Brazil;38.25
+1997;4;Beverages;Norway;36.00
+1997;5;Beverages;Germany;8010.00
+1997;5;Confections;Germany;3120.73
+1997;5;Beverages;Sweden;2760.00
+1997;5;Dairy Products;Germany;2528.63
+1997;5;Produce;Germany;2162.40
+1997;5;Beverages;Austria;2050.00
+1997;5;Seafood;United Kingdom;2049.66
+1997;5;Confections;France;1972.00
+1997;5;Seafood;Germany;1861.70
+1997;5;Condiments;Germany;1713.50
+1997;5;Dairy Products;Mexico;1687.50
+1997;5;Dairy Products;Venezuela;1617.00
+1997;5;Meat/Poultry;Austria;1560.00
+1997;5;Grains/Cereals;Finland;1473.00
+1997;5;Confections;United Kingdom;1363.50
+1997;5;Dairy Products;Switzerland;1105.80
+1997;5;Beverages;Brazil;1090.35
+1997;5;Condiments;Sweden;1045.00
+1997;5;Meat/Poultry;United Kingdom;877.50
+1997;5;Dairy Products;Sweden;835.20
+1997;5;Seafood;France;818.40
+1997;5;Condiments;Portugal;778.00
+1997;5;Dairy Products;United Kingdom;725.10
+1997;5;Dairy Products;Finland;690.00
+1997;5;Condiments;Brazil;682.02
+1997;5;Seafood;Sweden;662.90
+1997;5;Dairy Products;United States;602.20
+1997;5;Confections;Portugal;593.30
+1997;5;Condiments;Austria;570.00
+1997;5;Beverages;France;540.00
+1997;5;Grains/Cereals;Venezuela;535.50
+1997;5;Condiments;United Kingdom;408.00
+1997;5;Seafood;Switzerland;400.00
+1997;5;Dairy Products;Belgium;360.00
+1997;5;Meat/Poultry;Belgium;336.00
+1997;5;Produce;United States;319.20
+1997;5;Produce;Switzerland;318.00
+1997;5;Beverages;Portugal;306.00
+1997;5;Produce;France;300.00
+1997;5;Meat/Poultry;Spain;280.80
+1997;5;Condiments;Spain;256.50
+1997;5;Confections;Belgium;250.00
+1997;5;Confections;Finland;244.30
+1997;5;Beverages;Venezuela;232.50
+1997;5;Beverages;Finland;230.40
+1997;5;Meat/Poultry;Germany;229.46
+1997;5;Dairy Products;Brazil;174.15
+1997;5;Grains/Cereals;Germany;171.00
+1997;5;Seafood;Mexico;165.60
+1997;5;Confections;Spain;146.00
+1997;5;Meat/Poultry;Sweden;111.75
+1997;5;Dairy Products;Argentina;110.00
+1997;5;Beverages;United Kingdom;105.00
+1997;5;Beverages;United States;98.00
+1997;5;Grains/Cereals;Mexico;87.75
+1997;5;Seafood;Finland;60.00
+1997;6;Grains/Cereals;Canada;2704.65
+1997;6;Produce;Sweden;2650.00
+1997;6;Dairy Products;Republic of Ireland;2360.00
+1997;6;Dairy Products;Germany;1704.00
+1997;6;Meat/Poultry;Mexico;1522.00
+1997;6;Grains/Cereals;United States;1415.50
+1997;6;Produce;United States;1406.00
+1997;6;Meat/Poultry;Finland;1237.90
+1997;6;Dairy Products;France;1218.50
+1997;6;Meat/Poultry;United States;1162.80
+1997;6;Beverages;United States;1102.55
+1997;6;Grains/Cereals;Germany;1075.50
+1997;6;Seafood;France;1066.26
+1997;6;Produce;United Kingdom;1060.00
+1997;6;Dairy Products;Finland;999.60
+1997;6;Seafood;Sweden;920.00
+1997;6;Condiments;Germany;863.32
+1997;6;Dairy Products;Denmark;835.20
+1997;6;Confections;United States;750.60
+1997;6;Beverages;Mexico;740.00
+1997;6;Seafood;Germany;600.31
+1997;6;Meat/Poultry;United Kingdom;590.40
+1997;6;Beverages;Germany;587.00
+1997;6;Confections;Germany;554.63
+1997;6;Grains/Cereals;Brazil;490.00
+1997;6;Seafood;Brazil;475.00
+1997;6;Dairy Products;United States;456.25
+1997;6;Confections;Italy;443.70
+1997;6;Meat/Poultry;France;410.40
+1997;6;Condiments;Mexico;408.45
+1997;6;Condiments;United States;389.00
+1997;6;Beverages;United Kingdom;360.00
+1997;6;Grains/Cereals;Austria;333.20
+1997;6;Produce;Germany;331.31
+1997;6;Grains/Cereals;United Kingdom;327.00
+1997;6;Beverages;Brazil;310.00
+1997;6;Seafood;Spain;310.00
+1997;6;Dairy Products;Canada;299.25
+1997;6;Dairy Products;Sweden;288.00
+1997;6;Dairy Products;Mexico;250.00
+1997;6;Confections;United Kingdom;237.50
+1997;6;Produce;Austria;217.39
+1997;6;Condiments;Sweden;194.50
+1997;6;Confections;Sweden;188.46
+1997;6;Beverages;France;180.00
+1997;6;Produce;Republic of Ireland;159.00
+1997;6;Beverages;Sweden;104.63
+1997;6;Beverages;Canada;101.25
+1997;6;Dairy Products;Italy;45.00
+1997;6;Seafood;United Kingdom;45.00
+1997;6;Seafood;United States;36.80
+1997;7;Beverages;United States;5666.63
+1997;7;Seafood;United States;4835.30
+1997;7;Meat/Poultry;United States;3929.80
+1997;7;Dairy Products;United States;3714.98
+1997;7;Dairy Products;Canada;3612.38
+1997;7;Confections;United States;3030.00
+1997;7;Condiments;Austria;2767.08
+1997;7;Grains/Cereals;Germany;2184.00
+1997;7;Seafood;Germany;2000.00
+1997;7;Dairy Products;Venezuela;1925.00
+1997;7;Grains/Cereals;United States;1860.00
+1997;7;Dairy Products;Austria;1755.00
+1997;7;Confections;Germany;1589.14
+1997;7;Produce;United States;1350.00
+1997;7;Dairy Products;Germany;870.00
+1997;7;Condiments;United States;842.88
+1997;7;Condiments;Canada;741.00
+1997;7;Confections;Brazil;724.28
+1997;7;Condiments;Brazil;612.00
+1997;7;Seafood;France;609.25
+1997;7;Beverages;Austria;531.00
+1997;7;Dairy Products;Poland;510.00
+1997;7;Confections;Canada;497.33
+1997;7;Confections;United Kingdom;493.00
+1997;7;Seafood;Venezuela;403.20
+1997;7;Grains/Cereals;Austria;390.00
+1997;7;Meat/Poultry;Brazil;384.00
+1997;7;Meat/Poultry;Denmark;372.50
+1997;7;Condiments;Germany;368.13
+1997;7;Beverages;Brazil;360.00
+1997;7;Beverages;Canada;360.00
+1997;7;Beverages;Venezuela;310.00
+1997;7;Produce;Denmark;300.00
+1997;7;Beverages;Poland;298.00
+1997;7;Condiments;Denmark;188.75
+1997;7;Beverages;Portugal;162.00
+1997;7;Beverages;Germany;147.60
+1997;7;Meat/Poultry;Finland;120.00
+1997;7;Confections;Portugal;68.85
+1997;7;Confections;France;60.00
+1997;7;Beverages;France;54.00
+1997;7;Grains/Cereals;Italy;23.80
+1997;8;Confections;Austria;4281.49
+1997;8;Seafood;France;3125.00
+1997;8;Seafood;Brazil;2763.50
+1997;8;Grains/Cereals;Brazil;2481.00
+1997;8;Meat/Poultry;Spain;2475.80
+1997;8;Beverages;Germany;2123.25
+1997;8;Dairy Products;Venezuela;2088.00
+1997;8;Produce;France;1845.00
+1997;8;Condiments;Canada;1750.00
+1997;8;Beverages;Brazil;1717.38
+1997;8;Grains/Cereals;Canada;1635.00
+1997;8;Seafood;Venezuela;1294.00
+1997;8;Dairy Products;Austria;1162.80
+1997;8;Dairy Products;Sweden;1110.00
+1997;8;Meat/Poultry;Brazil;1002.50
+1997;8;Produce;Germany;1001.25
+1997;8;Beverages;Venezuela;950.00
+1997;8;Produce;Belgium;912.00
+1997;8;Confections;Brazil;841.94
+1997;8;Grains/Cereals;Italy;840.00
+1997;8;Meat/Poultry;United States;742.74
+1997;8;Confections;United States;739.50
+1997;8;Confections;Canada;607.50
+1997;8;Dairy Products;Germany;587.50
+1997;8;Condiments;Finland;550.00
+1997;8;Dairy Products;Belgium;522.00
+1997;8;Beverages;France;521.30
+1997;8;Seafood;Norway;500.00
+1997;8;Condiments;Italy;486.23
+1997;8;Dairy Products;Republic of Ireland;483.75
+1997;8;Condiments;Denmark;456.00
+1997;8;Produce;United States;456.00
+1997;8;Seafood;United States;446.25
+1997;8;Condiments;Venezuela;442.05
+1997;8;Seafood;Republic of Ireland;418.50
+1997;8;Meat/Poultry;Sweden;393.60
+1997;8;Confections;Germany;349.20
+1997;8;Condiments;Republic of Ireland;341.25
+1997;8;Dairy Products;Mexico;340.00
+1997;8;Dairy Products;United Kingdom;322.50
+1997;8;Beverages;United Kingdom;300.00
+1997;8;Grains/Cereals;Spain;299.25
+1997;8;Meat/Poultry;Germany;273.60
+1997;8;Confections;Denmark;240.00
+1997;8;Dairy Products;Brazil;210.00
+1997;8;Beverages;Republic of Ireland;202.50
+1997;8;Condiments;United States;194.50
+1997;8;Grains/Cereals;United Kingdom;90.00
+1997;8;Seafood;Finland;79.50
+1997;8;Grains/Cereals;Mexico;70.00
+1997;8;Produce;Mexico;69.75
+1997;8;Seafood;Austria;66.30
+1997;8;Confections;United Kingdom;46.00
+1997;8;Beverages;Canada;22.50
+1997;8;Seafood;Germany;18.00
+1997;9;Dairy Products;United States;5137.50
+1997;9;Meat/Poultry;Republic of Ireland;4875.40
+1997;9;Meat/Poultry;Switzerland;4456.44
+1997;9;Beverages;Sweden;3881.25
+1997;9;Dairy Products;Germany;3498.50
+1997;9;Seafood;Germany;3459.10
+1997;9;Grains/Cereals;United States;3061.00
+1997;9;Confections;United States;2983.08
+1997;9;Seafood;United States;1929.60
+1997;9;Dairy Products;Austria;1536.80
+1997;9;Confections;Germany;1533.95
+1997;9;Condiments;United States;1265.14
+1997;9;Produce;United States;1122.78
+1997;9;Seafood;Brazil;1116.96
+1997;9;Grains/Cereals;Germany;1051.88
+1997;9;Produce;France;1007.00
+1997;9;Meat/Poultry;Austria;936.00
+1997;9;Condiments;Germany;864.50
+1997;9;Confections;Mexico;860.77
+1997;9;Produce;Germany;697.50
+1997;9;Confections;France;667.50
+1997;9;Dairy Products;France;660.00
+1997;9;Seafood;Portugal;632.40
+1997;9;Seafood;Republic of Ireland;604.90
+1997;9;Beverages;Brazil;570.00
+1997;9;Seafood;Denmark;570.00
+1997;9;Beverages;Germany;543.75
+1997;9;Seafood;France;524.40
+1997;9;Condiments;Mexico;476.45
+1997;9;Confections;Austria;468.45
+1997;9;Grains/Cereals;France;462.00
+1997;9;Meat/Poultry;Germany;414.40
+1997;9;Grains/Cereals;Portugal;387.60
+1997;9;Grains/Cereals;Brazil;280.00
+1997;9;Beverages;Finland;276.00
+1997;9;Condiments;Portugal;268.39
+1997;9;Dairy Products;Sweden;258.00
+1997;9;Condiments;France;252.60
+1997;9;Condiments;Sweden;237.60
+1997;9;Dairy Products;Brazil;237.50
+1997;9;Beverages;Mexico;232.50
+1997;9;Meat/Poultry;United States;223.50
+1997;9;Condiments;Switzerland;210.50
+1997;9;Beverages;United States;180.00
+1997;9;Seafood;Italy;154.40
+1997;9;Confections;Brazil;142.50
+1997;9;Dairy Products;Mexico;92.00
+1997;9;Grains/Cereals;Finland;84.00
+1997;9;Seafood;Mexico;62.00
+1997;9;Confections;Finland;52.35
+1997;9;Grains/Cereals;United Kingdom;45.00
+1997;9;Beverages;Republic of Ireland;43.20
+1997;9;Meat/Poultry;Sweden;40.23
+1997;10;Meat/Poultry;United States;6691.20
+1997;10;Meat/Poultry;Germany;5063.35
+1997;10;Confections;Germany;4119.40
+1997;10;Dairy Products;Germany;3598.00
+1997;10;Seafood;United States;3538.55
+1997;10;Beverages;Germany;3400.00
+1997;10;Confections;United States;3183.50
+1997;10;Dairy Products;United States;3015.00
+1997;10;Produce;Germany;2700.00
+1997;10;Produce;Denmark;2462.40
+1997;10;Dairy Products;Republic of Ireland;2329.00
+1997;10;Condiments;Germany;2328.68
+1997;10;Beverages;United States;2120.40
+1997;10;Condiments;Brazil;2024.50
+1997;10;Dairy Products;Sweden;1925.00
+1997;10;Meat/Poultry;Austria;1707.61
+1997;10;Produce;Brazil;1484.00
+1997;10;Condiments;Austria;1299.84
+1997;10;Grains/Cereals;Republic of Ireland;1140.00
+1997;10;Grains/Cereals;United Kingdom;780.00
+1997;10;Seafood;Germany;760.00
+1997;10;Seafood;France;651.00
+1997;10;Dairy Products;France;645.00
+1997;10;Grains/Cereals;Brazil;598.00
+1997;10;Beverages;Sweden;567.50
+1997;10;Beverages;Brazil;535.50
+1997;10;Beverages;Republic of Ireland;535.50
+1997;10;Seafood;Sweden;525.00
+1997;10;Grains/Cereals;United States;513.00
+1997;10;Dairy Products;Brazil;512.00
+1997;10;Meat/Poultry;United Kingdom;504.00
+1997;10;Seafood;Denmark;502.20
+1997;10;Seafood;Canada;496.00
+1997;10;Beverages;Venezuela;459.00
+1997;10;Condiments;Finland;400.00
+1997;10;Dairy Products;Venezuela;378.00
+1997;10;Produce;Argentina;371.00
+1997;10;Beverages;United Kingdom;357.00
+1997;10;Dairy Products;Austria;315.00
+1997;10;Confections;Brazil;306.00
+1997;10;Seafood;Venezuela;298.13
+1997;10;Condiments;Argentina;285.00
+1997;10;Beverages;Denmark;196.00
+1997;10;Dairy Products;Finland;152.00
+1997;10;Meat/Poultry;Brazil;144.00
+1997;10;Condiments;Canada;142.50
+1997;10;Seafood;Brazil;115.80
+1997;10;Beverages;Austria;114.00
+1997;10;Confections;Italy;93.50
+1997;10;Meat/Poultry;Republic of Ireland;93.48
+1997;10;Beverages;Finland;90.00
+1997;10;Condiments;United States;85.40
+1997;10;Confections;Argentina;50.00
+1997;10;Confections;Venezuela;48.30
+1997;11;Dairy Products;Canada;2918.00
+1997;11;Dairy Products;Germany;2718.60
+1997;11;Grains/Cereals;United States;2683.60
+1997;11;Seafood;United States;2394.00
+1997;11;Confections;Switzerland;2078.08
+1997;11;Confections;United States;1539.00
+1997;11;Produce;Switzerland;1510.50
+1997;11;Seafood;Germany;1500.00
+1997;11;Dairy Products;Switzerland;1440.00
+1997;11;Produce;Sweden;1284.00
+1997;11;Grains/Cereals;France;1185.75
+1997;11;Dairy Products;Austria;1180.00
+1997;11;Dairy Products;Finland;1168.75
+1997;11;Seafood;Switzerland;1037.70
+1997;11;Dairy Products;United States;961.00
+1997;11;Confections;Venezuela;950.00
+1997;11;Beverages;United States;924.00
+1997;11;Beverages;Venezuela;900.00
+1997;11;Seafood;Brazil;887.10
+1997;11;Condiments;Republic of Ireland;842.00
+1997;11;Grains/Cereals;Switzerland;812.00
+1997;11;Condiments;Brazil;750.00
+1997;11;Meat/Poultry;Italy;741.00
+1997;11;Seafood;Denmark;736.00
+1997;11;Dairy Products;France;710.63
+1997;11;Beverages;Switzerland;600.00
+1997;11;Grains/Cereals;United Kingdom;570.00
+1997;11;Beverages;United Kingdom;552.00
+1997;11;Condiments;United Kingdom;550.00
+1997;11;Dairy Products;United Kingdom;543.00
+1997;11;Condiments;United States;536.40
+1997;11;Dairy Products;Italy;522.50
+1997;11;Confections;France;514.76
+1997;11;Dairy Products;Brazil;510.00
+1997;11;Condiments;Austria;395.10
+1997;11;Grains/Cereals;Italy;361.00
+1997;11;Beverages;Brazil;360.00
+1997;11;Beverages;France;360.00
+1997;11;Seafood;Austria;337.75
+1997;11;Seafood;Finland;323.00
+1997;11;Dairy Products;Mexico;320.00
+1997;11;Seafood;United Kingdom;319.20
+1997;11;Condiments;Germany;311.20
+1997;11;Meat/Poultry;Brazil;288.00
+1997;11;Seafood;France;253.80
+1997;11;Condiments;Canada;200.00
+1997;11;Condiments;France;199.98
+1997;11;Produce;United States;182.40
+1997;11;Grains/Cereals;Sweden;175.00
+1997;11;Beverages;Republic of Ireland;155.00
+1997;11;Produce;Finland;98.81
+1997;11;Seafood;Italy;93.20
+1997;11;Produce;Italy;50.00
+1997;12;Produce;Austria;6042.00
+1997;12;Meat/Poultry;Germany;3874.63
+1997;12;Dairy Products;Germany;3170.00
+1997;12;Meat/Poultry;Spain;3026.85
+1997;12;Beverages;United States;2956.50
+1997;12;Dairy Products;United Kingdom;2686.00
+1997;12;Meat/Poultry;France;2352.01
+1997;12;Meat/Poultry;Austria;2310.75
+1997;12;Grains/Cereals;Sweden;2280.00
+1997;12;Confections;Germany;2272.00
+1997;12;Beverages;Austria;2149.40
+1997;12;Confections;Belgium;1882.00
+1997;12;Seafood;France;1875.00
+1997;12;Beverages;Brazil;1577.90
+1997;12;Produce;United Kingdom;1571.40
+1997;12;Condiments;Germany;1515.60
+1997;12;Produce;Sweden;1484.00
+1997;12;Condiments;France;1359.10
+1997;12;Seafood;United Kingdom;1251.10
+1997;12;Dairy Products;Austria;1234.00
+1997;12;Produce;Denmark;1192.50
+1997;12;Dairy Products;Brazil;1145.00
+1997;12;Confections;Austria;1134.25
+1997;12;Beverages;Germany;1131.00
+1997;12;Meat/Poultry;Denmark;1080.00
+1997;12;Produce;Germany;1050.00
+1997;12;Beverages;Belgium;1035.00
+1997;12;Condiments;Brazil;960.00
+1997;12;Grains/Cereals;Venezuela;931.00
+1997;12;Confections;Denmark;924.38
+1997;12;Beverages;France;915.75
+1997;12;Dairy Products;Italy;887.40
+1997;12;Grains/Cereals;Brazil;870.00
+1997;12;Condiments;Sweden;850.00
+1997;12;Seafood;Denmark;760.46
+1997;12;Dairy Products;Venezuela;691.20
+1997;12;Confections;France;625.00
+1997;12;Grains/Cereals;Finland;608.00
+1997;12;Beverages;Venezuela;602.50
+1997;12;Seafood;Italy;588.40
+1997;12;Condiments;Denmark;570.00
+1997;12;Confections;Venezuela;524.66
+1997;12;Confections;Brazil;409.26
+1997;12;Condiments;Venezuela;389.50
+1997;12;Confections;United States;367.50
+1997;12;Produce;Brazil;355.50
+1997;12;Produce;Finland;350.00
+1997;12;Seafood;Brazil;310.68
+1997;12;Seafood;Venezuela;310.00
+1997;12;Beverages;Sweden;288.00
+1997;12;Seafood;Germany;285.35
+1997;12;Confections;Sweden;285.00
+1997;12;Seafood;Austria;243.67
+1997;12;Beverages;Poland;190.00
+1997;12;Confections;Poland;187.50
+1997;12;Seafood;United States;186.00
+1997;12;Condiments;Austria;180.00
+1997;12;Confections;United Kingdom;166.60
+1997;12;Grains/Cereals;Austria;159.60
+1997;12;Grains/Cereals;United Kingdom;140.00
+1997;12;Grains/Cereals;France;126.00
+1997;12;Produce;France;112.50
+1997;12;Grains/Cereals;Denmark;99.75
+1997;12;Seafood;Sweden;96.50
+1997;12;Meat/Poultry;United Kingdom;46.94
+1997;12;Meat/Poultry;Brazil;35.76
+1997;12;Beverages;Italy;30.60
+1997;12;Grains/Cereals;Belgium;28.00
+1997;12;Meat/Poultry;Poland;22.35
+1997;12;Dairy Products;Sweden;18.75
+1997;12;Meat/Poultry;Finland;17.88
+1997;12;Dairy Products;Argentina;12.50
+1998;1;Beverages;United States;10161.75
+1998;1;Beverages;Germany;8445.00
+1998;1;Confections;United States;5058.32
+1998;1;Dairy Products;Brazil;3684.30
+1998;1;Grains/Cereals;Germany;3496.33
+1998;1;Grains/Cereals;Austria;3292.50
+1998;1;Seafood;Austria;2966.50
+1998;1;Confections;Germany;2962.02
+1998;1;Seafood;United States;2771.60
+1998;1;Dairy Products;Belgium;2750.00
+1998;1;Grains/Cereals;United States;2698.00
+1998;1;Beverages;Norway;2666.00
+1998;1;Dairy Products;United States;2472.50
+1998;1;Seafood;Venezuela;2436.38
+1998;1;Dairy Products;Venezuela;2358.00
+1998;1;Seafood;Germany;2278.90
+1998;1;Dairy Products;Italy;2072.80
+1998;1;Dairy Products;Austria;2040.00
+1998;1;Beverages;France;1962.50
+1998;1;Meat/Poultry;United States;1872.00
+1998;1;Dairy Products;Germany;1451.25
+1998;1;Condiments;United Kingdom;1440.50
+1998;1;Seafood;Brazil;1269.66
+1998;1;Grains/Cereals;Belgium;1140.00
+1998;1;Meat/Poultry;Germany;1117.24
+1998;1;Confections;Sweden;1104.79
+1998;1;Beverages;Argentina;1004.00
+1998;1;Condiments;France;975.71
+1998;1;Meat/Poultry;Brazil;940.80
+1998;1;Meat/Poultry;Sweden;928.43
+1998;1;Confections;France;875.70
+1998;1;Beverages;Mexico;790.00
+1998;1;Beverages;Brazil;776.65
+1998;1;Dairy Products;United Kingdom;714.00
+1998;1;Seafood;France;672.40
+1998;1;Condiments;Belgium;657.00
+1998;1;Seafood;Sweden;611.80
+1998;1;Produce;Germany;540.00
+1998;1;Condiments;Germany;510.80
+1998;1;Seafood;Belgium;496.00
+1998;1;Produce;France;468.00
+1998;1;Grains/Cereals;Venezuela;454.50
+1998;1;Beverages;Belgium;450.00
+1998;1;Dairy Products;France;446.00
+1998;1;Confections;Brazil;433.00
+1998;1;Beverages;Sweden;418.50
+1998;1;Confections;Argentina;405.00
+1998;1;Grains/Cereals;France;392.25
+1998;1;Grains/Cereals;Brazil;325.25
+1998;1;Produce;United States;318.00
+1998;1;Dairy Products;Mexico;315.00
+1998;1;Condiments;Sweden;300.00
+1998;1;Meat/Poultry;United Kingdom;291.00
+1998;1;Grains/Cereals;Mexico;280.00
+1998;1;Condiments;United States;268.39
+1998;1;Condiments;Italy;260.00
+1998;1;Confections;Mexico;250.00
+1998;1;Confections;Venezuela;205.20
+1998;1;Produce;Belgium;200.00
+1998;1;Beverages;Venezuela;198.00
+1998;1;Seafood;Italy;193.00
+1998;1;Beverages;United Kingdom;190.00
+1998;1;Condiments;Venezuela;175.50
+1998;1;Condiments;Brazil;150.00
+1998;1;Beverages;Austria;108.00
+1998;1;Beverages;Canada;75.00
+1998;1;Confections;Canada;70.00
+1998;1;Seafood;United Kingdom;60.00
+1998;1;Seafood;Canada;42.00
+1998;1;Confections;Norway;18.40
+1998;2;Beverages;Germany;16432.50
+1998;2;Meat/Poultry;Republic of Ireland;15473.75
+1998;2;Beverages;United States;11459.50
+1998;2;Seafood;Brazil;4171.25
+1998;2;Dairy Products;Austria;3400.00
+1998;2;Meat/Poultry;Germany;2970.96
+1998;2;Dairy Products;United States;2550.00
+1998;2;Confections;United States;2445.50
+1998;2;Dairy Products;Belgium;2090.00
+1998;2;Confections;Brazil;2023.23
+1998;2;Seafood;Austria;1674.40
+1998;2;Seafood;Germany;1655.08
+1998;2;Confections;Germany;1539.00
+1998;2;Condiments;Brazil;1457.05
+1998;2;Beverages;Austria;1305.00
+1998;2;Confections;Spain;1301.70
+1998;2;Condiments;Germany;1200.00
+1998;2;Condiments;France;1187.50
+1998;2;Meat/Poultry;France;1177.80
+1998;2;Grains/Cereals;United States;1108.10
+1998;2;Dairy Products;Brazil;1050.00
+1998;2;Beverages;United Kingdom;1002.00
+1998;2;Confections;Sweden;960.98
+1998;2;Seafood;Republic of Ireland;932.04
+1998;2;Beverages;Sweden;919.50
+1998;2;Beverages;Brazil;915.75
+1998;2;Beverages;Belgium;884.00
+1998;2;Seafood;Sweden;776.70
+1998;2;Beverages;Spain;770.00
+1998;2;Meat/Poultry;Spain;696.00
+1998;2;Condiments;Sweden;684.00
+1998;2;Grains/Cereals;France;665.00
+1998;2;Dairy Products;Venezuela;645.00
+1998;2;Dairy Products;Republic of Ireland;630.00
+1998;2;Meat/Poultry;Sweden;612.00
+1998;2;Grains/Cereals;Belgium;608.00
+1998;2;Produce;Italy;570.00
+1998;2;Confections;Finland;510.40
+1998;2;Grains/Cereals;Spain;473.81
+1998;2;Meat/Poultry;Mexico;464.50
+1998;2;Grains/Cereals;United Kingdom;450.00
+1998;2;Beverages;Venezuela;428.40
+1998;2;Condiments;Poland;427.50
+1998;2;Seafood;Venezuela;424.65
+1998;2;Condiments;Spain;419.95
+1998;2;Grains/Cereals;Argentina;390.00
+1998;2;Seafood;France;387.10
+1998;2;Produce;Norway;360.00
+1998;2;Seafood;United States;358.35
+1998;2;Condiments;Finland;353.00
+1998;2;Condiments;Belgium;325.00
+1998;2;Seafood;Spain;310.00
+1998;2;Meat/Poultry;United States;301.04
+1998;2;Confections;Norway;261.75
+1998;2;Confections;United Kingdom;250.00
+1998;2;Beverages;France;248.50
+1998;2;Condiments;United States;239.97
+1998;2;Seafood;Finland;220.80
+1998;2;Grains/Cereals;Sweden;216.00
+1998;2;Dairy Products;United Kingdom;210.00
+1998;2;Confections;France;198.93
+1998;2;Dairy Products;Argentina;192.00
+1998;2;Beverages;Finland;180.00
+1998;2;Seafood;Argentina;180.00
+1998;2;Seafood;Belgium;142.50
+1998;2;Produce;Finland;136.80
+1998;2;Produce;Poland;106.00
+1998;2;Confections;Argentina;104.70
+1998;2;Grains/Cereals;Italy;93.10
+1998;2;Dairy Products;Mexico;75.00
+1998;2;Beverages;Poland;54.00
+1998;2;Seafood;Norway;48.25
+1998;3;Beverages;Brazil;17557.25
+1998;3;Confections;United States;4593.80
+1998;3;Confections;United Kingdom;4237.50
+1998;3;Confections;Canada;2958.00
+1998;3;Produce;United States;2648.00
+1998;3;Beverages;France;2531.30
+1998;3;Condiments;Denmark;2276.00
+1998;3;Dairy Products;Germany;2262.88
+1998;3;Dairy Products;Austria;2200.00
+1998;3;Dairy Products;United States;2152.50
+1998;3;Produce;Spain;2120.00
+1998;3;Beverages;Germany;1999.75
+1998;3;Meat/Poultry;France;1967.06
+1998;3;Produce;Germany;1865.20
+1998;3;Produce;United Kingdom;1800.00
+1998;3;Confections;Belgium;1797.50
+1998;3;Confections;Germany;1763.40
+1998;3;Produce;Sweden;1761.20
+1998;3;Seafood;Venezuela;1661.30
+1998;3;Confections;France;1653.48
+1998;3;Seafood;United States;1644.40
+1998;3;Condiments;Austria;1536.50
+1998;3;Dairy Products;United Kingdom;1509.75
+1998;3;Confections;Austria;1317.00
+1998;3;Beverages;Canada;1301.50
+1998;3;Confections;Argentina;1215.00
+1998;3;Condiments;Canada;1202.58
+1998;3;Confections;Venezuela;1170.11
+1998;3;Condiments;Germany;1075.00
+1998;3;Dairy Products;Republic of Ireland;1008.00
+1998;3;Condiments;Brazil;1000.00
+1998;3;Grains/Cereals;Switzerland;972.60
+1998;3;Dairy Products;Venezuela;959.23
+1998;3;Dairy Products;France;934.30
+1998;3;Seafood;Canada;930.00
+1998;3;Produce;Venezuela;912.00
+1998;3;Beverages;Sweden;908.90
+1998;3;Condiments;Sweden;878.00
+1998;3;Condiments;United Kingdom;855.00
+1998;3;Dairy Products;Argentina;804.00
+1998;3;Condiments;Belgium;779.19
+1998;3;Seafood;Denmark;775.00
+1998;3;Beverages;Venezuela;753.75
+1998;3;Seafood;Brazil;737.85
+1998;3;Dairy Products;Canada;716.25
+1998;3;Grains/Cereals;Canada;684.00
+1998;3;Seafood;Germany;672.00
+1998;3;Meat/Poultry;Germany;656.00
+1998;3;Beverages;Italy;637.50
+1998;3;Condiments;Argentina;622.00
+1998;3;Produce;Canada;600.00
+1998;3;Meat/Poultry;Brazil;585.00
+1998;3;Confections;Republic of Ireland;565.38
+1998;3;Confections;Italy;560.00
+1998;3;Seafood;Sweden;558.00
+1998;3;Seafood;France;552.90
+1998;3;Produce;Argentina;544.80
+1998;3;Produce;Austria;540.00
+1998;3;Confections;Switzerland;502.86
+1998;3;Seafood;Belgium;502.00
+1998;3;Beverages;Austria;495.00
+1998;3;Meat/Poultry;Belgium;480.00
+1998;3;Seafood;Switzerland;477.21
+1998;3;Beverages;Argentina;460.00
+1998;3;Seafood;Republic of Ireland;450.00
+1998;3;Grains/Cereals;United Kingdom;441.00
+1998;3;Condiments;United States;439.00
+1998;3;Dairy Products;Mexico;390.00
+1998;3;Beverages;Switzerland;368.13
+1998;3;Dairy Products;Spain;340.00
+1998;3;Dairy Products;Brazil;315.00
+1998;3;Beverages;Denmark;292.50
+1998;3;Grains/Cereals;United States;292.50
+1998;3;Confections;Sweden;285.00
+1998;3;Beverages;United Kingdom;276.00
+1998;3;Seafood;United Kingdom;270.00
+1998;3;Grains/Cereals;Venezuela;266.00
+1998;3;Confections;Spain;241.25
+1998;3;Produce;France;240.00
+1998;3;Meat/Poultry;Canada;234.00
+1998;3;Grains/Cereals;Spain;224.00
+1998;3;Beverages;Spain;180.00
+1998;3;Grains/Cereals;Brazil;165.30
+1998;3;Grains/Cereals;France;147.00
+1998;3;Grains/Cereals;Austria;133.00
+1998;3;Condiments;Italy;110.00
+1998;3;Meat/Poultry;Spain;96.00
+1998;3;Beverages;United States;90.00
+1998;3;Meat/Poultry;United Kingdom;65.60
+1998;3;Confections;Mexico;64.40
+1998;3;Seafood;Mexico;60.00
+1998;3;Dairy Products;Portugal;57.80
+1998;3;Dairy Products;Switzerland;35.63
+1998;3;Seafood;Spain;25.89
+1998;4;Beverages;United States;9463.75
+1998;4;Dairy Products;Germany;8898.30
+1998;4;Dairy Products;United States;7458.60
+1998;4;Dairy Products;Austria;7141.50
+1998;4;Meat/Poultry;United States;6716.24
+1998;4;Meat/Poultry;Sweden;4786.13
+1998;4;Confections;Germany;3649.49
+1998;4;Dairy Products;United Kingdom;3037.50
+1998;4;Produce;Austria;3032.40
+1998;4;Beverages;Germany;2760.55
+1998;4;Condiments;United States;2701.40
+1998;4;Produce;Germany;2504.25
+1998;4;Dairy Products;Brazil;2391.60
+1998;4;Beverages;Austria;2361.00
+1998;4;Seafood;United States;2290.00
+1998;4;Meat/Poultry;Switzerland;2066.40
+1998;4;Produce;Venezuela;1972.00
+1998;4;Condiments;Austria;1848.85
+1998;4;Condiments;Switzerland;1843.80
+1998;4;Produce;Sweden;1800.00
+1998;4;Beverages;United Kingdom;1762.50
+1998;4;Seafood;Austria;1750.00
+1998;4;Dairy Products;Venezuela;1600.00
+1998;4;Confections;Venezuela;1410.00
+1998;4;Beverages;Belgium;1368.00
+1998;4;Seafood;Germany;1361.25
+1998;4;Meat/Poultry;Austria;1326.00
+1998;4;Produce;United Kingdom;1320.00
+1998;4;Confections;Canada;1301.48
+1998;4;Produce;Canada;1272.00
+1998;4;Beverages;Brazil;1256.00
+1998;4;Meat/Poultry;Portugal;1237.90
+1998;4;Grains/Cereals;United States;1210.60
+1998;4;Condiments;Portugal;1200.00
+1998;4;Dairy Products;Switzerland;1166.40
+1998;4;Produce;Italy;1130.00
+1998;4;Produce;Mexico;1060.00
+1998;4;Grains/Cereals;Venezuela;1041.00
+1998;4;Dairy Products;Denmark;940.50
+1998;4;Seafood;Republic of Ireland;922.95
+1998;4;Condiments;United Kingdom;922.43
+1998;4;Meat/Poultry;Germany;840.00
+1998;4;Meat/Poultry;United Kingdom;840.00
+1998;4;Beverages;Sweden;810.00
+1998;4;Grains/Cereals;Switzerland;760.00
+1998;4;Grains/Cereals;Austria;665.00
+1998;4;Confections;Austria;650.00
+1998;4;Dairy Products;Belgium;645.00
+1998;4;Condiments;Brazil;633.75
+1998;4;Confections;Poland;591.60
+1998;4;Grains/Cereals;Germany;560.00
+1998;4;Seafood;Sweden;553.31
+1998;4;Dairy Products;Finland;550.00
+1998;4;Grains/Cereals;Sweden;525.00
+1998;4;Seafood;Italy;500.00
+1998;4;Beverages;Venezuela;499.50
+1998;4;Meat/Poultry;Brazil;468.00
+1998;4;Beverages;Switzerland;456.00
+1998;4;Seafood;Spain;446.50
+1998;4;Grains/Cereals;Belgium;434.00
+1998;4;Seafood;Venezuela;423.18
+1998;4;Beverages;Republic of Ireland;420.00
+1998;4;Seafood;Norway;388.35
+1998;4;Confections;United Kingdom;374.76
+1998;4;Condiments;Germany;373.35
+1998;4;Confections;United States;335.00
+1998;4;Confections;Brazil;322.00
+1998;4;Dairy Products;Spain;306.00
+1998;4;Seafood;United Kingdom;304.00
+1998;4;Beverages;Poland;286.50
+1998;4;Beverages;Argentina;280.00
+1998;4;Meat/Poultry;Italy;262.40
+1998;4;Condiments;Norway;234.00
+1998;4;Dairy Products;France;210.00
+1998;4;Produce;Poland;200.00
+1998;4;Condiments;Poland;199.50
+1998;4;Beverages;Finland;198.00
+1998;4;Grains/Cereals;Portugal;196.00
+1998;4;Beverages;Italy;189.00
+1998;4;Confections;Belgium;187.38
+1998;4;Seafood;Brazil;180.00
+1998;4;Grains/Cereals;Spain;146.00
+1998;4;Dairy Products;Italy;136.00
+1998;4;Dairy Products;Mexico;136.00
+1998;4;Condiments;Italy;130.00
+1998;4;Beverages;Spain;114.00
+1998;4;Seafood;Finland;108.00
+1998;4;Beverages;Canada;101.25
+1998;4;Meat/Poultry;Belgium;74.50
+1998;4;Seafood;Belgium;73.60
+1998;4;Confections;Argentina;40.00
+1998;4;Dairy Products;Canada;37.50
+1998;4;Beverages;France;36.00
+1998;4;Seafood;Argentina;36.00
+1998;4;Confections;Spain;25.00
+1998;4;Dairy Products;Argentina;25.00
+1998;5;Grains/Cereals;Austria;4322.50
+1998;5;Meat/Poultry;United States;3575.10
+1998;5;Beverages;Brazil;1407.60
+1998;5;Confections;United States;1237.86
+1998;5;Beverages;Germany;935.00
+1998;5;Beverages;United States;920.00
+1998;5;Beverages;Mexico;450.00
+1998;5;Confections;Germany;444.97
+1998;5;Produce;Venezuela;427.50
+1998;5;Seafood;Austria;386.00
+1998;5;Condiments;France;375.00
+1998;5;Confections;Austria;357.50
+1998;5;Produce;France;348.75
+1998;5;Produce;Brazil;310.08
+1998;5;Condiments;Brazil;309.40
+1998;5;Seafood;Switzerland;306.00
+1998;5;Seafood;United States;264.73
+1998;5;Dairy Products;Germany;250.00
+1998;5;Confections;Denmark;232.08
+1998;5;Dairy Products;Mexico;210.00
+1998;5;Condiments;United States;201.50
+1998;5;Beverages;Switzerland;192.10
+1998;5;Dairy Products;United States;168.12
+1998;5;Beverages;Austria;152.00
+1998;5;Seafood;Venezuela;134.67
+1998;5;Meat/Poultry;Venezuela;111.75
+1998;5;Grains/Cereals;United States;96.51
+1998;5;Seafood;Germany;86.85
+1998;5;Confections;France;69.00
+1998;5;Produce;United States;51.05

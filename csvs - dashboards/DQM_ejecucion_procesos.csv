@@ -1,9 +1,10 @@
 id_ejecucion;nombre_proceso;fecha_inicio;fecha_fin;estado;comentarios;duracion_seg
-1;STEP_02_LOAD_STAGING;2025-07-01 11:29:09;2025-07-01 11:29:10;Parcialmente Exitoso;Carga parcial: 7/12 archivos;1
-2;STEP_03_CREATE_INGESTION;2025-07-01 11:29:10;2025-07-01 11:29:10;Fallido;Error de base de datos: FOREIGN KEY constraint failed;0
-3;STEP_07_INITIAL_DWH_LOAD;2025-07-01 11:29:10;2025-07-01 11:29:10;Exitoso;DWH cargado: 6 dimensiones, 0 hechos;0
-4;step_08_load_ingesta2_to_staging;2025-07-01 11:29:10;;En Progreso;;
-5;STEP_09_UPDATE_DWH_INGESTA2;2025-07-01 11:29:11;2025-07-01 11:29:11;Exitoso;Actualización desde Ingesta2 completada.;0
-6;CreacionDP1_VentasMensuales;2025-07-01 11:29:11.185966;2025-07-01 11:29:11.199619;Exitoso;DP1 - Ventas Mensuales por Categoría y País generado.;0.013653
-7;CreacionDP2_PerformanceEmpleados;2025-07-01 11:29:11.206614;2025-07-01 11:29:11.219614;Exitoso;DP2 - Performance de Empleados Trimestral generado.;0.013
-8;CreacionDP3_AnalisisLogistica;2025-07-01 11:29:11.226614;2025-07-01 11:29:11.240616;Exitoso;DP3 - Análisis de Logística y Shippers generado.;0.014002
+1;STEP_02_LOAD_STAGING;2025-07-02 14:31:28;2025-07-02 14:31:29;Exitoso;Carga completada: 12 archivos procesados;1
+2;STEP_03_CREATE_INGESTION;2025-07-02 14:31:29;2025-07-02 14:31:31;Exitoso;Capa de ingesta creada: 12 tablas;2
+3;STEP_07_INITIAL_DWH_LOAD;2025-07-02 14:31:31;2025-07-02 14:31:32;Exitoso;DWH cargado: 6 dimensiones, 2163 hechos (con advertencias);1
+4;step_08_load_ingesta2_to_staging;2025-07-02 14:31:32;2025-07-02 14:31:32;Exitoso;Carga de Ingesta2 completada exitosamente;0
+5;STEP_08B_DATA_REMEDIATION;2025-07-02 14:31:32;2025-07-02 14:31:32;Exitoso;Remediación AVANZADA completada: 723 fixes total. Categorías resueltas: 5/6. Status: SUCCESS;0
+6;STEP_09_UPDATE_DWH_INGESTA2;2025-07-02 14:31:32;2025-07-02 14:31:32;Exitoso;Actualización desde Ingesta2 completada.;0
+7;CreacionDP1_VentasMensuales;2025-07-02 14:31:32.882844;2025-07-02 14:31:32.902272;Exitoso;DP1 - Ventas Mensuales por Categoría y País generado.;0.019428
+8;CreacionDP2_PerformanceEmpleados;2025-07-02 14:31:32.909289;2025-07-02 14:31:32.929724;Exitoso;DP2 - Performance de Empleados Trimestral generado.;0.020435
+9;CreacionDP3_AnalisisLogistica;2025-07-02 14:31:32.935748;2025-07-02 14:31:32.967757;Exitoso;DP3 - Análisis de Logística y Shippers generado.;0.032009
