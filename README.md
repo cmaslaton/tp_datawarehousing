@@ -1,13 +1,13 @@
 # Grupo 4
-- Buonincontro, Brenda
-- Maslaton, Carlos
-- Maslaton, Mariano
-- Molteni, María Pía
-- Ton Vanerio, Nicolás
+- **Buonincontro**, Brenda
+- **Maslaton**, Carlos
+- **Maslaton**, Mariano
+- **Molteni**, María Pía
+- **Ton Vanerio**, Nicolás
 
 # TP - Introducción a Data Warehousing
 
-Es un proyecto de ETL (Extracción, Transformación, Carga) desarrollado como trabajo práctico final de la materia Intrudicción a Data Warehousing de la Maestría en Ciencia de Datos de la Universidad Austral. La implementación fue realizada siguiendo principios de desarrollo profesional y arquitectura modular.
+Es un proyecto de ETL (Extracción, Transformación, Carga) desarrollado como trabajo práctico final de la materia IntrudUcción a Data Warehousing de la Maestría en Ciencia de Datos de la Universidad Austral. La implementación fue realizada siguiendo principios de desarrollo profesional y arquitectura modular.
 
 ## 📋 Tabla de Contenidos
 
