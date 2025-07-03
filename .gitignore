@@ -181,4 +181,3 @@ cython_debug/
 .cursorindexingignore
 
 # Proyecto DataWarehousing - Base de datos SQLite
-db/
